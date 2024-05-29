@@ -1,3 +1,40 @@
+<style>
+        .upload-container {
+            text-align: center;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .custom-file-upload img.upload-icon {
+            /* width: 50px;
+            height: 50px; */
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        #file-upload {
+            display: none;
+        }
+
+        .preview {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+    <head>
+    <meta name="csrf-token-name" content="<?php echo $csrf_token_name; ?>">
+    <meta name="csrf-token-value" content="<?php echo $csrf_token_value; ?>">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    
  <!-- Begin Page Content -->
  <div class="container-fluid">
 
@@ -90,78 +127,82 @@
 <div class="row">
 
     <!-- Area Chart -->
-    <div class="col-xl-8 col-lg-7">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div
-                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                        aria-labelledby="dropdownMenuLink">
-                        <div class="dropdown-header">Dropdown Header:</div>
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <div class="chart-area">
-                    <canvas id="myAreaChart"></canvas>
-                </div>
-            </div>
+    <div class="col-xl-6 col-lg-6">
+        <div class="card shadow p-3 upload-container">
+            <label for="file-upload" class="custom-file-upload">
+                <img src="<?php echo base_url('assets/img/images/upload.png');?>" alt="Upload Icon" class="upload-icon" width="100%">
+                <span>Upload Image</span>
+            </label>
+            <input type="file" multiple name="image_upload[]" id="file-upload" accept="image/*"/>
+        </div>
+        <div class="preview">
+            <img id="previewImage" src="" alt="Image Preview" style="max-width: 100%; height: auto;"  onclick="addMoreFields()">
         </div>
     </div>
-
+   <!--   <div class="form-group files">
+                <label>Upload Your Image</label>
+                <input type="file" class="form-control" multiple="" name="image_upload[]" id="image_upload" accept="image/*">
+            </div> -->
     <!-- Pie Chart -->
-    <div class="col-xl-4 col-lg-5">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div
-                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                        aria-labelledby="dropdownMenuLink">
-                        <div class="dropdown-header">Dropdown Header:</div>
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <div class="chart-pie pt-4 pb-2">
-                    <canvas id="myPieChart"></canvas>
-                </div>
-                <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                        <i class="fas fa-circle text-primary"></i> Direct
-                    </span>
-                    <span class="mr-2">
-                        <i class="fas fa-circle text-success"></i> Social
-                    </span>
-                    <span class="mr-2">
-                        <i class="fas fa-circle text-info"></i> Referral
-                    </span>
-                </div>
-            </div>
+    <div class="col-xl-6 col-lg-6">
+        <div class="card shadow p-3">
+            <img src="<?php echo base_url('assets/img/images/copy_paste.png');?>" alt="" width="100%" height="325px">
         </div>
     </div>
+</div>
+
 </div>
 
 </div>
 <!-- /.container-fluid -->
+<script>
+ $(document).ready(function() {
+        let counter = 0; // Initialize the counter variable
+
+        $('#file-upload').on('change', function() {
+            const files = this.files; // Get all selected files
+            const formData = new FormData();
+
+            // Append each file to FormData object
+            for (let i = 0; i < files.length; i++) {
+                formData.append('image_upload[]', files[i]); // Use [] to indicate array
+            }
+
+            // Get CSRF token from meta tags
+            const csrfTokenName = $('meta[name="csrf-token-name"]').attr('content');
+            const csrfTokenValue = $('meta[name="csrf-token-value"]').attr('content');
+
+            // Send AJAX request to store the images
+            $.ajax({
+                type: 'POST',
+                url: "<?php echo site_url('Reporter/saveArticalImage')?>",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    [csrfTokenName]: csrfTokenValue // Include CSRF token in headers
+                },
+                success: function(response) {
+                    if (response.success) {
+                        console.log("AJAX Success: Storing image data in localStorage");
+                        // Store image data in local storage
+                        localStorage.setItem('imageData', JSON.stringify(response.image_data));
+                        
+                        // Verify that the data was stored
+                        const storedData = localStorage.getItem('imageData');
+                        console.log("Stored Data in localStorage:", storedData);
+
+                        // Redirect to news_upload page
+                        window.location.href = "<?php echo site_url('NewsUpload/newsUpload') ?>";
+                    } else {
+                        console.error("Error:", response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                }
+            });
+        });
+    });
+</script>
+    </script>

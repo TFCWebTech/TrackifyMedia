@@ -18,6 +18,8 @@ class ManageNews extends CI_Controller {
     {
         $data['getAllNews'] = $this->reporter->getALlNews();
         // print_r($data);
+        $data['get_keywords'] = $this->reporter->getAllKeywords();
+        
         $data['get_clients'] = $this->reporter->getClients();
         $this->load->view('common/header');
         $this->load->view('admin/manage_news', $data);
@@ -104,15 +106,11 @@ class ManageNews extends CI_Controller {
             $editor_count = count($article_ids);
         
             $page_nos = $this->input->post('page_no'); // Retrieve the array of page numbers
-        
-            // Create an array to store all the updated records
             $updated_records = array();
-        
             for ($i = 0; $i < $editor_count; $i++) {
                 $editor = $this->input->post('editor' . ($i + 1));
                 $pageNo = $page_nos[$i]; // Accessing each page number sequentially
                 $articleId = $article_ids[$i]; // Accessing each article_id sequentially
-                
                 $newsArtical = array(
                     'news_artical_id' => $articleId,
                     'news_artical' => $editor,
@@ -126,13 +124,39 @@ class ManageNews extends CI_Controller {
             foreach ($updated_records as $record) {
                 $this->reporter->update('news_artical', 'news_artical_id', $record['news_artical_id'], $record);
             }
-        
             $this->session->set_flashdata('success', 'Your News Is Updated');
             redirect('ManageNews');
         }  
-            
         }
-
-      
+            public function sendMail() {
+                $clients = $this->manageNews->getClientDetailsForSending(); 
+                // print_r($clients);
+                foreach ($clients as $client) {
+                    $client_id = $client['client_id'];
+                    $email = $client['email'];
+                    $data['news_details'] = $this->manageNews->news($client_id);
+                    // print_r($data);
+                    $config = Array(
+                        'protocol' => 'smtp',
+                        'smtp_host' => 'master.herosite.pro',
+                        '_smtp_auth' => TRUE,
+                        'smtp_port' => 465,
+                        'smtp_user' => 'admin@pressbro.com',
+                        'smtp_pass' => 'Vajra@5566',
+                        'smtp_crypto' => 'ssl',
+                        'mailtype' => 'html',
+                        'charset' => 'utf-8'
+                    );
+                    $this->load->library('email', $config);
+                    $this->email->set_newline("\r\n");
+                    $this->email->set_mailtype("html");
+                    $this->email->from('admin@pressbro.com', 'Test');
+                    $this->email->to($email);
+                    $this->email->subject('test');
+                    $this->email->message($this->load->view('view_news', $data, TRUE));
+                    $result = $this->email->send();
+            }
+        }
+        
     }
 ?>

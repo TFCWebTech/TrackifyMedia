@@ -184,7 +184,8 @@ class Reporter_Model extends CI_Model
     
         $this->db->where_in('news_details_id', $news_details_ids);
         $this->db->select('*');
-        $this->db->from('news_artical'); // Corrected table name to 'news_article'
+        $this->db->from('news_artical as na'); // Corrected table name to 'news_article'
+        $this->db->join('artical_images as ai', 'na.artical_images_id = ai.artical_images_id', 'left');
         $query = $this->db->get();
         return $query->result_array(); // Added return statement
     }
@@ -198,6 +199,29 @@ class Reporter_Model extends CI_Model
     
         $client_names = array_column($clients, 'client_name');
         return $client_names;
+    }
+
+    public function getAllKeywords() {
+        // Step 1: Retrieve the client_keywords from the database
+        $this->db->select('client_keywords');
+        $this->db->from('client');
+        $query = $this->db->get();
+        $client_keywords = $query->result_array();
+    
+        // Step 2: Extract all keywords and merge them into a single array
+        $all_keywords = array();
+        foreach ($client_keywords as $keywords_array) {
+            if (isset($keywords_array['client_keywords'])) {
+                $keywords = explode(',', $keywords_array['client_keywords']);
+                $all_keywords = array_merge($all_keywords, array_map('trim', $keywords));
+            }
+        }
+    
+        // Step 3: Remove duplicates from the array
+        $all_keywords = array_unique($all_keywords);
+    
+        // Step 4: Return the cleaned array
+        return array_values($all_keywords); // Reset array keys
     }
     
     private function mergeArticles($articles) {

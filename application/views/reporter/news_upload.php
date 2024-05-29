@@ -71,30 +71,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" id="news_arr">
-                                <!-- <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-md-12 ">
-                                            <textarea class="form-control" name="editor1" id="getNews" oninput="getKeywords()"></textarea>
-                                        </div>
-                                    </div>    
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label>Matching Keywords </label>
-                                            <textarea class="form-control" name="getKeys" id="getKeys"></textarea>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <input type="hidden" value="1">
-                                            <label>Page Number </label>
-                                            <input type="number" name="page_no" class="form-control" placeholder="page no">
-                                        </div>
-                                        
-                                        <div class="col-md-12 mt-2">
-                                            <button class="btn btn-primary" onclick="addMoreFilds()">add more</button>
-                                        </div> 
-                                    </div>
-                                </div>-->
-                            </div>
+                            <!-- <div class="row" id="news_arr">
+                                
+                            </div> -->
                         </div>
                     </div>
                     <div class="col-md-12 py-2 mt-3" >
@@ -244,6 +223,15 @@
                                     </div>
                         </div>
                     </div>
+
+                    <div class="col-md-12 mt-3">
+                        <div class="border-with-text" data-heading="Article Editing">
+                           
+                            <div class="row" id="news_arr">
+                                
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-12 text-right px-4 py-2">
                         <!-- <button  class="btn btn-success">Additional Page</button> -->
                         <button type="submit" class="btn btn-primary">SAVE</button>
@@ -252,16 +240,7 @@
         </form>
     </div>
 </div>          
-<script>
-    // Get the current time
-    const currentTime = new Date();
-    
-    // Format the current time as HH:MM:SS
-    const formattedTime = currentTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-    // Set the formatted time in the input field
-    // document.getElementById("current_time").value = formattedTime;
-</script>
 <!-- this div is for footer --->
 </div>
 
@@ -301,13 +280,15 @@
             },
             success: function(response) {
                 if (response.success) {
-                    var imageUris = response.image_uris;
-                    console.log("Image URIs:", imageUris);
-                    // imageToText(imageUris);
+                    var imageData = response.image_data;
+                    console.log("Image Data:", imageData);
                     var i = 1;
-                    imageUris.forEach(function(image) {
-                        // Call imageToText function for each image URI
-                        imageToText(image, i);
+                    imageData.forEach(function(image) {
+                        var imageUrl = image.image_url;
+                        var imageId = image.article_images_id;
+                        console.log("Image URL:", imageUrl);
+                        console.log("Image ID:", imageId);
+                        imageToText(imageUrl, i, imageId);
                         i++;
                     });
                 } else {
@@ -320,9 +301,9 @@
         });
     });
 
-    function imageToText(imageUri, index) {
+    function imageToText(imageUrl, index , imageId) {
         // Fetch the image content as a Blob
-        fetch(imageUri)
+        fetch(imageUrl)
             .then(response => response.blob())
             .then(blob => {
                 setTimeout(() => {
@@ -363,6 +344,7 @@
                                         
                                         let data = '<div class="col-md-6"><div class="row mt-2">';
                                         data += '<div class="col-md-12">';
+                                        data += '<input type="text" name="image_id' + index + '" class="form-control" value="' + imageId + '">';
                                         data += '<textarea class="form-control" name="editor' + index + '" id="getNews' + editorId + '"></textarea>';
                                         data += '</div></div>';
                                         data += '<div class="col-md-12" id="keyword_container_' + index + '"></div>'; // Placeholder for keywords
@@ -475,42 +457,64 @@ function getKeywords(textareaId) {
     console.log("Description:", description);
 
     $.ajax({
-        type: 'POST',
-        url: "<?php echo site_url('Reporter/searchKeywords')?>",
-        data: { description: description }, // Send the description
-        success: function(response) {
-        console.log("Response:", response); // Log the response object to the console
-        try {
-            var keywords = JSON.parse(response);
-            console.log("Parsed Keywords:", keywords);
+    type: 'POST',
+    url: "<?php echo site_url('Reporter/searchKeywords')?>",
+    data: { description: description }, // Send the description
+    success: function(response) {
+    console.log("Response:", response); // Log the response object to the console
+    try {
+        var keywords = JSON.parse(response);
+        console.log("Parsed Keywords:", keywords);
 
-            // Check if any matching keywords were returned
-            if (keywords.length > 0) {
-                var formattedKeywords = keywords.join(', ');
+        // Check if any matching keywords were returned
+        if (keywords.length > 0) {
+            var formattedKeywords = keywords.join(', ');
 
-                // Update the UI with the matching keywords
-                console.log("Matching Keywords:", formattedKeywords);
+            // Update the UI with the matching keywords
+            console.log("Matching Keywords:", formattedKeywords);
 
-                // Prepare the new HTML content
-                let keywordData = '<div class="row">';
-                keywordData += '<div class="col-md-12">';
-                keywordData += '<label>Matching Keywords </label>';
-                keywordData += '<textarea class="form-control" name="getKeys' + index + '[]" id="getKeys' + index + '" oninput="sendKeywordData(' + index + ')">' + formattedKeywords + '</textarea>';
-                keywordData += '</div>';
-                keywordData += '</div>';
-                // Append the keyword data to the placeholder container
-                $('#keyword_container_' + index).html(keywordData);
+            let f_keys = formattedKeywords.split(',').map(keyword => keyword.trim());
 
-                // Call sendKeywordData immediately after updating the textarea content
-                sendKeywordData(index);
-            } else {
-                console.log("No matching keywords found.");
-            }
-            } catch (error) {
-                console.error("Error parsing response:", error);
-            }
-        },
+            let selectOptions = '';
+            // Iterate through the list of all keywords and include all keywords
+            <?php foreach($get_keywords as $keys): ?>
+                var keyword = "<?php echo $keys; ?>";
+                if (f_keys.includes(keyword)) {
+                    selectOptions += `<option value="${keyword}" selected>${keyword}</option>`;
+                } else {
+                    selectOptions += `<option value="${keyword}">${keyword}</option>`;
+                }
+            <?php endforeach; ?>
 
+            // Construct the HTML for select element
+            let keywordData = '<div class="row">';
+            keywordData += '<div class="col-md-12">';
+            keywordData += '<label>Matching client </label>';
+            keywordData += '<select class="js-example-basic-multiple form-control" name="getKeys' + index + '[]" id="getKeys' + index + '" multiple="multiple">';
+            keywordData += '<option disabled>Select</option>';
+            keywordData += selectOptions; // Add select options here
+            keywordData += '</select>';
+            keywordData += '</div>';
+            keywordData += '</div>';
+
+            // Append the keyword data to the placeholder container
+            $('#keyword_container_' + index).html(keywordData);
+            // Reinitialize Select2 on the newly added select element
+            $('#getKeys' + index).select2();
+            $('#getKeys' + index).on('change', function() {
+                let selectedKeywords = $(this).val(); // Get all selected keywords
+                sendKeywordData(index, selectedKeywords);
+            });
+            // Trigger change event programmatically to call sendKeywordData immediately
+            $('#getKeys' + index).trigger('change');
+
+        } else {
+            console.log("No matching keywords found.");
+        }
+    } catch (error) {
+        console.error("Error parsing response:", error);
+    }
+},
         error: function(xhr, status, error) {
             console.error(error);
         }
@@ -531,7 +535,6 @@ $(document).ready(function() {
             success: function(response) {
                 // Clear previous errors
                 $('.error-message').remove();
-
                 if (response.status == 'error') {
                     // Display the validation error next to the relevant field
                     var field = $('*[name="' + response.error_field + '"]');
@@ -540,7 +543,6 @@ $(document).ready(function() {
                     // Clear form and display success message
                     $('#articleForm')[0].reset();
                     alert(response.message);
-                    
                 }
             }
         });
@@ -560,21 +562,25 @@ $(document).ready(function() {
             }
         });
 
-        function sendKeywordData(index) {
-            var textarea = document.getElementById('getKeys' + index);
-            var keywordData = textarea.value;
-            console.log('key = ', keywordData);
-            // AJAX request
-            $.ajax({
-                type: 'POST',
-                url: '<?php echo site_url('NewsUpload/getClientsFromKeywords')?>', 
-                data: { keywordData: keywordData },
-                success: function(response) {
-                console.log('Data sent successfully:', response);
-                // Convert the response string into an array of client IDs
-                let clientIDs = response.split(',').map(id => parseInt(id.trim()));
+        function sendKeywordData(index, selectedKeywords) {
+    console.log('demo ', selectedKeywords);
+    
+    // Create a comma-separated string of selected keywords
+    var keywordData = selectedKeywords.join(',');
+    console.log('key = ', keywordData);
 
-                let selectOptions = '';
+    // AJAX request
+    $.ajax({
+        type: 'POST',
+        url: '<?php echo site_url('NewsUpload/getClientsFromKeywords')?>', 
+        data: { keywordData: keywordData },
+        success: function(response) {
+            console.log('Data sent successfully:', response);
+
+            // Convert the response string into an array of client IDs
+            let clientIDs = response.split(',').map(id => parseInt(id.trim()));
+
+            let selectOptions = '';
             // Iterate through the list of all clients and include all clients
             <?php foreach($get_clients as $values): ?>
                 if (clientIDs.includes(<?php echo $values['client_id']; ?>)) {

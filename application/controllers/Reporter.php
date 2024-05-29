@@ -22,23 +22,33 @@ class Reporter extends CI_Controller {
 		$this->load->helper('url');
 		$target_dir = $this->config->item('PicDir');
 		$response = array();
+	
 		if (!empty($_FILES['image_upload']['name'][0])) { // Check if files are present
-			$image_uris = array();
+			$image_data = array(); // Array to store image URLs and IDs
 	
 			foreach ($_FILES['image_upload']['tmp_name'] as $key => $tmp_name) {
 				$file_name = $_FILES['image_upload']['name'][$key];
 				$ext = pathinfo($file_name, PATHINFO_EXTENSION);
-				$mtime = uniqid(microtime());
-				$uniqueid = substr($mtime, 2, 8);
-				$image_upload = 'image_upload'.$uniqueid . '.' . $ext;
+				$mtime = uniqid(microtime(), true);
+				$uniqueid = substr(md5($mtime), 0, 8);
+				$image_upload = 'image_upload_' . $uniqueid . '.' . $ext;
 				$target_file = $target_dir . 'Uploads/' . $image_upload;
+	
 				if (move_uploaded_file($_FILES['image_upload']['tmp_name'][$key], $target_file)) {
-					$image_uris[] = base_url() . 'Uploads/' . $image_upload;
+					// Insert image name into database
+					$this->db->insert('artical_images', array('artical_images_name' => $image_upload));
+					$article_images_id = $this->db->insert_id();
+	
+					$image_data[] = array(
+						'image_url' => base_url() . 'Uploads/' . $image_upload,
+						'article_images_id' => $article_images_id
+					);
 				}
 			}
-			if (!empty($image_uris)) {
+	
+			if (!empty($image_data)) {
 				$response['success'] = true;
-				$response['image_uris'] = $image_uris; // Include image URLs in the response
+				$response['image_data'] = $image_data; // Include image URLs and IDs in the response
 			} else {
 				$response['success'] = false;
 				$response['error'] = 'Failed to upload files';
@@ -46,10 +56,12 @@ class Reporter extends CI_Controller {
 		} else {
 			$response['success'] = false;
 			$response['error'] = 'No files uploaded';
-		}		
+		}
+	
 		header('Content-Type: application/json');
 		echo json_encode($response);
 	}
+
 		public function searchKeywords() {
 			$description = $this->input->post('description');
 			// Get the keywords from your model

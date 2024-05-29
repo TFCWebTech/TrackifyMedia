@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/News/';
+$config['base_url'] = 'http://localhost/TrackifyMedia/';
 $config['uploads_dir']     = getcwd()."/";
 $config['PicDir']   = $config['uploads_dir'];
 /*

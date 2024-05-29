@@ -30,7 +30,5 @@ class EmailTemplate extends CI_Controller {
         $this->load->view('view_news');
         $this->load->view('common/footer');
     }
-
-    
 }
 ?>

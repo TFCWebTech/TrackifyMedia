@@ -20,24 +20,28 @@ select.form-control[multiple], select.form-control[size] {
 </style>
 
 <div class="container">
-    <!-- <div class="d-flex justify-content-end">
-            <div class="d-flex text-right p-1 ">
-                        <input type="date" class="form-control m-1" placeholder="Enter Headline">
-                        <button class="btn btn-primary m-1">Search</button>
+          <div class="row">
+            <div class="col-md-12 text-right mb-2">
+              <a href="<?php echo site_url('ManageNews/sendMail');?>"> <i class="fa fa-send-o" style="font-size:36px;color:red"></i></a>
             </div>
-        </div> -->
+          </div>
          <?php if (!empty($getAllNews)): ?>
           <div class="row">
           <?php foreach ($getAllNews as $news): ?>
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                       <div class="card shadow mb-4">
-                          <div class="card-header py-3">
-                              <h6 class="m-0 font-weight-bold text-primary"><?php echo $news['head_line']; ?></h6>
-                          </div>
+                          <!-- <div class="card-header py-3">
+                          </div> -->
                           <div class="card-body">
                               <?php if (!empty($news['news_article_data'])):
-                                  foreach ($news['news_article_data'] as $article): ?>
-                                      <p id="dynamicContent">
+                                  foreach ($news['news_article_data'] as $article): 
+                                    if($article['artical_images_name'] != ''){?>
+                                    <img src="<?php echo base_url('Uploads/'. $article['artical_images_name']); ?>" alt="" style="width:100%; ">
+                                    <?php } else { ?>
+                                      <p class="text-center">No Image Found !</p>
+                                      <?php } ?>
+                                    <h6 class="m-0 font-weight-bold text-primary"><?php echo $news['head_line']; ?></h6>  
+                                    <p id="dynamicContent">
                                           <?php
                                           // Get the news article content
                                           $news_article = $article['news_artical'];
@@ -56,19 +60,19 @@ select.form-control[multiple], select.form-control[size] {
                                           ?>
                                       </p>
                                       <br>
-                                      <p><?php echo $news['keywords']; ?>&nbsp;<a class="text-primary" data-toggle="modal" data-target="#addKeywords" onclick="addKeywords('<?php echo $news['news_details_id']; ?>')"><u><i class="fa fa-plus-circle"></i></u></a></p>
+                                      <p> <i class="fa fa-file-word-o text-primary"></i>  <?php echo $news['keywords']; ?>&nbsp;<a class="text-primary" data-toggle="modal" data-target="#addKeywords" onclick="addKeywords('<?php echo $news['news_details_id']; ?>')"><u><i class="fa fa-plus-circle"></i></u></a></p>
                                       <?php if ($this->session->userdata('user_type') == 'Admin'): ?>
-                                          <p><span class="text-primary">Clients Finds: </span>&nbsp;
+                                          <p><i class="fa fa-users text-primary"></i>&nbsp;
                                           <?php echo $news['client_names']; ?> <i class="fa fa-eye cursor" data-toggle="modal" data-target="#tatamoters"></i> &nbsp;
-                                              <a class="text-primary" data-toggle="modal" data-target="#addClients" onclick="addClients('<?php echo $article['news_details_id']; ?>')"><u>edit clients</u></a>
+                                              <a class="text-primary" data-toggle="modal" data-target="#addClients" onclick="addClients('<?php echo $article['news_details_id']; ?>')"><u><i class="fa fa-plus-circle"></i></u></a>
                                           </p>
                                       <?php endif; ?>
                                       <div class="d-flex justify-content-end ">
-                                          <?php if ($this->session->userdata('user_type') == 'Admin'): ?>
+                                          <!-- <?php if ($this->session->userdata('user_type') == 'Admin'): ?>
                                               <div class="m-1">
                                                   <button class="btn btn-success" href="<?php echo site_url('EmailTemplate/'.$news['news_details_id']);?>">Preview Mail</button>
                                               </div>
-                                          <?php endif; ?>
+                                          <?php endif; ?> -->
                                           <div class="m-1">
                                               <a class="btn " href="<?php echo site_url('ManageNews/EditNews/'.$news['news_details_id']);?>"><i class="fa fa-edit" style="font-size:24px"></i></a>
                                           </div>
@@ -125,7 +129,12 @@ select.form-control[multiple], select.form-control[size] {
           <div class="col-md-12">
             <input type="text" id="remove_news_details_id" name="news_details_id" hidden>
             <label class="pl-1 font-weight-normal" for="Sub">Add / Edit Keywords</label>
-            <textarea name="newKeywords" class="form-control" id="newKeywords" rows="7" ></textarea>
+            <select class="js-example-basic-multiple form-control" name="newKeywords[]" id="newKeywords" multiple="multiple">
+                <option disabled>Select</option>
+                <?php foreach($get_keywords as $keyword) { ?>
+                    <option value="<?php echo $keyword; ?>"><?php echo $keyword; ?></option>
+                <?php } ?>
+            </select>
           </div>
           <div class="col-md-12 text-right mt-2">
             <button type="submit" class="btn btn-primary">UPDATE</button>
@@ -202,22 +211,46 @@ function addClients(news_details_id) {
         }
 
    
-        function addKeywords(news_details_id){
-          console.log(news_details_id);
-          var news_artical = <?php echo json_encode($getAllNews); ?>;
-          console.log(news_artical);
-            var desiredNewsArtical = null;
-            for (var i = 0; i < news_artical.length; i++) {
-                if (news_artical[i].news_details_id == news_details_id) {
-                    desiredNewsArtical = news_artical[i];
-                    break;
-                }
-            }
-            console.log(desiredNewsArtical);
-          $('#remove_news_details_id').val(desiredNewsArtical.news_details_id);
-          $('#newKeywords').val(desiredNewsArtical.keywords);
+        // function addKeywords(news_details_id){
+        //   console.log(news_details_id);
+        //   var news_artical = <?php echo json_encode($getAllNews); ?>;
+        //   console.log(news_artical);
+        //     var desiredNewsArtical = null;
+        //     for (var i = 0; i < news_artical.length; i++) {
+        //         if (news_artical[i].news_details_id == news_details_id) {
+        //             desiredNewsArtical = news_artical[i];
+        //             break;
+        //         }
+        //     }
+        //     console.log(desiredNewsArtical);
+        //   $('#remove_news_details_id').val(desiredNewsArtical.news_details_id);
+        //   $('#newKeywords').val(desiredNewsArtical.keywords);
+        // }
+        function addKeywords(news_details_id) {
+    var news_artical = <?php echo json_encode($getAllNews); ?>;
+    console.log(news_details_id);
+    var desiredNewsArtical = null;
+    
+    for (var i = 0; i < news_artical.length; i++) {
+        if (news_artical[i].news_details_id == news_details_id) {
+            desiredNewsArtical = news_artical[i];
+            break;
         }
+    }
+    $('#remove_news_details_id').val(desiredNewsArtical.news_details_id);
+    if (desiredNewsArtical) {
+        var keywordsString = desiredNewsArtical.keywords; // This is a string like "best car, bengaluru"
+        var keywords = keywordsString.split(',').map(keyword => keyword.trim());
 
+        // Clear previous selections
+        $("#newKeywords").val(null).trigger("change");
+
+        // Set new selections
+        $("#newKeywords").val(keywords).trigger("change");
+    } else {
+        console.error("No matching news article found for ID:", news_details_id);
+    }
+}
 </script>
 
 </div>

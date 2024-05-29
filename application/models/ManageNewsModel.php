@@ -8,6 +8,8 @@ class ManageNewsModel extends CI_Model
         return $this->db->insert_id();
     }
 
+    
+
     public function getNews($news_details_id) {
         // Fetch news details where 'is_send' is 0 and 'news_details_id' matches the given id
         $this->db->where('is_send', 0);
@@ -101,11 +103,43 @@ class ManageNewsModel extends CI_Model
         $result = $this->db->update($table, $data);
         return $result;
     }
-
     public function getUserData($user_id){
         $sql="SELECT * FROM `user` WHERE `user_id` = $user_id; ";
         $query = $this->db->query($sql);
         return $query->result_array();
     }
+
+    public function getClientDetailsForSending() {
+        // Step 1: Get unique client IDs
+        $this->db->where('is_send', 0);
+        $this->db->select('GROUP_CONCAT(DISTINCT client_id) as client_ids'); // Concatenate distinct client IDs into a string
+        $this->db->from('news_details');
+        $query = $this->db->get();
+    
+        $row = $query->row_array(); // Fetch a single row since we're selecting a single value
+        $client_ids = $row['client_ids']; // Get the concatenated client IDs
+    
+        if ($client_ids) {
+            // Step 2: Retrieve client details
+            $client_ids_array = array_unique(array_map('trim', explode(',', $client_ids)));
+            $client_ids_str = implode(',', array_map('intval', $client_ids_array));
+    
+            $sql = "SELECT * FROM `client` WHERE `client_id` IN ($client_ids_str)";
+            $query = $this->db->query($sql);
+            return $query->result_array();
+        }
+    
+        return [];
+    }
+    
+    public function news($client_id) {
+        // Query the database
+        $this->db->where('is_send', 0);
+        $this->db->where("FIND_IN_SET($client_id, client_id) >", 0);
+        $this->db->select('*');
+        $this->db->from('news_details');
+        return $this->db->get()->result_array();
+    }
+    
 }
 ?>

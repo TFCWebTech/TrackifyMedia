@@ -14,6 +14,8 @@ class NewsUpload extends CI_Controller {
     }
 	public function index()
     {
+		$data['csrf_token_name'] = $this->security->get_csrf_token_name();
+        $data['csrf_token_value'] = $this->security->get_csrf_hash();
 		$data['get_clients'] = $this->reporter->getClients();
         $this->load->view('common/header');
 		$this->load->view('reporter/reporter_dashbord',$data);
@@ -21,13 +23,14 @@ class NewsUpload extends CI_Controller {
     }
     public function newsUpload()
     {
-        // $data['all_staff'] = $this->staff->getStaffData();
+		$data['get_keywords'] = $this->reporter->getAllKeywords();
 		$data['get_clients'] = $this->reporter->getClients();
         $this->load->view('common/header');
 		$this->load->view('reporter/news_upload',$data);
         $this->load->view('common/footer');
     }
 
+	
 	public function addArticle() {
 		$index_no = $this->input->post('index');
 		$media_type = $this->input->post('media_type');
@@ -83,10 +86,12 @@ class NewsUpload extends CI_Controller {
 			for ($i = 1; $i <= $index_no; $i++) {
 				 $editor = $this->input->post('editor' . $i);
 				 $pageNo = $this->input->post('page_no' . $i);
+				 $image_id = $this->input->post('image_id' . $i);
 				$newsArtical = array(
 					'news_details_id' => $newsDetailsId,
 					'news_artical' => $editor,
 					'page_no' => $pageNo,
+					'artical_images_id' => $image_id,
 				);
 				$this->reporter->insert('news_artical', $newsArtical);
 			}
@@ -94,7 +99,6 @@ class NewsUpload extends CI_Controller {
 		$this->session->set_flashdata('success','Your News Is Uploaded');
 		redirect('NewsUpload');
 	}
-
 	
 	public function getClientsFromKeywords() {
 		// Get keywords from POST request
@@ -133,7 +137,6 @@ class NewsUpload extends CI_Controller {
 	
 		// Join matching client names with a comma
 		$clientNamesString = implode(', ', $matchingClients);
-	
 		// Print matching client names
 		echo $clientNamesString;
 	}
@@ -153,9 +156,8 @@ class NewsUpload extends CI_Controller {
 
 	public function addKeywords() {
 		// Retrieve POST data
-		$news_details_id = $this->input->post('news_details_id'); // Corrected variable name
+		echo $news_details_id = $this->input->post('news_details_id'); // Corrected variable name
 		$newKeywords = $this->input->post('newKeywords');
-		
 		
 		// Ensure newKeywords is an array
 		if (!is_array($newKeywords)) {
@@ -196,7 +198,6 @@ class NewsUpload extends CI_Controller {
 		);
 		// Prepare data array
 		$this->reporter->update('news_details', 'news_details_id', $news_details_id, $data);
-	
 		$this->session->set_flashdata('success', 'Keywords Updated Successfully');
 		redirect('ManageNews');
 		
