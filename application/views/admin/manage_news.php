@@ -38,7 +38,7 @@ select.form-control[multiple], select.form-control[size] {
                                     if($article['artical_images_name'] != ''){?>
                                     <img src="<?php echo base_url('Uploads/'. $article['artical_images_name']); ?>" alt="" style="width:100%; ">
                                     <?php } else { ?>
-                                      <p class="text-center">No Image Found !</p>
+                                      <img src="<?php echo base_url('assets/img/page.png'); ?>" alt="" style="width:100%; ">
                                       <?php } ?>
                                     <h6 class="m-0 font-weight-bold text-primary"><?php echo $news['head_line']; ?></h6>  
                                     <p id="dynamicContent">

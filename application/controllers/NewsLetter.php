@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class ManageSubeditor extends CI_Controller {
+class NewsLetter extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
@@ -10,21 +10,16 @@ class ManageSubeditor extends CI_Controller {
         $this->load->database();
         $this->load->helper('security');
 		$this->load->library('form_validation');
-        $this->load->model('Reporter_Model', 'reporter', TRUE);
+        $this->load->model('NewsLetter_Model', 'newsLetter', TRUE);
     }
     public function index()
     {
-        // $data['all_staff'] = $this->staff->getStaffData();
+        $data['get_clients'] = $this->newsLetter->getClients();
+        // print_r($data);
         $this->load->view('common/header');
-        $this->load->view('manage_subeditor');
+        $this->load->view('news_letter', $data);
         $this->load->view('common/footer');
     }
  
-    public function Logout()
- 	{
- 		$this->session->unset_userdata('userData');
-        $this->session->sess_destroy();
-        redirect('Login');
- 	}
 }
 ?>

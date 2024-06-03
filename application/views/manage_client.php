@@ -66,6 +66,33 @@ function addKeywordInput() {
     parentDiv.appendChild(formGroup);
 }
 </script>
+
+
+
+<script>
+function addKeywordInput2() {
+    var formGroup = document.createElement('div');
+    formGroup.classList.add('form-group');
+
+    var label = document.createElement('label');
+    label.classList.add('px-1', 'font-weight-bold');
+    label.setAttribute('for', 'user_type');
+    label.textContent = 'Add Keywords';
+
+    var input = document.createElement('input');
+    input.setAttribute('type', 'text');
+    input.classList.add('form-control');
+    input.setAttribute('placeholder', 'Enter Keywords');
+    input.setAttribute('name', 'CompetetorKeywords[]');
+    input.setAttribute('required', 'required');
+
+    formGroup.appendChild(label);
+    formGroup.appendChild(input);
+
+    var parentDiv = document.getElementById('additionalKeywords2');
+    parentDiv.appendChild(formGroup);
+}
+</script>
 <div class="container">
         <div class="row">
             <div class="col-md-12 text-right p-2">
@@ -80,6 +107,7 @@ function addKeywordInput() {
                     <th>Client Name</th>
                     <th>Keywords</th>
                     <th>Status</th>
+                    <th>Add Competitor</th>
                     <!-- <th>Created At</th> -->
                     <th> Email Template</th>
                     <th>Action</th>
@@ -98,8 +126,9 @@ function addKeywordInput() {
                     <?php }else {?>
                         <td>NA</td>
                     <?php }?>
+                    <td class="text-center"><a class="btn btn-primary" data-toggle="modal" data-target="#addCompitetor"  onclick="addCompetotor(<?php echo $values['client_id'];?>)" > ADD</a></td>
                     <!-- <td><?php echo date('d/ F /Y', strtotime($values['create_at'])); ?></td> -->
-                    <td class="text-center"><a class="btn btn-primary" href="<?php echo site_url('EmailTemplate/CreateTemplate/'.$values['client_id']);?>);?>"> ADD</a></td>
+                    <td class="text-center"><a class="btn btn-primary" href="<?php echo site_url('EmailTemplate/CreateTemplate/'.$values['client_id']);?>"> ADD</a></td>
                     <td>
                         &nbsp; <i class="fa fa-edit text-primary" onclick="editUserType('')" data-toggle="modal" data-target="#editModal" title="Edit"></i>&nbsp; 
                         <i class="fa fa-trash text-danger" onclick="deleteUserType('')" data-toggle="modal" data-target="#deleteModal" title="Delete"></i>&nbsp;
@@ -222,6 +251,49 @@ function addKeywordInput() {
   </div>
 </div>
 
+
+<div class="modal" id="addCompitetor">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Add Compiter</h4>
+        <!-- Correct close button for Bootstrap 4 -->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+            <form onsubmit="return validateForm()" action="<?php echo site_url('ManageClient/addCompetitor')?>" method="post">
+                <div class="form-group">
+                    <input type="text" id="client_id" name="client_id" hidden> 
+                    <label class="px-1 font-weight-bold" for="user_type">Competitor Name </label>
+                    <input type="text" class="form-control" placeholder="Enter Competitor Name" name="Competitor_name" required>
+                </div>
+                <div class="form-group">
+                    <label class="px-1 font-weight-bold" for="is_active">Status</label>
+                    <select name="is_active" class="form-control">
+                        <option >Select</option>
+                        <option value="1">Active</option>
+                        <option value="0">InActive</option>
+                    </select>
+                </div>
+                <div class="form-group" id="additionalKeywords2">
+                    <label class="px-1 font-weight-bold" for="user_type">Add Keywords</label>
+                    <input type="text" class="form-control" placeholder="Enter Keywords" name="CompetetorKeywords[]" required>
+                </div>
+                <div class="text-right pt-2">
+                    <p onclick="addKeywordInput2()"><i class="text-primary cursor"><u> Add More Keywords</u> </i></p>
+                 <button type="submit" class="btn btn-primary">ADD</button>
+                </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
     $('table').DataTable();
 
@@ -242,6 +314,13 @@ clientSelect.addEventListener("change", function() {
 });
 });
 </script>
+
+<script>
+    function addCompetotor(client){
+        $('#client_id').val(client);
+    }
+</script>
+
 </div>
 
             <!-- End of Main Content -->    

@@ -68,7 +68,6 @@ class ManageNews extends CI_Controller {
             if (is_array($keys)) {
                 $all_keys = array_merge($all_keys, $keys);
             }
-    
             if (is_array($clients)) {
                 $all_clients = array_merge($all_clients, $clients);
             }
@@ -128,35 +127,65 @@ class ManageNews extends CI_Controller {
             redirect('ManageNews');
         }  
         }
-            public function sendMail() {
-                $clients = $this->manageNews->getClientDetailsForSending(); 
-                // print_r($clients);
-                foreach ($clients as $client) {
-                    $client_id = $client['client_id'];
-                    $email = $client['email'];
-                    $data['news_details'] = $this->manageNews->news($client_id);
-                    // print_r($data);
-                    $config = Array(
-                        'protocol' => 'smtp',
-                        'smtp_host' => 'master.herosite.pro',
-                        '_smtp_auth' => TRUE,
-                        'smtp_port' => 465,
-                        'smtp_user' => 'admin@pressbro.com',
-                        'smtp_pass' => 'Vajra@5566',
-                        'smtp_crypto' => 'ssl',
-                        'mailtype' => 'html',
-                        'charset' => 'utf-8'
-                    );
-                    $this->load->library('email', $config);
-                    $this->email->set_newline("\r\n");
-                    $this->email->set_mailtype("html");
-                    $this->email->from('admin@pressbro.com', 'Test');
-                    $this->email->to($email);
-                    $this->email->subject('test');
-                    $this->email->message($this->load->view('view_news', $data, TRUE));
-                    $result = $this->email->send();
+        public function sendMail() {
+
+            $clients = $this->manageNews->getClientDetailsForSending();
+            // print_r($clients);
+            foreach ($clients['client_details'] as $client) {
+                $client_id = $client['client_id'];
+                $email = $client['email'];
+                $client_name = $client['client_name'];
+                $data['news_details'] = $this->manageNews->news($client_id);
+                $data['client_name'] = $client_name;
+                // Debugging output
+                foreach ($data['news_details'] as &$news) {
+                    if (!isset($news['news_article_data'])) {
+                        $news['news_article_data'] = [];
+                    }
+                }
+                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // print_r($data);
+                $config = Array(
+                    'protocol' => 'smtp',
+                    'smtp_host' => 'master.herosite.pro',
+                    '_smtp_auth' => TRUE,
+                    'smtp_port' => 465,
+                    'smtp_user' => 'admin@pressbro.com',
+                    'smtp_pass' => 'Vajra@5566',
+                    'smtp_crypto' => 'ssl',
+                    'mailtype' => 'html',
+                    'charset' => 'utf-8'
+                );
+                $this->load->library('email', $config);
+                $this->email->set_newline("\r\n");
+                $this->email->set_mailtype("html");
+                $this->email->from('admin@pressbro.com', 'Test');
+                $this->email->to($email);
+                $this->email->subject('News');
+                $this->email->message($this->load->view('view_news', $data, TRUE));
+                $result = $this->email->send();
+
+                if ($result) {
+                    // Debugging output
+                    echo "Email sent to: $email\n";
+                    foreach ($data['news_details'] as $news) {
+                        if (isset($news['news_details_id'])) {
+                            $news_details_id = $news['news_details_id'];
+                            $this->db->query("UPDATE `news_details` SET `is_send`= ? WHERE `news_details_id`= ?", array(1, $news_details_id));
+                            echo "Updated news_details_id: $news_details_id\n";
+                        }
+                    }
+                } else {
+                    echo "Failed to send email to: $email\n";
+                    echo $this->email->print_debugger();
+                }
+        } else {
+                echo "Invalid email address: $email\n";
             }
-        }
-        
     }
+        $this->session->set_flashdata('success', 'News Sent Successfully');
+    redirect('ManageNews');
+   }
+        
+}
 ?>

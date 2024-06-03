@@ -8,7 +8,7 @@
 <div class="container" >
     <div class="card p-3">
 
-        <form action="#" method="post"> 
+        <form action="<?php echo site_url('EmailTemplate/addTemplate');?>" method="post"> 
             <div class="row">
                     <div class="col-md-12 py-2">
                         <div class="text-center">
@@ -20,24 +20,29 @@
                         <div class="border-with-text" data-heading="Menu Information">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="px-1 font-weight-bold" for="BlueBytes Link">BlueBytes Link</label>
-                                            <select class="form-control" name="BlueBytesLink" >
+                                            <input type="text" name="client_id" value=" <?php echo $client_id; ?>" hidden>
+                                            <label class="px-1 font-weight-bold" for="Trackify Link">Trackify Media</label>
+                                            <select class="form-control" name="trackify_media">
                                                 <option value="">Select</option>
                                                 <option value="Yes">Yes</option>
                                                 <option value="No">No</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="px-1 font-weight-bold" for="header_bg_color">Header Background Color</label>
-                                            <input type="text" class="form-control" name="header_bg_color" placeholder="Background Color">
+                                            <label class="px-1 font-weight-bold" for="menu_bg_color">Trackify Link</label>
+                                            <input type="text" class="form-control" name="trackify_link" placeholder="Trackify Link">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="px-1 font-weight-bold" for="menu_bg_color">Header Background Color</label>
+                                            <input type="text" class="form-control" name="menu_bg_color" placeholder="Background Color">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="header_bg_color">Header Font Color</label>
-                                            <input type="text" class="form-control" name="Header_font-color" placeholder="Header Font Color">
+                                            <input type="text" class="form-control" name="menu_font_color" placeholder="Header Font Color">
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="px-1 font-weight-bold" for="header_bg_color">Header Font </label>
-                                            <select name="HTBFont" class="form-control" id="HTBFont1">
+                                            <label class="px-1 font-weight-bold" for="menu_bg_color">Header Font </label>
+                                            <select name="header_font" class="form-control" id="HTBFont1">
                                                             <option value="1">Select</option>
                                                             <option value="Arial" selected="">Arial</option>
                                                             <option value="Helvetica">Helvetica</option>
@@ -64,8 +69,8 @@
                                                         </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="px-1 font-weight-bold" for="header_bg_color">Header Font Size</label>
-                                            <select name="HTBFontSize" class="form-control" id="HTBFontSize1">
+                                            <label class="px-1 font-weight-bold" for="menu_bg_color">Header Font Size</label>
+                                            <select name="header_font_size" class="form-control" id="HTBFontSize1">
                                                             <option value="">Select</option>
                                                             <option value="1">1</option>
                                                             <option value="2">2</option>
@@ -100,15 +105,15 @@
                                         </div> -->
                                         <div class="col-md-2">
                                             <label class="px-1 font-weight-bold" for="title_name">Row Background </label>
-                                            <input type="text" class="form-control" name="RowBackground " placeholder="Row Background ">
+                                            <input type="text" class="form-control" name="row_background " placeholder="Row Background ">
                                         </div>
                                         <div class="col-md-2">
                                             <label class="px-1 font-weight-bold" for="font_color">Row Font Color</label>
-                                            <input type="text" class="form-control" name="Row_font_color" placeholder="Row Font Color">
+                                            <input type="text" class="form-control" name="row_font_color" placeholder="Row Font Color">
                                         </div>
                                         <div class="col-md-2">
                                             <label class="px-1 font-weight-bold" for="header_bg_color">Row Font </label>
-                                            <select name="HTBFont" class="form-control" id="HTBFont1">
+                                            <select name="row_font" class="form-control" id="HTBFont1">
                                                             <option value="1">Select</option>
                                                             <option value="Arial" selected="">Arial</option>
                                                             <option value="Helvetica">Helvetica</option>
@@ -136,7 +141,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <label class="px-1 font-weight-bold" for="title_name">Row Font Size</label>
-                                            <select name="HTBFontSize" class="form-control" id="HTBFontSize1">
+                                            <select name="row_font_size" class="form-control" id="HTBFontSize1">
                                                             <option value="">Select</option>
                                                             <option value="1">1</option>
                                                             <option value="2">2</option>
@@ -162,7 +167,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <label class="px-1 font-weight-bold" for="font_color">No News Text</label>
-                                            <select name="HTBFontSize" class="form-control" id="HTBFontSize1">
+                                            <select name="no_news_text" class="form-control" id="HTBFontSize1">
                                                             <option value="">Select</option>
                                                             <option value="Yes">Yes</option>
                                                             <option value="No">No</option>
@@ -181,15 +186,15 @@
                             <div class="row">
                                 <div class="col-md-4">  
                                     <label class="px-1 font-weight-bold" for="media_type">Name </label>
-                                    <input type="text" class="form-control" placeholder="Enter Name ">
+                                    <input type="text" class="form-control" name="quick_links_name" placeholder="Enter Name ">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="px-1 font-weight-bold" for="media_type">URL </label>
-                                    <input type="text" class="form-control" placeholder="Enter URL ">
+                                    <input type="text" class="form-control" name="quick_link_url" placeholder="Enter URL ">
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="px-1 font-weight-bold" for="media_type">Quicklinks Position  </label>
-                                    <select name="Quicklink" class="form-control" id="Quicklink1">
+                                    <label class="px-1 font-weight-bold" for="media_type">Quick links Position  </label>
+                                    <select name="Quicklink" class="form-control" name="quick_links_position" id="Quicklink1">
                                         <option value="">Select</option>
                                         <option value="Row1">Row 1</option>
                                         <option value="Row2">Row 2</option>
@@ -232,19 +237,18 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="font_color">Title Font Size</label>
-                                            <input type="text" class="form-control" name="font_color" placeholder="Font Color">
+                                            <input type="text" class="form-control" name="font_size" placeholder="Font Color">
                                         </div>
                                        
                                     </div>
                         </div>
                     </div>
-
                     <div class="col-md-12 mt-3" >
                         <div class="border-with-text" data-heading="Content News">
                             <div class="row">
                                     <div class="col-md-4">
                                             <label class="px-1 font-weight-bold" for="media_type">Category </label>
-                                            <select name="category"  class="form-control" accesskey="n" onkeyup="validateUserType('?text=' + this.value);">
+                                            <select name="content_category"  class="form-control" accesskey="n" onkeyup="validateUserType('?text=' + this.value);">
                                             <option value="0">Select</option>
                                             <option value="111" >111</option>
                                             <option value="After Market MFCSL" >After Market MFCSL</option>
@@ -265,7 +269,7 @@
                                     </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Publication</label>
-                                            <select class="form-control" name="publication" >
+                                            <select class="form-control" name="content_publication" >
                                                 <option value="">Select</option>
                                                 <option value="4Ps">4Ps</option>
                                                 <option value="50 Fashion Brand Icons">50 Fashion Brand Icons</option>
@@ -278,28 +282,28 @@
                                         </div>
                                         <div class="col-md-2">
                                             <label class="px-1 font-weight-bold" for="media_type">Edition</label>
-                                            <select class="form-control" name="edition" >
+                                            <select class="form-control" name="content_edition" >
                                                 <option value="">Select</option>
                                                 <option value="National">National</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="author">News Summary Color</label>
-                                            <input type="text" class="form-control" placeholder="Enter Summary Color" name="author">
+                                            <input type="text" class="form-control" placeholder="Enter Summary Color" name="content_news_summary_color">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">News Summary Font Size</label>
-                                            <input type="text" class="form-control" placeholder="Enter Font Size" name="page_no">
+                                            <input type="text" class="form-control" placeholder="Enter Font Size" name="content_news_summary_color_size">
                                         </div>
 
                                        
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Headline Color </label>
-                                            <input type="text" class="form-control" placeholder="Enter Headline Color" name="Headline Color">
+                                            <input type="text" class="form-control" placeholder="Enter Headline Color" name="content_headline_color">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Headline Font </label>
-                                            <select name="MediaFont" class="form-control" id="MediaFont1">
+                                            <select name="headline_font" class="form-control" id="MediaFont1">
                                                             <option value="1">Select</option>
                                                             <option value="Arial">Arial</option>
                                                             <option value="Helvetica">Helvetica</option>
@@ -325,14 +329,13 @@
                                                             <option value="Verdana">Verdana</option>
                                                         </select>
                                         </div>
-                                    
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Headline Font Size </label>
-                                            <input type="text" class="form-control" placeholder="Enter Font Size " name="Headline Color">
+                                            <input type="text" class="form-control" placeholder="Enter Font Size " name="headline_font_size">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Media Details </label>
-                                            <select name="category"  class="form-control" accesskey="n" onkeyup="validateUserType('?text=' + this.value);">
+                                            <select name="media_details"  class="form-control" accesskey="n" onkeyup="validateUserType('?text=' + this.value);">
                                             <option value="0">Select</option>
                                             <option value="Yes" >Yes</option>
                                             <option value="No" >No</option>
@@ -340,11 +343,11 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Media Color </label>
-                                            <input type="text" class="form-control" placeholder="Enter Media Color" name="Headline Color">
+                                            <input type="text" class="form-control" placeholder="Enter Media Color" name="media_color">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="Time">Media Font  </label>
-                                            <select name="MediaFont" class="form-control" id="MediaFont1">
+                                            <select name="media_font" class="form-control" id="MediaFont1">
                                                             <option value="1">Select</option>
                                                             <option value="Arial">Arial</option>
                                                             <option value="Helvetica">Helvetica</option>
@@ -372,13 +375,13 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="Duration">Media Font Size</label>
-                                            <input type="text" class="form-control" placeholder="Enter Font Size" name="Font Size">
+                                            <input type="text" class="form-control" placeholder="Enter Font Size" name="media_font_size">
                                         </div>
                                     
 
                                         <div class="col-md-4">
                                             <label class="px-1 font-weight-bold" for="media_type">Context  </label>
-                                            <select name="category"  class="form-control" accesskey="n" onkeyup="validateUserType('?text=' + this.value);">
+                                            <select name="context"  class="form-control" accesskey="n" onkeyup="validateUserType('?text=' + this.value);">
                                             <option value="0">Select</option>
                                             <option value="Yes" >Yes</option>
                                             <option value="No" >No</option>
@@ -386,7 +389,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="Time">Context Font</label>
-                                            <select name="MediaFont" class="form-control" id="MediaFont1">
+                                            <select name="context_font" class="form-control" id="MediaFont1">
                                                             <option value="1">Select</option>
                                                             <option value="Arial">Arial</option>
                                                             <option value="Helvetica">Helvetica</option>
@@ -414,7 +417,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="Duration">Context Font Size</label>
-                                            <input type="text" class="form-control" placeholder="Context Font Size" name="Font Size">
+                                            <input type="text" class="form-control" placeholder="Context Font Size" name="context_font_size">
                                         </div>
                             </div>
                         </div>
@@ -423,16 +426,16 @@
                         <div class="border-with-text" data-heading="Footer Information">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="px-1 font-weight-bold" for="header_bg_color">Footer Background Color</label>
-                                            <input type="text" class="form-control" name="header_bg_color" placeholder="Background Color">
+                                            <label class="px-1 font-weight-bold" for="footer_bg_color">Footer Background Color</label>
+                                            <input type="text" class="form-control" name="footer_bg_color" placeholder="Background Color">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="logo_url">Logo Url</label>
-                                            <input type="text" class="form-control" name="logo_url" placeholder="Logo Url">
+                                            <input type="text" class="form-control" name="footer_logo_url" placeholder="Logo Url">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="logo_position">Logo Position</label>
-                                            <select class="form-control" name="logo_position" >
+                                            <select class="form-control" name="footer_logo_position" >
                                                 <option value="">Select</option>
                                                 <option value="Left">Left</option>
                                                 <option value="Right">Right</option>
@@ -441,17 +444,16 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="title_name">Title Name</label>
-                                            <input type="text" class="form-control" name="title_name" placeholder="Title Name">
+                                            <input type="text" class="form-control" name="footer_title_name" placeholder="Title Name">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="font_color">Title Font Color</label>
-                                            <input type="text" class="form-control" name="font_color" placeholder="Font Color">
+                                            <input type="text" class="form-control" name="footer_font_color" placeholder="Font Color">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="font_color">Title Font Size</label>
-                                            <input type="text" class="form-control" name="font_color" placeholder="Font Color">
+                                            <input type="text" class="form-control" name="footer_font_size" placeholder="Font size">
                                         </div>
-                                       
                                     </div>
                          </div>
                     </div>
@@ -461,20 +463,8 @@
                         <button  class="btn btn-primary">Save Page</button>
                     </div>
         </form>
-
     </div>
 </div>          
-<script>
-    // Get the current time
-    const currentTime = new Date();
-    
-    // Format the current time as HH:MM:SS
-    const formattedTime = currentTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-    // Set the formatted time in the input field
-    document.getElementById("current_time").value = formattedTime;
-</script>
-<!-- this div is for footer --->
 </div>
 
 <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>

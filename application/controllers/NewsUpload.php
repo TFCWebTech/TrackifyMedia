@@ -12,7 +12,7 @@ class NewsUpload extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->load->model('Reporter_Model', 'reporter', TRUE);
     }
-	public function index()
+	public function newsUpload()
     {
 		$data['csrf_token_name'] = $this->security->get_csrf_token_name();
         $data['csrf_token_value'] = $this->security->get_csrf_hash();
@@ -21,7 +21,7 @@ class NewsUpload extends CI_Controller {
 		$this->load->view('reporter/reporter_dashbord',$data);
         $this->load->view('common/footer');
     }
-    public function newsUpload()
+    public function index()
     {
 		$data['get_keywords'] = $this->reporter->getAllKeywords();
 		$data['get_clients'] = $this->reporter->getClients();

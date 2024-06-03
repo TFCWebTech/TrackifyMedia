@@ -8,10 +8,7 @@ class ManageNewsModel extends CI_Model
         return $this->db->insert_id();
     }
 
-    
-
     public function getNews($news_details_id) {
-        // Fetch news details where 'is_send' is 0 and 'news_details_id' matches the given id
         $this->db->where('is_send', 0);
         $this->db->where('news_details_id', $news_details_id);
         $this->db->order_by('news_details_id');
@@ -115,7 +112,7 @@ class ManageNewsModel extends CI_Model
         $this->db->select('GROUP_CONCAT(DISTINCT client_id) as client_ids'); // Concatenate distinct client IDs into a string
         $this->db->from('news_details');
         $query = $this->db->get();
-    
+        
         $row = $query->row_array(); // Fetch a single row since we're selecting a single value
         $client_ids = $row['client_ids']; // Get the concatenated client IDs
     
@@ -123,22 +120,69 @@ class ManageNewsModel extends CI_Model
             // Step 2: Retrieve client details
             $client_ids_array = array_unique(array_map('trim', explode(',', $client_ids)));
             $client_ids_str = implode(',', array_map('intval', $client_ids_array));
+            
+            // Retrieve client details
+            $this->db->where_in('client_id', $client_ids_array);
+            $query_clients = $this->db->get('client');
+            $client_details = $query_clients->result_array();
+            
+            
     
-            $sql = "SELECT * FROM `client` WHERE `client_id` IN ($client_ids_str)";
-            $query = $this->db->query($sql);
-            return $query->result_array();
+            return [
+                'client_details' => $client_details,
+            ];
         }
     
         return [];
     }
     
     public function news($client_id) {
-        // Query the database
         $this->db->where('is_send', 0);
-        $this->db->where("FIND_IN_SET($client_id, client_id) >", 0);
+        if (!empty($client_id)) {
+            $this->db->where("FIND_IN_SET($client_id, client_id) >", 0);
+        }
         $this->db->select('*');
         $this->db->from('news_details');
-        return $this->db->get()->result_array();
+        $result = $this->db->get()->result_array();
+    
+        $outArr = [];
+        foreach ($result as $row) {
+            // Split client_ids and fetch client names
+            $client_ids = explode(',', $row['client_id']);
+            $client_templates = $this->getClientTemplate($client_ids);
+    
+            // Get related news articles directly using the current news_details_id
+            $news_article_data = $this->getNewsArticle([$row['news_details_id']]);
+    
+            // Merge articles with the same news_details_id
+            $merged_articles = $this->mergeArticles($news_article_data);
+    
+            // Add the articles data to the row
+            $row['news_article_data'] = $merged_articles;
+            $row['client_templates'] = $client_templates;
+    
+            // Add the modified row to the output array
+            $outArr[] = $row;
+        }
+    
+        return $outArr;
+    }
+    
+    public function getClientTemplate($client_ids) {
+        if (is_array($client_ids)) {
+            $this->db->where_in('client_id', $client_ids);
+        } else {
+            $this->db->where('client_id', $client_ids);
+        }
+        $query = $this->db->get('mail_template');
+        return $query->result_array();
+    }
+    
+
+    public function industry(){
+        $sql="SELECT * FROM `industry`  ; ";
+        $query = $this->db->query($sql);
+        return $query->result_array();
     }
     
 }

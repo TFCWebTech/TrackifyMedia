@@ -60,7 +60,7 @@
                         <div class="border-with-text" data-heading="Article Editing">
                             <div class="row">
                                 <div class="col-md-12 text-right">
-                                    <a class="btn btn-primary" onclick="addMoreFields()">Upload News</a>
+                                    <a class="btn btn-primary" onclick="addMoreFields()">Add Article</a>
                                 </div>
                                 <div class="col-md-4 my-2">
                                     <!-- <label class=" font-weight-bold" for="Height">Upload Image </label>
@@ -72,7 +72,6 @@
                                 </div>
                             </div>
                             <!-- <div class="row" id="news_arr">
-                                
                             </div> -->
                         </div>
                     </div>
@@ -234,7 +233,7 @@
                     </div>
                     <div class="col-md-12 text-right px-4 py-2">
                         <!-- <button  class="btn btn-success">Additional Page</button> -->
-                        <button type="submit" class="btn btn-primary">SAVE</button>
+                        <button type="submit" class="btn btn-primary">Upload News</button>
                     </div>
             </div>  
         </form>
