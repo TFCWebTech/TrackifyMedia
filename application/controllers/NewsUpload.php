@@ -83,6 +83,24 @@ class NewsUpload extends CI_Controller {
 		// print_r($data);
 		$newsDetailsId = $this->reporter->insert('news_details', $data);
 		if ($newsDetailsId) {
+			// $index_count = $this->input->post('index_count');
+			for ($i = 1; $i <= $index_no; $i++) {
+				$get_company_data_id = $this->input->post('get_company_data_id'. $i);
+				$getcompetitor_data_id = $this->input->post('getcompetitor_data_id'. $i);
+				$getIndustry_data_id = $this->input->post('getIndustry_data_id'. $i);
+				
+				$client_competitor = array(
+					'news_details_id' => $newsDetailsId,
+					'company_id' => $get_company_data_id,
+					'competitor_id' => $getcompetitor_data_id,
+					'Industry_id' => $getIndustry_data_id,
+				);
+				print_r($client_competitor);
+				$this->reporter->insert('client_competitor_industry', $client_competitor);
+			}
+		}
+
+		if ($newsDetailsId) {
 			for ($i = 1; $i <= $index_no; $i++) {
 				 $editor = $this->input->post('editor' . $i);
 				 $pageNo = $this->input->post('page_no' . $i);
@@ -202,6 +220,107 @@ class NewsUpload extends CI_Controller {
 		redirect('ManageNews');
 		
 	}
+
+	// public function getCompitetorsFromClients() {
+	// 	$clientsToMatch = $this->input->post('clientsData');
+		
+	// 	if (!is_array($clientsToMatch)) {
+	// 		$clientsToMatch = explode(',', $clientsToMatch);
+	// 	}
+	
+	// 	$allCompetitors = [];
+	
+	// 	foreach ($clientsToMatch as $clientID) {
+	// 		$clientID = trim($clientID); // Ensure there are no surrounding spaces
+			
+	// 		$competitorsData = $this->reporter->getCompetitor($clientID);
+	// 		$industriesData = $this->reporter->industryData($clientID);
+	
+	// 		foreach ($competitorsData as $competitor) {
+	// 			$clientName = $competitor['client_name'];
+	// 			$competitorName = $competitor['Competitor_name'];
+				
+	// 			if (!isset($allCompetitors[$clientName])) {
+	// 				$allCompetitors[$clientName] = [
+	// 					'competitors' => [],
+	// 					'industries' => []
+	// 				];
+	// 			}
+				
+	// 			// Add competitor name
+	// 			$allCompetitors[$clientName]['competitors'][] = $competitorName;
+	// 		}
+	
+	// 		foreach ($industriesData as $industry) {
+	// 			$clientName = $industry['client_name'];
+	// 			$industryName = $industry['Industry_name'];
+				
+	// 			if (!isset($allCompetitors[$clientName])) {
+	// 				$allCompetitors[$clientName] = [
+	// 					'competitors' => [],
+	// 					'industries' => []
+	// 				];
+	// 			}
+				
+	// 			// Add industry name
+	// 			$allCompetitors[$clientName]['industries'][] = $industryName;
+	// 		}
+	// 	}
+	
+	// 	// Prepare the output array
+	// 	$output = [];
+	// 	foreach ($allCompetitors as $clientName => $data) {
+	// 		$output[] = [
+	// 			'client_name' => $clientName,
+	// 			'competitors' => array_unique($data['competitors']),
+	// 			'industries' => array_unique($data['industries']),
+	// 		];
+	// 	}
+	
+	// 	echo json_encode($output);
+	// }
+	
+	
+
+
+	public function getCompitetorsFromClients() {
+		$clientsToMatch = $this->input->post('clientsData');
+		
+		if (!is_array($clientsToMatch)) {
+			$clientsToMatch = explode(',', $clientsToMatch);
+		}
+	
+		$allData = []; // Modified to hold both competitor and industry data
+		
+		foreach ($clientsToMatch as $clientID) {
+			$clientID = trim($clientID); // Ensure there are no surrounding spaces
+			
+			$competitorsData = $this->reporter->getCompetitor($clientID);
+			$allIndustriesData = $this->reporter->industryData($clientID);
+			// print_r($competitorsData);
+			foreach ($competitorsData as $competitor) {
+				$industryData = [];
+				foreach ($allIndustriesData as $industry) {
+					$industryData[] = [
+						'Industry_id' => $industry['Industry_id'],
+						'Industry_name' => $industry['Industry_name']
+					];
+				}
+	
+				$allData[] = [
+					'Competitor_name' => $competitor['Competitor_name'],
+					'competitor_id' => $competitor['competitor_id'],
+					'client_name' => $competitor['client_name'],
+					'client_id' => $competitor['client_id'],
+					'Industry_id' => $industry['Industry_id'] ,
+					'Industry_name' => $industry['Industry_name'] 
+				];
+			}
+		}
+		
+		echo json_encode($allData);
+	}
+	
 	
 	
 }

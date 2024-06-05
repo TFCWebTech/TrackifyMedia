@@ -435,6 +435,8 @@ function addMoreFields() {
     data += '</div></div>';
     data += '<div class="col-md-12" id="keyword_container_' + index + '"></div>'; // Placeholder for keywords
     data += '<div class="col-md-12" id="client_container_' + index + '"></div>';
+    data += '<div class="col-md-12" id="getCompData' + index + '"></div>';
+    
     data += '<div class="col-md-6">';
     data += '<label>Page Number </label>';
     data += '<input type="number" name="page_no' + index + '" class="form-control" placeholder="page no">';
@@ -484,18 +486,16 @@ function getKeywords(textareaId) {
                     selectOptions += `<option value="${keyword}">${keyword}</option>`;
                 }
             <?php endforeach; ?>
-
             // Construct the HTML for select element
             let keywordData = '<div class="row">';
             keywordData += '<div class="col-md-12">';
-            keywordData += '<label>Matching client </label>';
+            keywordData += '<label>Keywords </label>';
             keywordData += '<select class="js-example-basic-multiple form-control" name="getKeys' + index + '[]" id="getKeys' + index + '" multiple="multiple">';
             keywordData += '<option disabled>Select</option>';
             keywordData += selectOptions; // Add select options here
             keywordData += '</select>';
             keywordData += '</div>';
             keywordData += '</div>';
-
             // Append the keyword data to the placeholder container
             $('#keyword_container_' + index).html(keywordData);
             // Reinitialize Select2 on the newly added select element
@@ -506,7 +506,6 @@ function getKeywords(textareaId) {
             });
             // Trigger change event programmatically to call sendKeywordData immediately
             $('#getKeys' + index).trigger('change');
-
         } else {
             console.log("No matching keywords found.");
         }
@@ -592,22 +591,79 @@ $(document).ready(function() {
             // Construct the HTML for select element
             let selectHTML = '<div class="row">';
             selectHTML += '<div class="col-md-12">';
-            selectHTML += '<label>Matching client </label>';
+            selectHTML += '<label> Clients </label>';
             selectHTML += '<select class="js-example-basic-multiple form-control" name="getclient' + index + '[]" id="getclient' + index + '" multiple="multiple">';
             selectHTML += '<option disabled>Select</option>';
             selectHTML += selectOptions; // Add select options here
             selectHTML += '</select>';
             selectHTML += '</div>';
             selectHTML += '</div>';
-
             // Append the select element to the placeholder container
             $('#client_container_' + index).html(selectHTML);
-
             // Reinitialize Select2 on the newly added select element
             $('#getclient' + index).select2();
+            $('#getclient' + index).on('change', function() {
+                let selectedClients = $(this).val(); // Get all selected keywords
+                sendClientData(index, selectedClients);
+            });
+            // Trigger change event programmatically to call sendKeywordData immediately
+            $('#getclient' + index).trigger('change');
         },
         error: function(error) {
             console.log('Error sending data:', error);
+        }
+    });
+}
+
+function sendClientData(index, selectedClients) {
+    console.log('client name ', selectedClients);
+    
+    var clientsData = selectedClients.join(',');
+    console.log('client new data= ', clientsData);
+
+    $.ajax({
+        type: 'POST',
+        url: '<?php echo site_url('NewsUpload/getCompitetorsFromClients')?>', 
+        data: { clientsData: clientsData },
+        success: function(response) {
+            // Parse the JSON response
+            let data = JSON.parse(response);
+            console.log('Data competitor successfully:', data);
+            
+            // Initialize the HTML string
+            let getComp = '<div class="row">';
+            let displayedClients = new Set(); // Set to keep track of displayed client names
+
+            data.forEach(function(item, i) { // Using a different variable for the inner index
+                if (!displayedClients.has(item.client_name)) {
+                    displayedClients.add(item.client_name); // Add client name to the set
+
+                    getComp += '<div class="col-md-12">';
+                    getComp += '<label> Client </label> <br>';
+                    getComp += '<input name="get_company_data_id' + i + '" id="get_company_id' + i + '" value="' + item.client_id + '" disabled hidden> ';
+                    getComp += '<input name="get_company_data' + i + '" id="get_company' + i + '" value="' + item.client_name + '" disabled>';
+                    getComp += '</div>';
+                }
+
+                getComp += '<div class="col-md-6">';
+                getComp += '<label> Competitors </label>';
+                getComp += '<input name="getcompetitor_data_id' + i + '" id="getcompetitor_id' + i + '" value="' + item.competitor_id + '" disabled hidden> ';
+                getComp += '<input name="getcompetitor_data' + i + '" id="getcompetitor' + i + '" value="' + item.Competitor_name + '" disabled>';
+                getComp += '</div>';
+                getComp += '<div class="col-md-6">';
+                getComp += '<label> Industry </label>';
+                getComp += '<input name="getIndustry_data_id' + i + '" id="getIndustry_id' + i + '" value="' + item.Industry_id + '" disabled hidden> ';
+                getComp += '<input name="getIndustry_data' + i + '" id="getIndustry' + i + '" value="' + item.Industry_name + '" disabled>';
+                getComp += '</div>';
+            });
+
+            getComp += '</div>';
+
+            // Append the generated HTML to the placeholder container
+            $('#getCompData' + index).html(getComp);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('Error: ' + textStatus + ', ' + errorThrown);
         }
     });
 }

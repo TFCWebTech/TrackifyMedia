@@ -14,37 +14,45 @@ class NewsLetter_Model extends CI_Model
     // }
 
     public function getClients() {
+        // Fetch all clients from the 'client' table
         $this->db->select('*');
         $this->db->from('client');
         $query = $this->db->get();
-        $result = $query->result_array();
+        $clients = $query->result_array(); // Store the result in $clients
+    
         $outArr = [];
-        foreach ($result as $row) {
-            $client_templates = $this->getClientTemplate($row['client_id']);
-            $client_ids = explode(',', $row['client_id']);
-            $news_data = $this->getNews($client_ids);
-            $row['client_templates'] = $client_templates; 
-            $row['news_data'] = $news_data; 
-            $outArr[] = $row;
+        foreach ($clients as $client) {
+            $client_news = $this->getNews($client['client_id']);
+            $client['client_news'] = $client_news; 
+            $outArr[] = $client;
         }
-        return $outArr;
+    
+        return $outArr; // Return the final output array
     }
     
-    public function getNews($client_ids){
-        $outArr = [];
-        foreach ($client_ids as $client_id) {
-            $client_ids = explode(',', $row['client_id']);
-            $this->db->where('client_id', $client_id);
-            $this->db->select('*');
-            $this->db->from('news_details');
-            $query = $this->db->get();
-            $result = $query->result_array();
-            $outArr = array_merge($outArr, $result);
-        }
-        return $outArr;
+    public function getNews($client_id) {
+        // Fetch news details for the given client_id with is_send = 0
+        $this->db->select('*');
+        $this->db->from('news_details');
+        $this->db->where('is_send', '0');
+        
+        $this->db->group_start(); // Start grouping for client_id conditions
+        $this->db->like('client_id', ',' . $client_id . ',');
+        $this->db->or_like('client_id', $client_id . ',');
+        $this->db->or_like('client_id', ',' . $client_id);
+        $this->db->or_where('client_id', $client_id);
+        $this->db->group_end(); // End grouping
+    
+        $query = $this->db->get();
+        $result = $query->result_array(); // Store the result in $result
+    
+        return $result; // Return the news details
     }
     
-    public function getClientTemplate($client_ids){
+    
+    
+
+    public function getClientTemplate($client_ids) {
         $this->db->where_in('client_id', $client_ids); 
         $this->db->select('*');
         $this->db->from('mail_template');

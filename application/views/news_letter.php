@@ -12,7 +12,7 @@
         <tbody>
             <?php foreach($get_clients as $clients): ?>
                 <tr>
-                    <td><?php echo $clients['client_name']; ?>&nbsp;<i class="fa fa-eye text-primary"></i> </td>
+                    <td><?php echo $clients['client_name']; ?>&nbsp; <a href="<?php echo site_url('NewsLetter/newsMail/'. $clients['client_id']); ?>"> <i class="fa fa-eye text-primary "></i></a> </td>
                     <td></td>
                     <td></td>
                     <td></td>

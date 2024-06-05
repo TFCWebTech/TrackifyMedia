@@ -28,8 +28,6 @@ class ManageClient extends CI_Controller {
             // $Keyword = explode(',', $Keywords);
             //  print_r($Keyword);
 	}
-
-
     public function ClientInfo(){
         $data['get_clients'] = $this->client->getClients();
         $this->load->view('common/header');

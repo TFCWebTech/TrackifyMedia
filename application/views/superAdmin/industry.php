@@ -27,6 +27,24 @@ margin-bottom: 5px !important;
 .cursor{
     cursor: pointer;
 }
+
+
+    .modal-footer{
+        justify-content: flex-start !important; 
+        display: block !important;
+    }
+.pointer{
+cursor:pointer;
+}
+select.form-control[multiple], select.form-control[size] {
+    height: 114px !important;
+}
+.select2-container{
+	width:100% !important;
+}
+.select2 {
+	width:100% !important;
+}	
 </style>
 <script>
 function validateForm() {
@@ -73,26 +91,47 @@ function addKeywordInput() {
             <table class="table table-bordered table-hover dt-responsive">
                 <thead >
                 <tr>
-                    <th>Competitor Name</th>
+                    <th>Industry Name</th>
+                    <th>Company Name</th>
                     <th>Keywords</th>
                     <th>Status</th>
-                    <th>Add</th>
-                    <th>Action</th>
+                    <!-- <th>Add</th> -->
+                    <!-- <th>Action</th> -->
                 </tr>
                 </thead>
                 <tbody>
 
-                <?php foreach($get_industry as $values){ ?>
-                <tr>
-                    <td>Tech Mahindra</td>
-                    <td>blockchain , Digital Supply Chain</td>
-                    <td>Active</td>
-                    <td > 23</td>
-                    <td>
+                <?php foreach($get_industry as $values) { ?>
+                    <tr>
+                        <td><?php echo $values['Industry_name']; ?></td>
+                        <td>
+                            <?php 
+                                if (!empty($values['client_names'])) {
+                                    $client_count = count($values['client_names']);
+                                    foreach ($values['client_names'] as $index => $client) {
+                                        echo $client['client_name'];
+                                        if ($index < $client_count - 1) {
+                                            echo ', ';
+                                        }
+                                    }
+                                } else {
+                                    echo 'No clients available';
+                                }
+                            ?>
+                        </td>
+                        <td><?php echo $values['Keywords']; ?></td>
+                        <?php if($values['is_active'] == '1') { ?>
+                            <td> <i class="text-primary font-weight-bold"> Active</i></td>
+                        <?php } elseif($values['is_active'] == '0') { ?>
+                            <td> <i class="text-danger font-weight-bold"> InActive</i></td>
+                        <?php } else { ?>
+                            <td>NA</td>
+                        <?php } ?>
+                    <!-- <td > 23</td> -->
+                    <!-- <td>
                                 &nbsp; <i class="fa fa-edit text-primary" onclick="editUserType('')" data-toggle="modal" data-target="#editModal" title="Edit"></i>&nbsp; 
                                 <i class="fa fa-trash text-danger" onclick="deleteUserType('')" data-toggle="modal" data-target="#deleteModal" title="Delete"></i>&nbsp;
-                                <!-- <i class="fa fa-trash text-danger" onclick="deleteUserType('')" data-toggle="modal" data-target="#deleteModal" title="Delete"></i> -->
-                            </td>
+                            </td> -->
                 </tr>
                 <?php } ?>
                 </tbody>
@@ -131,6 +170,16 @@ function addKeywordInput() {
                         <option value="0">InActive</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label class="px-1 font-weight-bold" for="is_active">Add Clients</label>
+                    <select class="js-example-basic-multiple form-control" name="client_name[]" id="client_name" multiple="multiple">
+                        <option disabled>Select</option>
+                        <?php foreach($get_clients as $values) { ?>
+                            <option value="<?php echo $values['client_id']; ?>"> <?php echo $values['client_name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                
                 <div class="form-group" id="additionalKeywords">
                     <label class="px-1 font-weight-bold" for="user_type">Add Keywords</label>
                     <input type="text" class="form-control" placeholder="Enter Keywords" name="Keywords[]" required>

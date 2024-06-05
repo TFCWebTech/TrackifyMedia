@@ -94,6 +94,7 @@ class ManageNewsModel extends CI_Model
         return $query->result_array();
     }
 
+    
     public function update($table, $colIdName, $id, $data)
     {
         $this->db->where($colIdName, $id);
@@ -179,9 +180,35 @@ class ManageNewsModel extends CI_Model
     }
     
 
-    public function industry(){
-        $sql="SELECT * FROM `industry`  ; ";
-        $query = $this->db->query($sql);
+    // public function industry(){
+    //     $sql="SELECT * FROM `industry`  ; ";
+    //     $query = $this->db->query($sql);
+    //     return $query->result_array();
+
+    // }
+
+
+    public function industry() {
+        $this->db->select('*');
+        $this->db->from('industry');
+        $result = $this->db->get()->result_array();
+    
+        $outArr = array();
+        foreach ($result as $row) {
+            // Split client_ids and fetch client names
+            $client_ids = explode(',', $row['client_id']);
+            $client_names = $this->getClientsData($client_ids);
+            $row['client_names'] = $client_names;
+            $outArr[] = $row;
+        }
+    
+        return $outArr;
+    }
+    public function getClientsData($client_ids) {
+        $this->db->select('*');
+        $this->db->from('client');
+        $this->db->where_in('client_id', $client_ids);
+        $query = $this->db->get();
         return $query->result_array();
     }
     

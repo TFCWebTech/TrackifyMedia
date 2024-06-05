@@ -286,5 +286,53 @@ class Reporter_Model extends CI_Model
         $query = $this->db->query($sql);
         return $query->result_array();
     }
+
+    public function getCompetitor($client_id){
+        $sql = "SELECT * FROM `competitor` as c JOIN `client` as cl ON cl.client_id = c.client_id WHERE c.client_id = ?";
+        $query = $this->db->query($sql, array($client_id));
+        return $query->result_array();
+    }
+    
+    public function industryData($client_ids) {
+        // Ensure $client_ids is an array
+        if (!is_array($client_ids)) {
+            $client_ids = [$client_ids];
+        }
+    
+        // Build the WHERE clause using LIKE for each client_id
+        $conditions = array_map(function($id) {
+            return "`client_id` LIKE '%$id%'";
+        }, $client_ids);
+    
+        $whereClause = implode(' OR ', $conditions);
+        $sql = "SELECT * FROM `industry` WHERE $whereClause";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+    
+    public function getClientIds($client_ids) {
+        $industries = $this->industryData($client_ids);
+        $clientIds = [];
+    
+        foreach ($industries as $industry) {
+            echo "Processing client_id: " . $industry['client_id'] . "\n";
+            
+            // Split the client_id by comma if it contains multiple ids
+            $ids = explode(',', $industry['client_id']);
+            
+            // Print the split ids for debugging
+            print_r($ids);
+            
+            // Merge the split ids into the clientIds array
+            $clientIds = array_merge($clientIds, $ids);
+        }
+    
+        // Remove duplicates and re-index the array
+        $clientIds = array_unique($clientIds);
+        $clientIds = array_values($clientIds);
+    
+        return $clientIds;
+    }
+    
 }
 ?>
