@@ -144,7 +144,7 @@ class ManageNews extends CI_Controller {
                     }
                 }
                 if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            // print_r($data);
+                 // print_r($data);
                 $config = Array(
                     'protocol' => 'smtp',
                     'smtp_host' => 'master.herosite.pro',

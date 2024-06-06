@@ -176,6 +176,11 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Manage Client</span></a>
             </li>
+            <li class="nav-item <?php print ($this->uri->segment(2)=='newsLetter')?'active':''; ?>">
+                <a class="nav-link" href="<?php echo site_url('newsLetter');?>">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Manage NewsLetter</span></a>
+            </li>
             <?php
             } ?>
            <!--  <li class="nav-item <?php print ($this->uri->segment(1)=='Process')?'active':''; ?>">

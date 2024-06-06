@@ -430,6 +430,9 @@ function addMoreFields() {
     // Create a new textarea element
     let data = '<div class="col-md-6"><div class="row mt-2">';
     data += '<div class="col-md-12">';
+    data += '<input type="text" id="company' + index + '" name="company' + index + '" hidden>'
+    data += '<input type="text" id="competitor' + index + '" name="competitor' + index + '" hidden>'
+    data += '<input type="text" id="industry' + index + '" name="industry' + index + '"hidden>'
     data += '<input type="text" value=" '+ index+' " name="index" hidden>'
     data += '<textarea class="form-control" name="editor' + index + '" id="' + textareaId + '"></textarea>';
     data += '</div></div>';
@@ -633,7 +636,9 @@ function sendClientData(index, selectedClients) {
             // Initialize the HTML string
             let getComp = '<div class="row">';
             let displayedClients = new Set(); // Set to keep track of displayed client names
-
+            $('#company'+index).val('');
+            $('#competitor'+index).val('');
+            $('#industry'+index).val('');
             data.forEach(function(item, i) { // Using a different variable for the inner index
                 if (!displayedClients.has(item.client_name)) {
                     displayedClients.add(item.client_name); // Add client name to the set
@@ -655,6 +660,36 @@ function sendClientData(index, selectedClients) {
                 getComp += '<input name="getIndustry_data_id' + i + '" id="getIndustry_id' + i + '" value="' + item.Industry_id + '" disabled hidden> ';
                 getComp += '<input name="getIndustry_data' + i + '" id="getIndustry' + i + '" value="' + item.Industry_name + '" disabled>';
                 getComp += '</div>';
+
+
+                var inputField = $('#competitor'+index);
+                var currentValue = inputField.val();
+                var newValue = item.competitor_id;  // Change this to the value you want to add
+
+                if (currentValue) {
+                    inputField.val(currentValue + ', ' + newValue);
+                } else {
+                    inputField.val(newValue);
+                }
+                var inputIndField = $('#industry'+index);
+                var currentIndValue = inputIndField.val();
+                var newIndValue = item.Industry_id;  // Change this to the value you want to add
+
+                if (currentIndValue) {
+                    inputIndField.val(currentIndValue + ', ' + newIndValue);
+                } else {
+                    inputIndField.val(newIndValue);
+                }
+
+                var inputCompField = $('#company'+index);
+                var currentComValue = inputCompField.val();
+                var newComValue = item.client_id;  // Change this to the value you want to add
+
+                if (currentComValue) {
+                    inputCompField.val(currentComValue + ', ' + newComValue);
+                } else {
+                    inputCompField.val(newComValue);
+                }
             });
 
             getComp += '</div>';

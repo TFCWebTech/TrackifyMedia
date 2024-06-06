@@ -15,15 +15,19 @@ class NewsLetter extends CI_Controller {
     public function index()
     {
         $data['get_clients'] = $this->newsLetter->getClients();
-        print_r($data);
+        // print_r($data);
         $this->load->view('common/header');
         $this->load->view('news_letter', $data);
         $this->load->view('common/footer');
     }
     public function newsMail($client_id){
-        // echo $client_id;
+
+        // $data['get_client_details'] = $this->newsLetter->getClientDetails($client_id);
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
         $this->load->view('common/header');
-        $this->load->view('mail_letter', $data);
+        $this->load->view('mail_letter');
         $this->load->view('common/footer');
     }
  

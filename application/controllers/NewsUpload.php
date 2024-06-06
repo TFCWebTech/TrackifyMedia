@@ -83,28 +83,33 @@ class NewsUpload extends CI_Controller {
 		// print_r($data);
 		$newsDetailsId = $this->reporter->insert('news_details', $data);
 		if ($newsDetailsId) {
-			// $index_count = $this->input->post('index_count');
-			for ($i = 1; $i <= $index_no; $i++) {
-				$get_company_data_id = $this->input->post('get_company_data_id'. $i);
-				$getcompetitor_data_id = $this->input->post('getcompetitor_data_id'. $i);
-				$getIndustry_data_id = $this->input->post('getIndustry_data_id'. $i);
-				
-				$client_competitor = array(
-					'news_details_id' => $newsDetailsId,
-					'company_id' => $get_company_data_id,
-					'competitor_id' => $getcompetitor_data_id,
-					'Industry_id' => $getIndustry_data_id,
-				);
-				print_r($client_competitor);
-				$this->reporter->insert('client_competitor_industry', $client_competitor);
+				for ($i = 1; $i <= $index_no; $i++) {
+					$get_company_data_id = explode(',', $this->input->post('company'. $i));
+					$getcompetitor_data_id = explode(',', $this->input->post('competitor'. $i));
+					$getIndustry_data_id = explode(',', $this->input->post('industry'. $i));
+					
+					$max_length = max(count($get_company_data_id), count($getcompetitor_data_id), count($getIndustry_data_id));
+					
+					for ($j = 0; $j < $max_length; $j++) {
+						$client_competitor = array(
+							'news_details_id' => $newsDetailsId,
+							'company_id' => $get_company_data_id[$j] ?? null,
+							'competitor_id' => $getcompetitor_data_id[$j] ?? null,
+							'Industry_id' => $getIndustry_data_id[$j] ?? null,
+						);
+						
+						// print_r($client_competitor);
+						$this->reporter->insert('client_competetor_industry', $client_competitor);
+					}
+				}
 			}
-		}
 
 		if ($newsDetailsId) {
 			for ($i = 1; $i <= $index_no; $i++) {
 				 $editor = $this->input->post('editor' . $i);
 				 $pageNo = $this->input->post('page_no' . $i);
 				 $image_id = $this->input->post('image_id' . $i);
+				 
 				$newsArtical = array(
 					'news_details_id' => $newsDetailsId,
 					'news_artical' => $editor,
