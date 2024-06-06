@@ -63,9 +63,7 @@ class EmailTemplate extends CI_Controller {
             $row_font = $this->input->post('row_font');
             $row_font_size = $this->input->post('row_font_size');
             $no_news_text = $this->input->post('no_news_text');
-            $quick_links_name = $this->input->post('quick_links_name');
-            $quick_link_url = $this->input->post('quick_link_url');
-            $quick_links_position = $this->input->post('quick_links_position');
+            
             $header_bg_color = $this->input->post('header_bg_color');
             $logo_url = $this->input->post('logo_url');
             $logo_position = $this->input->post('logo_position');
@@ -87,7 +85,6 @@ class EmailTemplate extends CI_Controller {
             $context = $this->input->post('context');
             $context_font = $this->input->post('context_font');
             $context_font_size = $this->input->post('context_font_size');
-            // $footer_bg_color = $this->input->post('footer_bg_color');
             $footer_bg_color = $this->input->post('footer_bg_color');
             $footer_logo_url = $this->input->post('footer_logo_url');
             $footer_logo_position = $this->input->post('footer_logo_position');
@@ -108,9 +105,6 @@ class EmailTemplate extends CI_Controller {
                 'menu_row_font' => $row_font,
                 'menu_row_font_Size' => $row_font_size,
                 'menu_no_news_text' => $no_news_text,
-                'quick_links' => $quick_links_name,
-                'quick_links_url' => $quick_link_url,
-                'quick_links_position' => $quick_links_position,
                 'header_background_color' => $header_bg_color,
                 'header_logo_url' => $logo_url,
                 'logo_position' => $logo_position,
@@ -139,10 +133,37 @@ class EmailTemplate extends CI_Controller {
                 'footer_title_font_color' => $footer_font_color,
                 'footer_title_font_size' => $footer_font_size,
             ];
-            $result = $this->db->insert('mail_template', $data);
-            if ($result) {
-                $this->session->set_flashdata('success', 'Template Added Successfully');
-                redirect('EmailTemplate/CreateTemplate/' . $client_id);
+            $this->db->insert('mail_template', $data);
+            $mail_template_id = $this->db->insert_id();
+            if ($mail_template_id) {
+                $quick_links_name = $this->input->post('quick_links_name');
+                $quick_link_url = $this->input->post('quick_link_url');
+                $quick_links_position = $this->input->post('quick_links_position');
+                $quick_links_data = [];
+            
+                for ($i = 0; $i < count($quick_links_name); $i++) {
+                    $quick_links_data[] = [
+                        'mail_template_id' => $mail_template_id,
+                        'quick_links_name' => $quick_links_name[$i],
+                        'quick_links_url' => $quick_link_url[$i],
+                        'quick_links_position' => $quick_links_position[$i]
+                    ];
+                }
+            
+                $all_inserted = true;
+                foreach ($quick_links_data as $link_data) {
+                    if (!$this->db->insert('quick_links', $link_data)) {
+                        $all_inserted = false;
+                        break;
+                    }
+                }
+                if ($all_inserted) {
+                    $this->session->set_flashdata('success', 'Template Added Successfully');
+                    redirect('EmailTemplate/CreateTemplate/' . $client_id);
+                } else {
+                    $this->session->set_flashdata('error', 'Error adding template');
+                    redirect('EmailTemplate/CreateTemplate/' . $client_id);
+                }
             } else {
                 $this->session->set_flashdata('error', 'Something Went Wrong');
                 redirect('EmailTemplate/CreateTemplate/' . $client_id);

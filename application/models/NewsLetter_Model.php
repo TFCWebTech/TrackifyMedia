@@ -55,20 +55,30 @@ class NewsLetter_Model extends CI_Model
         $query = $this->db->get();
         return $query->result_array(); 
     }
+
+    public function getClientById($client_id)
+    {
+        $this->db->select('*');
+        $this->db->from('client');
+        $this->db->where('client_id', $client_id);
+        return $this->db->get()->row_array();
+    }
     
-    public function getClientDetails($client_id){
+    public function getClientTemplateDetails($client_id){
         $this->db->where_in('client_id', $client_id); 
         $this->db->select('*');
-        $this->db->from('mail_template');
+        $this->db->from('mail_template as mt');
+        $this->db->join('quick_links as ql','mt.mail_template_id = ql.mail_template_id', 'left');
         $query = $this->db->get();
         $clients = $query->result_array(); 
         $outArr = [];
         foreach ($clients as $client) {
-            $client_news = $this->getNewsDetails($client['client_id']);
-            $compitetor_industry = $this->getCompIndustry($client['client_id']);
-            $client['client_news'] = $client_news; 
-            $compitetorIndustry['compitetor_industry'] = $compitetor_industry; 
-            $outArr[] = $compitetorIndustry;
+            $client['client_news'] = $this->getNewsDetails($client['client_id']);
+            $client['compititors_data'] = $this->getCompData($client['client_id']);
+            $client['industry_data'] = $this->getIndustryData($client['client_id']);
+            // $client['client_news'] = $client_news; 
+            // $compitetorIndustry['compitetor_industry'] = $compitetor_industry; 
+            // $outArr[] = $compitetorIndustry;
             $outArr[] = $client;
         }
         return $outArr;
@@ -77,7 +87,8 @@ class NewsLetter_Model extends CI_Model
 
     public function getNewsDetails($client_id) {
         $date = date('Y-m-d');
-        $this->db->select('*');
+        
+        $this->db->select('news_details.*, (SELECT COUNT(news_artical_id) FROM news_artical WHERE news_artical.news_details_id = news_details.news_details_id) as page_count');
         $this->db->from('news_details');
         $this->db->where('DATE(create_at)', $date);
         $this->db->group_start(); 
@@ -93,6 +104,7 @@ class NewsLetter_Model extends CI_Model
     }
 
     public function getCompIndustry($client_id){
+        $date = date('Y-m-d');
         $this->db->select('*');
         $this->db->from('mail_template');
         $this->db->where('DATE(create_at)', $date);
@@ -105,6 +117,57 @@ class NewsLetter_Model extends CI_Model
         $query = $this->db->get();
         $result = $query->result_array(); 
     
+        return $result; 
+    }
+    
+    public function getIndustryData($client_id){
+        $this->db->select('*');
+        $this->db->from('industry');
+        $this->db->where("FIND_IN_SET('$client_id', client_id) >", 0);
+        $result = $this->db->get()->result_array();
+        $outArr = array();
+        foreach ($result as $row){
+            $row['news'] = $this->getCompNewsByKey($row['Keywords'], $client_id);
+            $outArr[] = $row;
+        }
+        return $outArr;
+    }
+
+    public function getCompData($client_id)
+    {
+        $this->db->select('*');
+        $this->db->from('competitor');
+        $this->db->where('client_id', $client_id);
+        $result = $this->db->get()->result_array();
+        $outArr = array();
+        foreach ($result as $row){
+            $row['news'] = $this->getCompNewsByKey($row['Keywords'], $client_id);
+            $outArr[] = $row;
+        }
+        return $outArr;
+    }
+
+    public function getCompNewsByKey($Keywords, $client_id)
+    {
+        $date = date('Y-m-d');
+        
+        $this->db->select('news_details.*, (SELECT COUNT(news_artical_id) FROM news_artical WHERE news_artical.news_details_id = news_details.news_details_id) as page_count');
+        $this->db->from('news_details');
+        $this->db->where('DATE(create_at)', $date);
+        $this->db->where('is_send', 0);
+
+        $this->db->group_start();
+        $this->db->where("NOT FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
+        $this->db->group_end();
+        
+        $this->db->group_start();
+        foreach (explode(',', $Keywords) as $keyword) {
+            $keyword = trim($keyword); // Trim any whitespace around keywords
+            $this->db->or_where("FIND_IN_SET('$keyword', keywords) >", 0);
+        }
+        $this->db->group_end();
+        $query = $this->db->get();
+        $result = $query->result_array(); 
         return $result; 
     }
 }
