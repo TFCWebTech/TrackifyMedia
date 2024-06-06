@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'newsreport',
+	'hostname' => 'master.herosite.pro',
+	'username' => 'doctor',
+	'password' => 'Vajra@5566',
+	'database' => 'pressbro_NewsReport',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

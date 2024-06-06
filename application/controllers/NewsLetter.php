@@ -21,13 +21,13 @@ class NewsLetter extends CI_Controller {
         $this->load->view('common/footer');
     }
     public function newsMail($client_id){
-
-        // $data['get_client_details'] = $this->newsLetter->getClientDetails($client_id);
+        $data['details'] = $this->newsLetter->getClientById($client_id);
+        $data['get_client_details'] = $this->newsLetter->getClientTemplateDetails($client_id);
         // echo '<pre>';
-        // print_r($data);
+        // print_r($data['get_client_details']);
         // echo '</pre>';
         $this->load->view('common/header');
-        $this->load->view('mail_letter');
+        $this->load->view('mail_letter', $data);
         $this->load->view('common/footer');
     }
  
