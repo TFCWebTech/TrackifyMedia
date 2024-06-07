@@ -46,14 +46,14 @@ margin-bottom: 5px !important;
                 </thead>
                 <tbody>
                 <tr>
-    <td>Air India </td>
-    <td id="dynamicContent">NEW DELHI: Tata Group-owned Air India Express has sacked around 30 of its employees </td>
-    <td>Aarti</td>
-    <td>26/05/2012</td>
-    <td>
-        &nbsp;<a  href="<?php echo site_url('ManageNews/viewNews');?>"> <i class="fa fa-eye text-primary" data-toggle="modal"title="Edit"></i> </a> &nbsp;
-    </td>
-</tr>
+                    <td>Air India </td>
+                    <td id="dynamicContent">NEW DELHI: Tata Group-owned Air India Express has sacked around 30 of its employees </td>
+                    <td>Aarti</td>
+                    <td>26/05/2012</td>
+                    <td>
+                        &nbsp;<a  href="<?php echo site_url('ManageNews/viewNews');?>"> <i class="fa fa-eye text-primary" data-toggle="modal"title="Edit"></i> </a> &nbsp;
+                    </td>
+                </tr>
 
                 </tbody>
             

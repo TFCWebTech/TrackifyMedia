@@ -1,4 +1,11 @@
 <div class="card p-4">
+<form action="<?php echo base_url('NewsLetter/sendMailToMultipleClient');?>" method="post">
+
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="submit" class="btn text-primary font-weight-bold"> Process </button>
+        </div>
+    </div>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -6,7 +13,7 @@
                 <th>News Send Detail</th>
                 <th>Today Pending News</th>
                 <th>Today Send News</th>
-                <th><input type="checkbox" id="checkAll" name="checkAll" value="checkAll"></th>
+                <th><input type="checkbox" id="checkAll" value="checkAll"></th>
             </tr>
         </thead>
         <tbody>
@@ -16,12 +23,15 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><input type="checkbox" class="checkBox" name="option1" value="option1"></td>
+                    <td><input type="checkbox" class="checkBox" name="client_id[]" value="<?php echo $clients['client_id'];?>"></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
+</form>
+
 </div>
+
 </div>
 <script>
     document.getElementById("checkAll").addEventListener("click", function() {

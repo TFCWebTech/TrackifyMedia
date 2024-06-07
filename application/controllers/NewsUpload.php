@@ -29,12 +29,12 @@ class NewsUpload extends CI_Controller {
 		$this->load->view('reporter/news_upload',$data);
         $this->load->view('common/footer');
     }
-
 	
 	public function addArticle() {
 		$index_no = $this->input->post('index');
 		$media_type = $this->input->post('media_type');
 		$publication = $this->input->post('publication');
+		$edition = $this->input->post('edition');
 		$SupplementId = $this->input->post('SupplementId');
 		$journalist_name = $this->input->post('journalist_name');
 		$agency = $this->input->post('agency');
@@ -42,6 +42,28 @@ class NewsUpload extends CI_Controller {
 		$NewsCity = $this->input->post('NewsCity');
 		$headline = $this->input->post('headline');
 		$Summary = $this->input->post('Summary');
+
+		// $video_upload = $this->input->post('video_upload');
+		// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		// 	if (isset($_FILES['video_upload']) && $_FILES['video_upload']['error'] == UPLOAD_ERR_OK) {
+		// 		$uploadDir = 'video/';
+		// 		$uploadFile = $uploadDir . basename($_FILES['video_upload']['name']);
+		
+		// 		// Check if the uploaded file is a video
+		// 		$fileType = mime_content_type($_FILES['video_upload']['tmp_name']);
+		// 		if (strpos($fileType, 'video') !== false) {
+		// 			if (move_uploaded_file($_FILES['video_upload']['tmp_name'], $uploadFile)) {
+		// 				echo "File is valid, and was successfully uploaded.\n";
+		// 			} else {
+		// 				echo "Possible file upload attack!\n";
+		// 			}
+		// 		} else {
+		// 			echo "Uploaded file is not a valid video.\n";
+		// 		}
+		// 	} else {
+		// 		echo "Upload failed. Please try again.\n";
+		// 	}
+		// }
 	
 		$allKeys = array();
 		$allClients = array();
@@ -59,17 +81,16 @@ class NewsUpload extends CI_Controller {
 			}
 		}
 	
-		// Remove duplicates
 		$allKeys = array_unique($allKeys);
 		$allClients = array_unique($allClients);
 	
-		// Convert arrays back to strings
 		$getKeysString = implode(',', $allKeys);
 		$getclientsString = implode(',', $allClients);
 		// exit();
 		$data = array(
 			'media_type_id' => $media_type,
 			'publication_id' => $publication,
+			'edition_id' => $edition,
 			'supplement_id' => $SupplementId,
 			'journalist_id' => $journalist_name,
 			'agencies_id' => $agency,

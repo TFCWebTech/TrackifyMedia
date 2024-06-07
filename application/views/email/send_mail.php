@@ -42,11 +42,6 @@ th {
 </style>
 </head>
 <div class="container" >
-        <div class="row">
-            <div class="col-md-12 text-right mb-2">
-              <a href="<?php echo site_url('NewsLetter/sendMail/'.$details['client_id']);?>"> <i class="fa fa-send-o" style="font-size:36px;color:red"></i></a>
-            </div>
-        </div>
     <div class="card" style="background-color: #F9F9F9;">
                 <div class="header" style="background-color: <?php echo $get_client_details[0]['header_background_color']; ?>; padding:5px 10px;">
                     <table width="100%" cellpadding="0" cellspacing="0">
@@ -97,7 +92,7 @@ th {
                                     <td>
                                         <p><?php echo $detail['quick_links_name']; ?></p>
                                     </td>
-                                    <td><a href="">Login</a></td>
+                                    <td><a href="<?php echo site_url('ClienttDashbord/');?>">Login</a></td>
                                 </tr>
                             <?php elseif ($detail['quick_links_position'] == '2'): ?>
                                 <tr style="background-color: #DCD5D5; color: #ffffff;">
@@ -151,14 +146,14 @@ th {
                     <h4 style="background-color: #6D6B6B; color: #ffffff; padding:4px;"> <?php echo $details['client_name']; ?></h4>
                     <?php
                     foreach ($get_client_details[0]['client_news'] as $key => $news) { ?>
-                        <h5 ><a href="<?php echo site_url('NewsLetter/DisplayNews/'.$news['news_details_id']);?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
+                        <h5 ><a href="<?php echo site_url('ClienttDashbord/Home/DisplayNews/'.$news['news_details_id']);?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
                          <h6 >Summary:</h6>
                             <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                             <?php echo $news['summary']; ?>
                             </p>
                          <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?></p>  
                          <p>Publication :<span> <?php echo $news['publication_id']; ?></span>, Agency :<span> <?php echo $news['agencies_id']; ?></span>  </p>  
-                         <p>Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> </p>                   
+                         <p>Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span></p>                   
                          <hr>
                     <?php }
                     ?>
@@ -170,10 +165,9 @@ th {
                 foreach ($get_client_details[0]['compititors_data'] as $key => $compititor) { ?>
                     <div class="body-content" style="padding:10px 15px 0px 15px;">
                         <h4 style="background-color: #6D6B6B; color: #ffffff; padding:4px;"> <?php echo $compititor['Competitor_name']; ?></h4>
-
                         <?php
                         foreach ($compititor['news'] as $key => $news) { ?>
-                            <h5 ><a href="<?php echo site_url('NewsLetter/DisplayNews/'.$news['news_details_id']);?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
+                            <h5 ><a href="<?php echo site_url('ClienttDashbord/Home/DisplayNews/'.$news['news_details_id']);?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
                              <h6 >Summary:</h6>
                                 <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                                 <?php echo $news['summary']; ?>
@@ -198,14 +192,14 @@ th {
 
                         <?php
                         foreach ($compititor['news'] as $key => $news) { ?>
-                            <h5 ><a href="<?php echo site_url('NewsLetter/DisplayNews/'.$news['news_details_id']);?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
+                            <h5 ><a href="<?php echo site_url('ClienttDashbord/Home/DisplayNews/'.$news['news_details_id']);?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
                              <h6 >Summary:</h6>
                                 <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                                 <?php echo $news['summary']; ?>
                                 </p>
                              <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?></p>  
                              <p>Publication :<span> <?php echo $news['publication_id']; ?></span>, Agency :<span> <?php echo $news['agencies_id']; ?></span>  </p>  
-                             <p>Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> </p>                   
+                             <p>Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span></p>                   
                              <hr>
                         <?php }
                         ?>
@@ -237,7 +231,7 @@ th {
                         ?>
                         </div>
                     </div>
-                    <p style="font-size:<?php echo $get_client_details[0]['footer_title_font_size'] ?>px; color:<?php echo $get_client_details[0]['footer_title_font_color'] ?>;text-align: center"><?php echo $get_client_details[0]['footer_title_name']; ?></p>
+                    <p style="font-size:<?php echo $get_client_details[0]['footer_title_font_size'] ?>px; color:<?php echo $get_client_details[0]['footer_title_font_color'] ?>;text-align: center"><?php echo $get_client_details[0]['footer_title_name']; ?> </p>
                     <p><span style="color:red; font-weight:bold;">This is an auto generated email – please do not reply to this email id</span></p>
                 </div>
         </div>

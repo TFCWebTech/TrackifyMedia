@@ -118,22 +118,16 @@ class ManageNewsModel extends CI_Model
         $client_ids = $row['client_ids']; // Get the concatenated client IDs
     
         if ($client_ids) {
-            // Step 2: Retrieve client details
             $client_ids_array = array_unique(array_map('trim', explode(',', $client_ids)));
             $client_ids_str = implode(',', array_map('intval', $client_ids_array));
             
-            // Retrieve client details
             $this->db->where_in('client_id', $client_ids_array);
             $query_clients = $this->db->get('client');
             $client_details = $query_clients->result_array();
-            
-            
-    
             return [
                 'client_details' => $client_details,
             ];
         }
-    
         return [];
     }
     

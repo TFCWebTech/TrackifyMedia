@@ -402,6 +402,7 @@
             updateChartData(pieChart, labels.slice(0, 3), data.slice(0, 3)); // Pie chart typically has fewer segments
             updateChartData(barChart, labels, data);
             updateChartData(lineChart, labels, data);
+            
             updateChartData(verticalBarChart, labels, data);
             console.log(`Updated charts for: ${timeFrame}`);
         }

@@ -48,7 +48,7 @@
 <div class="container" >
     <div class="card p-3">
         <!-- <form id="articleForm"  method="post">  -->
-        <form action="<?php echo base_url('NewsUpload/addArticle')?>" method="post">
+        <form action="<?php echo base_url('NewsUpload/addArticle')?>" method="post" enctype="multipart/form-data">
             <div class="row">
                     <div class="col-md-12">
                         <div class="text-center">
@@ -60,14 +60,20 @@
                         <div class="border-with-text" data-heading="Article Editing">
                             <div class="row">
                                 <div class="col-md-12 text-right">
-                                    <a class="btn btn-primary" onclick="addMoreFields()">Add Article</a>
+                                    <a class="btn btn-primary" onclick="addMoreFields()">Online Article</a>
                                 </div>
-                                <div class="col-md-4 my-2">
+                                <div class="col-md-6 my-2">
                                     <!-- <label class=" font-weight-bold" for="Height">Upload Image </label>
                                     <input type="file" class="form-control" placeholder="Enter Height" name="image_upload" id="image_upload"> -->
                                     <div class="form-group files">
                                         <label>Upload Your Image </label>
                                         <input type="file" class="form-control" multiple="" name="image_upload[]" id="image_upload">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 my-2">
+                                    <div class="form-group files">
+                                        <label for="video_upload">Upload Your Video</label>
+                                        <input type="file" class="form-control" name="video_upload" id="video_upload" accept="video/*">
                                     </div>
                                 </div>
                             </div>
@@ -142,8 +148,8 @@
                     <div class="col-md-12 mt-3" >
                         <div class="border-with-text" data-heading="Journalist Information">
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <label class="px-1 font-weight-bold" name="journalist_name" for="journalist_name">Journalist Name / News Agencies</label>
+                                        <div class="col-md-3">
+                                            <label class="px-1 font-weight-bold" name="journalist_name" for="journalist_name">Journalist / News Agencies</label>
                                             <select class="form-control" name="journalist_name" id="journalist_name">
                                             <option value="">Select</option>
                                             <optgroup label="News Agencies">
@@ -161,11 +167,11 @@
                                             </optgroup>
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="Author">Author </label>
                                             <input type="text" class="form-control" placeholder="Enter Author" name="author" id="author" >
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="news_position"> News Position</label>
                                             <select class="form-control" name="NewsPosition" id="NewsPosition" >
                                                 <option value="0">Select</option>
@@ -190,7 +196,7 @@
                                                 </select>
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="NewsCity"> News City</label>
                                             <select  class="form-control"  name="NewsCity" id="NewsCity">
                                                 <option value="0">Select</option>
@@ -198,7 +204,7 @@
                                                 </select>
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
+                                        <!-- <div class="col-md-4">
                                             <label class="px-1 font-weight-bold" for="Category"> Category </label>
                                             <select class="form-control" name="category" id="category">
                                                 <option value="0">Select</option>
@@ -208,7 +214,7 @@
                                                 <option value="Agri Honda Siel Power Products" rel="asm0option4">Agri Honda Siel Power Products</option>
                                                 </select>
                                             </select>
-                                        </div>
+                                        </div> -->
                                         <div class="col-md-6">
                                             <label class="px-1 font-weight-bold" for="HeadLine">HeadLine</label>
                                             <textarea  class="form-control" name="headline"  rows="4" cols="50">
@@ -312,7 +318,7 @@
 
                         // Make the API request with the base64-encoded image
                         $.ajax({
-                            url: 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBYb7FLN__svPKZUbaOeoV4kxZrNoxehLw', 
+                            url: 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBKPb2Kqnd_L5WEab0ZaiDHuy9tc_eA5AA', 
                             type: 'POST',
                             contentType: 'application/json',
                             data: JSON.stringify({
