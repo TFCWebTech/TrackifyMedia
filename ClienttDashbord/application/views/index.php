@@ -55,42 +55,48 @@
     margin-top: 0.5rem !important;
 }
 </style>
-
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-md-12 d-flex justify-content-end ">
+                    <form method="post" action="<?php echo site_url('Home/filterGraphs'); ?>">
                     <div class="d-flex ">
-                    <label for="from-date"> From: </label> &nbsp;
-                    <input id="from-date" class="form-control" type="date"> &nbsp;
-                    <label for="to-date"> To: </label> &nbsp;
-                    <input id="to-date" class="form-control" type="date">
-                    <button class="bg-color-primary"> <i class="fa fa-search "></i></button> 
+                        
+                            <label for="from-date"> From: </label> &nbsp;
+                            <input id="from-date" name="from" class="form-control" type="date" value="<?php echo $this->uri->segment(3); ?>" required> &nbsp;
+                            <label for="to-date"> To: </label> &nbsp;
+                            <input id="to-date" name="to" class="form-control" type="date" value="<?php echo $this->uri->segment(4); ?>" required>
+                            &nbsp;<button type="submit" class="bg-primary border-primary text-light"> <i class="fa fa-search "></i></button> 
+                        
                     </div>
+                    </form> &nbsp;&nbsp;
+                    <!-- <input type="text" name="daterange" value="01/01/2015 - 01/31/2015" /> -->
+                    <div class="mb-4">
+                            <select name="" id="chartTypeSelector" class="form-control" onchange="handleChartTypeChange()">
+                                <option value="Quantity">Quantity</option>
+                                <option value="Size">Size</option>
+                                <option value="Media">Media</option>
+                                <option value="Publication">Publication</option>
+                                <option value="Geography">Geography</option>
+                                <option value="Journalist">Journalist</option>
+                            </select>
+                        </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12 d-flex justify-content-between">
-                    <div class="mb-4">
-                        <button class="btn btn-secondary" onclick="updateChart('daily')">Daily</button>
-                        <button class="btn btn-secondary" onclick="updateChart('weekly')">Weekly</button>
-                        <button class="btn btn-secondary" onclick="updateChart('monthly')">Monthly</button>
-                    </div>
-                    <div class="mb-4">
-                        <select name="" id="chartTypeSelector" class="form-control" onchange="handleChartTypeChange()">
-                            <option value="Quantity">Quantity</option>
-                            <option value="Size">Size</option>
-                            <option value="Media">Media</option>
-                            <option value="Publication">Publication</option>
-                            <option value="Geography">Geography</option>
-                            <option value="Journalist">Journalist</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
             <div class="quantity">
+                <div class="row">
+                    <div class="col-md-12 d-flex justify-content-between">
+                        <div class="mb-4">
+                            <button class="btn btn-secondary" onclick="updateChart('daily')">Daily</button>
+                            <button class="btn btn-secondary" onclick="updateChart('weekly')">Weekly</button>
+                            <button class="btn btn-secondary" onclick="updateChart('monthly')">Monthly</button>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Quantity</h6>
@@ -121,8 +127,19 @@
             </div>
 
             <hr>
-
             <div class="size">
+
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-between">
+                    <div class="mb-4">
+                        <button class="btn btn-secondary" onclick="updateChart2('daily')">Daily</button>
+                        <button class="btn btn-secondary" onclick="updateChart2('weekly')">Weekly</button>
+                        <button class="btn btn-secondary" onclick="updateChart2('monthly')">Monthly</button>
+                    </div>
+                    
+                </div>
+            </div>
+
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Size</h6>
@@ -152,6 +169,17 @@
                 </div>
             </div>
             <div class="media">
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-between">
+                    <div class="mb-4">
+                        <button class="btn btn-secondary" onclick="updateChart3('daily')">Daily</button>
+                        <button class="btn btn-secondary" onclick="updateChart3('weekly')">Weekly</button>
+                        <button class="btn btn-secondary" onclick="updateChart3('monthly')">Monthly</button>
+                    </div>
+                    
+                </div>
+            </div>
+
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Media</h6>
@@ -182,6 +210,16 @@
             </div>
 
             <div class="publication">
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-between">
+                    <div class="mb-4">
+                        <button class="btn btn-secondary" onclick="updateChart4('daily')">Daily</button>
+                        <button class="btn btn-secondary" onclick="updateChart4('weekly')">Weekly</button>
+                        <button class="btn btn-secondary" onclick="updateChart4('monthly')">Monthly</button>
+                    </div>
+                    
+                </div>
+            </div>
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Publication</h6>
@@ -213,6 +251,16 @@
 
 
             <div class="geography">
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-between">
+                    <div class="mb-4">
+                        <button class="btn btn-secondary" onclick="updateChart5('daily')">Daily</button>
+                        <button class="btn btn-secondary" onclick="updateChart5('weekly')">Weekly</button>
+                        <button class="btn btn-secondary" onclick="updateChart5('monthly')">Monthly</button>
+                    </div>
+                    
+                </div>
+            </div>
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Geography</h6>
@@ -243,6 +291,16 @@
             </div>
 
             <div class="journalist">
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-between">
+                    <div class="mb-4">
+                        <button class="btn btn-secondary" onclick="updateChart6('daily')">Daily</button>
+                        <button class="btn btn-secondary" onclick="updateChart6('weekly')">Weekly</button>
+                        <button class="btn btn-secondary" onclick="updateChart6('monthly')">Monthly</button>
+                    </div>
+                    
+                </div>
+            </div>
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Journalist</h6>
@@ -341,7 +399,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Revenue',
+                label: '',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -349,6 +407,7 @@
             }]
         },
         options: {
+            indexAxis: 'y',
             maintainAspectRatio: false,
             scales: {
                 y: {
@@ -396,7 +455,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Expenses',
+                label: '',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -428,22 +487,32 @@
     }
 
     function updateChart(timeFrame) {
-        let data, labels;
+        let data = [];
+        let labels = [];
+        var quantityGraphDaily = <?php echo json_encode($quantity_graph_daily); ?>;
+        var quantityGraphWeekly = <?php echo json_encode($quantity_graph_weekly); ?>;
+        var quantityGraphMonthly = <?php echo json_encode($quantity_graph_monthly); ?>;
 
         switch (timeFrame) {
             case 'daily':
-                labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                data = [12, 19, 3, 5, 2, 3, 7]; 
+                for (var i = 0; i < quantityGraphDaily.length; i++) {
+                    labels.push(quantityGraphDaily[i].label);
+                    data.push(quantityGraphDaily[i].count);
+                }
                 break;
             case 'weekly':
-                labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-                data = [20, 30, 10, 40]; 
+                for (var i = 0; i < quantityGraphWeekly.length; i++) {
+                    labels.push(quantityGraphWeekly[i].label);
+                    data.push(quantityGraphWeekly[i].count);
+                }
                 break;
             case 'monthly':
-                labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                data = [30, 40, 20, 50, 60, 70, 80, 90, 100, 110, 120, 130]; 
+                for (var i = 0; i < quantityGraphMonthly.length; i++) {
+                    labels.push(quantityGraphMonthly[i].label);
+                    data.push(quantityGraphMonthly[i].count);
+                }
                 break;
-        }
+        }        
 
         updateChartData(areaChart, labels, data);
         updateChartData(pieChart, labels.slice(0, 3), data.slice(0, 3)); 
@@ -1061,6 +1130,7 @@
             }]
         },
         options: {
+            indexAxis: 'y',
             maintainAspectRatio: false,
             scales: {
                 y: {
@@ -1140,21 +1210,30 @@
     }
 
     function updateChart5(timeFrame) {
-        let data, labels;
-
+        let data = [];
+        let labels = [];
+        var geographyGraphDaily = <?php echo json_encode($geography_graph_daily); ?>;
+        var geographyGraphWeekly = <?php echo json_encode($geography_graph_weekly); ?>;
+        var geographyGraphMonthly = <?php echo json_encode($geography_graph_monthly); ?>;
         switch (timeFrame) {
             case 'daily':
-                labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                data = [12, 19, 3, 5, 2, 3, 7]; 
-                break;
+                for (var i = 0; i < geographyGraphDaily.length; i++) {
+                labels.push(`${geographyGraphDaily[i].label} - ${geographyGraphDaily[i].Edition}`);
+                data.push(geographyGraphDaily[i].count);
+            }
+            break;
             case 'weekly':
-                labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-                data = [20, 30, 10, 40]; 
-                break;
+                for (var i = 0; i < geographyGraphWeekly.length; i++) {
+                labels.push(`${geographyGraphWeekly[i].label} - ${geographyGraphWeekly[i].Edition}`);
+                data.push(geographyGraphWeekly[i].count);
+            }
+            break;
             case 'monthly':
-                labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                data = [30, 40, 20, 50, 60, 70, 80, 90, 100, 110, 120, 130]; 
-                break;
+                for (var i = 0; i < geographyGraphMonthly.length; i++) {
+                labels.push(`${geographyGraphMonthly[i].label} - ${geographyGraphMonthly[i].Edition}`);
+                data.push(geographyGraphMonthly[i].count);
+            }
+            break;
         }
 
         updateChartData5(geographyAreaChart, labels, data);
@@ -1185,7 +1264,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Earnings',
+                label: '',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 0.1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -1232,7 +1311,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Revenue',
+                label: '',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -1240,6 +1319,7 @@
             }]
         },
         options: {
+            indexAxis: 'y',
             maintainAspectRatio: false,
             scales: {
                 y: {
@@ -1287,7 +1367,8 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Expenses',
+                
+                label: '',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -1319,20 +1400,30 @@
     }
 
     function updateChart6(timeFrame) {
-        let data, labels;
+        let data = [];
+        let labels = [];
+        var JournalistGraphDaily = <?php echo json_encode($Journalist_graph_daily); ?>;
+        var JournalistGraphWeekly = <?php echo json_encode($Journalist_graph_weekly); ?>;
+        var JournalistGraphMonthly = <?php echo json_encode($Journalist_graph_monthly); ?>;
 
         switch (timeFrame) {
             case 'daily':
-                labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                data = [12, 19, 3, 5, 2, 3, 7]; 
+                for (var i = 0; i < JournalistGraphDaily.length; i++) {
+                labels.push(`${JournalistGraphDaily[i].label} - ${JournalistGraphDaily[i].Journalist}`);
+                data.push(JournalistGraphDaily[i].count);
+            }
                 break;
             case 'weekly':
-                labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-                data = [20, 30, 10, 40]; 
+                for (var i = 0; i < JournalistGraphWeekly.length; i++) {
+                labels.push(`${JournalistGraphWeekly[i].label} - ${JournalistGraphWeekly[i].Journalist}`);
+                data.push(JournalistGraphWeekly[i].count);
+            }
                 break;
             case 'monthly':
-                labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                data = [30, 40, 20, 50, 60, 70, 80, 90, 100, 110, 120, 130]; 
+                for (var i = 0; i < JournalistGraphMonthly.length; i++) {
+                labels.push(`${JournalistGraphMonthly[i].label} - ${JournalistGraphMonthly[i].Journalist}`);
+                data.push(JournalistGraphMonthly[i].count);
+            }
                 break;
         }
 

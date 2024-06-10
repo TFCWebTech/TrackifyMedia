@@ -37,7 +37,7 @@
 
 .thumbnail-wrapper {
     display: flex;
-    align-items: center;
+    align-items: left;
     justify-content: center;
 }
 
@@ -60,7 +60,7 @@ body {
         if (isset($news_details) && !empty($news_details)) {
             ?>
             <div class="row p-2">
-                <div class="col-md-12 pt-1 text-center">
+                <div class="col-md-12 pt-1 ">
                     <h5 style="color:blue;"><?php echo $news_details['head_line']; ?></h5>
                     <p><?php echo $news_details['summary']; ?></p>
                     <hr>
@@ -99,10 +99,11 @@ body {
                     }
                 }
                 ?>
+                
             <div class="row p-2">
                 <div class="col-md-12 px-5">
-                    <p>Publication: <span style="color:blue;"><?php echo $news_details['publication_id']; ?></span> , Journalist: <span style="color:blue;"><?php echo $news_details['journalist_id']; ?></span> , 
-                    Edition: <span style="color:blue;"><?php echo $news_details['publication_id']; ?></span>, Supplement: <span style="color:blue;"><?php echo $news_details['supplement_id']; ?></span> , Agencies: <span style="color:blue;"><?php echo $news_details['agencies_id']; ?></span> , Date: <span style="color:blue;"><?php echo $news_details['create_at']; ?></span></p>
+                    <p>Publication: <span style="color:blue;"><?php echo $news_details['MediaOutlet']; ?></span> , Journalist: <span style="color:blue;"><?php echo $news_details['Journalist']; ?></span> , 
+                    Edition: <span style="color:blue;"><?php echo $news_details['Edition']; ?></span>, Supplement: <span style="color:blue;"><?php echo $news_details['Supplement']; ?></span> , Agencies: <span style="color:blue;"><?php echo $news_details['Journalist']; ?></span> , Date: <span style="color:blue;"><?php echo $news_details['create_at']; ?></span></p>
                 </div>
             </div>
         <?php 

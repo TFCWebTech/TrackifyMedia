@@ -85,23 +85,44 @@ class NewsLetter_Model extends CI_Model
 
     }
 
+    // public function getNewsDetails($client_id) {
+    //     $date = date('Y-m-d');
+        
+    //     $this->db->select('news_details.*, (SELECT COUNT(news_artical_id) FROM news_artical WHERE news_artical.news_details_id = news_details.news_details_id) as page_count');
+    //     $this->db->from('news_details');
+    //     $this->db->where('DATE(create_at)', $date);
+    //     $this->db->group_start(); 
+    //     $this->db->like('client_id', ',' . $client_id . ',');
+    //     $this->db->or_like('client_id', $client_id . ',');
+    //     $this->db->or_like('client_id', ',' . $client_id);
+    //     $this->db->or_where('client_id', $client_id);
+    //     $this->db->group_end(); 
+    
+    //     $query = $this->db->get();
+    //     $result = $query->result_array(); 
+    //     return $result; 
+    // }
+
     public function getNewsDetails($client_id) {
         $date = date('Y-m-d');
-        
-        $this->db->select('news_details.*, (SELECT COUNT(news_artical_id) FROM news_artical WHERE news_artical.news_details_id = news_details.news_details_id) as page_count');
-        $this->db->from('news_details');
-        $this->db->where('DATE(create_at)', $date);
+        $this->db->select('nd.*, mout.*, ed.gidEdition , ed.Edition, s.gidSupplement, s.Supplement, j.gidJournalist, j.Journalist, (SELECT COUNT(na.news_artical_id) FROM news_artical as na WHERE na.news_details_id = nd.news_details_id) as page_count');
+        $this->db->from('news_details as nd');
+        $this->db->join('mediaoutlet as mout', 'nd.publication_id = mout.gidMediaOutlet', 'left');
+        $this->db->join('edition as ed', 'nd.edition_id = ed.gidEdition', 'left');
+        $this->db->join('supplements as s', 'nd.supplement_id = s.gidSupplement', 'left');
+        $this->db->join('journalist as j', 'nd.journalist_id = j.gidJournalist', 'left');
+        $this->db->where('DATE(nd.create_at)', $date);
         $this->db->group_start(); 
-        $this->db->like('client_id', ',' . $client_id . ',');
-        $this->db->or_like('client_id', $client_id . ',');
-        $this->db->or_like('client_id', ',' . $client_id);
-        $this->db->or_where('client_id', $client_id);
+        $this->db->like('nd.client_id', ',' . $client_id . ',');
+        $this->db->or_like('nd.client_id', $client_id . ',');
+        $this->db->or_like('nd.client_id', ',' . $client_id);
+        $this->db->or_where('nd.client_id', $client_id);
         $this->db->group_end(); 
     
         $query = $this->db->get();
         $result = $query->result_array(); 
         return $result; 
-    }
+    }    
 
     public function getCompIndustry($client_id){
         $date = date('Y-m-d');
@@ -172,8 +193,14 @@ class NewsLetter_Model extends CI_Model
     }
 
     public function getNewsDataById($news_details_id) {
-        $this->db->select('*');
-        $this->db->from('news_details');
+        $this->db->select('nd.*, mout.*, ed.gidEdition , ed.Edition, s.gidSupplement, s.Supplement, j.gidJournalist, j.Journalist');
+        // $this->db->from('news_details');
+        $this->db->from('news_details as nd');
+        $this->db->join('mediaoutlet as mout', 'nd.publication_id = mout.gidMediaOutlet', 'left');
+        $this->db->join('edition as ed', 'nd.edition_id = ed.gidEdition', 'left');
+        $this->db->join('supplements as s', 'nd.supplement_id = s.gidSupplement', 'left');
+        $this->db->join('journalist as j', 'nd.journalist_id = j.gidJournalist', 'left');
+
         $this->db->where('news_details_id', $news_details_id);
         $result = $this->db->get()->row_array();
         if ($result) {
