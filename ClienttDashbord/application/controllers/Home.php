@@ -14,7 +14,9 @@ class Home extends CI_Controller {
 
     public function index()
     {
-        // $data['all_staff'] = $this->staff->getStaffData();
+        $client_id = $this->session->userdata('client_id');
+        // echo $client_id;
+        
         $this->load->view('common/header');
         $this->load->view('index');
         $this->load->view('common/footer');
@@ -27,5 +29,6 @@ class Home extends CI_Controller {
     $this->load->view('common/footer');
 
     }
+
 }
 ?>

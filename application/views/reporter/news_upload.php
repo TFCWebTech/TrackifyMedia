@@ -56,42 +56,18 @@
                         </div>  
                         <hr>
                     </div>
-                    <div class="col-md-12 mt-3">
-                        <div class="border-with-text" data-heading="Article Editing">
-                            <div class="row">
-                                <div class="col-md-12 text-right">
-                                    <a class="btn btn-primary" onclick="addMoreFields()">Online Article</a>
-                                </div>
-                                <div class="col-md-6 my-2">
-                                    <!-- <label class=" font-weight-bold" for="Height">Upload Image </label>
-                                    <input type="file" class="form-control" placeholder="Enter Height" name="image_upload" id="image_upload"> -->
-                                    <div class="form-group files">
-                                        <label>Upload Your Image </label>
-                                        <input type="file" class="form-control" multiple="" name="image_upload[]" id="image_upload">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-2">
-                                    <div class="form-group files">
-                                        <label for="video_upload">Upload Your Video</label>
-                                        <input type="file" class="form-control" name="video_upload" id="video_upload" accept="video/*">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- <div class="row" id="news_arr">
-                            </div> -->
-                        </div>
-                    </div>
+                    
                     <div class="col-md-12 py-2 mt-3" >
                         <div class="border-with-text" data-heading="Media Information">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Media Type </label>
-                                            <select class="form-control" name="media_type" id="media_type">
+                                            <select class="form-control" name="media_type" id="media_type" onchange="checkSelection()">
                                             <option value="">Select</option>
                                                 <option value="Magazine">Magazine</option>
                                                 <option value="NewsPaper">NewsPaper</option>
-                                                <option value="Online">Online</option>
-                                                <option value="RSS">RSS</option>
+                                                <option value="Online" >Online</option>
+                                                <option value="Video">Video</option>
                                                 <option value="TV">TV</option>
                                             </select>
                                         </div>
@@ -228,10 +204,50 @@
                                     </div>
                         </div>
                     </div>
-
+                    <!-- <div class="col-md-12 mt-3">
+                        <div class="border-with-text" data-heading="Article Editing">
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <a class="btn btn-primary" onclick="addMoreFields()">Online Article</a>
+                                </div>
+                                <div class="col-md-6 my-2">
+                                   
+                                    <div class="form-group files">
+                                        <label>Upload Your Image </label>
+                                        <input type="file" class="form-control" multiple="" name="image_upload[]" id="image_upload">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 my-2">
+                                    <div class="form-group files">
+                                        <label for="video_upload">Upload Your Video</label>
+                                        <input type="file" class="form-control" name="video_upload" id="video_upload" accept="video/*">
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div> -->
                     <div class="col-md-12 mt-3">
                         <div class="border-with-text" data-heading="Article Editing">
-                           
+                        <div class="row">
+                                <!-- <div class="col-md-12 text-right">
+                                    <a class="btn btn-primary" onclick="addMoreFields()">Online Article</a>
+                                </div> -->
+                                <div class="col-md-6 my-2">
+                                    <!-- <label class=" font-weight-bold" for="Height">Upload Image </label>
+                                    <input type="file" class="form-control" placeholder="Enter Height" name="image_upload" id="image_upload"> -->
+                                    <div class="form-group files">
+                                        <label>Upload Your Image </label>
+                                        <input type="file" class="form-control" multiple="" name="image_upload[]" id="image_upload">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 my-2">
+                                    <div class="form-group files">
+                                        <label for="video_upload">Upload Your Video</label>
+                                        <input type="file" class="form-control" name="video_upload" id="video_upload" accept="video/*">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row" id="news_arr">
                                 
                             </div>
@@ -248,7 +264,17 @@
 
 <!-- this div is for footer --->
 </div>
+<script>
+function checkSelection() {
+    var selectElement = document.getElementById('media_type');
+    var selectedValue = selectElement.value;
 
+    if (selectedValue === 'Online') {
+        addMoreFields();
+    }
+}
+
+</script>
 <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
 
@@ -293,6 +319,7 @@
                         var imageId = image.article_images_id;
                         console.log("Image URL:", imageUrl);
                         console.log("Image ID:", imageId);
+                        // demo(i);
                         imageToText(imageUrl, i, imageId);
                         i++;
                     });
@@ -306,7 +333,7 @@
         });
     });
 
-    function imageToText(imageUrl, index , imageId) {
+        function imageToText(imageUrl, index , imageId) {
         // Fetch the image content as a Blob
         fetch(imageUrl)
             .then(response => response.blob())
@@ -337,12 +364,11 @@
                             }),
                             
                             success: function(response) {
-                                // Check if response is not empty and contains responses array
                                 if (response && response.responses && response.responses.length > 0) {
-                                    // Check if textAnnotations array exists and is not empty
                                     if (response.responses[0].textAnnotations && response.responses[0].textAnnotations.length > 0) {
                                         var description = response.responses[0].textAnnotations[0].description;
                                         console.log(description);
+
 
                                         var textareaId = 'editor_' + index; // Unique ID for textarea
                                         var editorId = 'editor_instance_' + index;   // Unique ID for CKEditor instance
@@ -354,6 +380,7 @@
                                         data += '</div></div>';
                                         data += '<div class="col-md-12" id="keyword_container_' + index + '"></div>'; // Placeholder for keywords
                                         data += '<div class="col-md-12" id="client_container_' + index + '"></div>';
+                                        data += '<div class="col-md-12" id="getCompData' + index + '"></div>';
                                         data += '<div class="col-md-6">';
                                         data += '<label>Page Number </label>';
                                         data += '<input type="number" name="page_no' + index + '" class="form-control" placeholder="page no">';
@@ -382,18 +409,46 @@
                                                     if (keywords.length > 0) {
                                                         var formattedKeywords = keywords.join(', ');
 
-                                                        // Update the UI with the matching keywords
                                                         console.log("Matching Keywords:", formattedKeywords);
+
+                                                        let f_keys = formattedKeywords.split(',').map(keyword => keyword.trim());
+
+                                                            let selectOptions = '';
+                                                            // Iterate through the list of all keywords and include all keywords
+                                                            <?php foreach($get_keywords as $keys): ?>
+                                                                var keyword = "<?php echo $keys; ?>";
+                                                                if (f_keys.includes(keyword)) {
+                                                                    selectOptions += `<option value="${keyword}" selected>${keyword}</option>`;
+                                                                } else {
+                                                                    selectOptions += `<option value="${keyword}">${keyword}</option>`;
+                                                                }
+                                                            <?php endforeach; ?>
 
                                                         let keywordData = '<div class="row">';
                                                         keywordData += '<div class="col-md-12">';
-                                                        keywordData += '<label>Matching Keywords </label>';
-                                                        keywordData += '<textarea class="form-control" name="getKeys' + index + '[]" id="getKeys' + index + '" oninput="sendKeywordData(' + index + ')">' + formattedKeywords + '</textarea>';
+                                                        // keywordData += '<label>Matching Keywords </label>';
+                                                        // keywordData += '<textarea class="form-control" name="getKeys' + index + '[]" id="getKeys' + index + '" oninput="sendKeywordData(' + index + ')">' + formattedKeywords + '</textarea>';
+                                                        keywordData += '<label>Keywords </label>';
+                                                        keywordData += '<select class="js-example-basic-multiple form-control" name="getKeys' + index + '[]" id="getKeys' + index + '" multiple="multiple">';
+                                                        keywordData += '<option disabled>Select</option>';
+                                                        keywordData += selectOptions; // Add select options here
+                                                        keywordData += '</select>';
                                                         keywordData += '</div>';
                                                         keywordData += '</div>';
                                                         // Append the keyword data to the placeholder container
+                                                        // $('#keyword_container_' + index).html(keywordData);
+                                                        // sendKeywordData(index);
+
+                                                        // Append the keyword data to the placeholder container
                                                         $('#keyword_container_' + index).html(keywordData);
-                                                        sendKeywordData(index);
+                                                        // Reinitialize Select2 on the newly added select element
+                                                        $('#getKeys' + index).select2();
+                                                        $('#getKeys' + index).on('change', function() {
+                                                            let selectedKeywords = $(this).val(); // Get all selected keywords
+                                                            sendKeywordData(index, selectedKeywords);
+                                                        });
+                                                        // Trigger change event programmatically to call sendKeywordData immediately
+                                                        $('#getKeys' + index).trigger('change');
                                                     } else {
                                                         console.log("No matching keywords found.");
                                                     }
@@ -426,6 +481,126 @@
             });
     }
 });
+
+
+    // function imageToText(imageUrl, index , imageId) {
+    //     // Fetch the image content as a Blob
+    //     fetch(imageUrl)
+    //         .then(response => response.blob())
+    //         .then(blob => {
+    //             setTimeout(() => {
+    //                 const reader = new FileReader();
+    //                 reader.onloadend = function() {
+    //                     const base64data = reader.result.split(',')[1];
+
+    //                     // Make the API request with the base64-encoded image
+    //                     $.ajax({
+    //                         url: 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBKPb2Kqnd_L5WEab0ZaiDHuy9tc_eA5AA', 
+    //                         type: 'POST',
+    //                         contentType: 'application/json',
+    //                         data: JSON.stringify({
+    //                             "requests": [
+    //                                 {
+    //                                     "image": {
+    //                                         "content": base64data
+    //                                     },
+    //                                     "features": [
+    //                                         {
+    //                                             "type": "TEXT_DETECTION"
+    //                                         }
+    //                                     ]
+    //                                 }
+    //                             ]
+    //                         }),
+                            
+    //                         success: function(response) {
+    //                             if (response && response.responses && response.responses.length > 0) {
+    //                                 if (response.responses[0].textAnnotations && response.responses[0].textAnnotations.length > 0) {
+    //                                     var description = response.responses[0].textAnnotations[0].description;
+    //                                     console.log(description);
+
+    //                                     var textareaId = 'editor_' + index; // Unique ID for textarea
+    //                                     var editorId = 'editor_instance_' + index;   // Unique ID for CKEditor instance
+                                        
+    //                                     let data = '<div class="col-md-6"><div class="row mt-2">';
+    //                                     data += '<div class="col-md-12">';
+    //                                     data += '<input type="text" name="image_id' + index + '" class="form-control" value="' + imageId + '">';
+    //                                     data += '<textarea class="form-control" name="editor' + index + '" id="getNews' + editorId + '"></textarea>';
+    //                                     data += '</div></div>';
+    //                                     data += '<div class="col-md-12" id="keyword_container_' + index + '"></div>'; // Placeholder for keywords
+    //                                     data += '<div class="col-md-12" id="client_container_' + index + '"></div>';
+    //                                     data += '<div class="col-md-6">';
+    //                                     data += '<label>Page Number </label>';
+    //                                     data += '<input type="number" name="page_no' + index + '" class="form-control" placeholder="page no">';
+    //                                     data += '</div></div>';
+
+    //                                     // Increment the counter
+    //                                     counter++;
+    //                                     // Append the hidden input field with the updated counter value
+    //                                     data += '<input type="text" value="' + counter + '" name="index" id="index_value" hidden>';
+
+    //                                     // Append the textarea to the container
+    //                                     $('#news_arr').append(data);
+    //                                     // Initialize CKEditor for the new textarea
+    //                                     var img = CKEDITOR.replace('editor' + index);
+    //                                     img.setData(description);
+    //                                     $.ajax({
+    //                                         type: 'POST',
+    //                                         url: "<?php echo site_url('Reporter/searchKeywords')?>",
+    //                                         data: { description: description }, // Send the description
+    //                                         success: function(response) {
+    //                                             console.log("Response:", response); // Log the response object to the console
+    //                                             try {
+    //                                                 var keywords = JSON.parse(response);
+    //                                                 console.log("Parsed Keywords:", keywords);
+    //                                                 // Check if any matching keywords were returned
+    //                                                 if (keywords.length > 0) {
+    //                                                     var formattedKeywords = keywords.join(', ');
+
+    //                                                     // Update the UI with the matching keywords
+    //                                                     console.log("Matching Keywords:", formattedKeywords);
+
+    //                                                     let keywordData = '<div class="row">';
+    //                                                     keywordData += '<div class="col-md-12">';
+    //                                                     keywordData += '<label>Matching Keywords </label>';
+    //                                                     keywordData += '<textarea class="form-control" name="getKeys' + index + '[]" id="getKeys' + index + '" oninput="sendKeywordData(' + index + ')">' + formattedKeywords + '</textarea>';
+    //                                                     keywordData += '</div>';
+    //                                                     keywordData += '</div>';
+    //                                                     // Append the keyword data to the placeholder container
+    //                                                     $('#keyword_container_' + index).html(keywordData);
+    //                                                     sendKeywordData(index);
+    //                                                 } else {
+    //                                                     console.log("No matching keywords found.");
+    //                                                 }
+    //                                             } catch (error) {
+    //                                                 console.error("Error parsing response:", error);
+    //                                             }
+    //                                         },
+    //                                         error: function(xhr, status, error) {
+    //                                             console.error(error);
+    //                                         }
+    //                                     });
+    //                                 } else {
+    //                                     console.error('No text annotations found in the response.');
+    //                                 }
+    //                             } else {
+    //                                 console.error('Invalid response format or no responses received.');
+    //                             }
+    //                         },
+    //                         error: function(xhr, status, error) {
+    //                             // Handle error
+    //                             console.error(error);
+    //                         }
+    //                     });
+    //                 };
+    //                 reader.readAsDataURL(blob);
+    //             }, index * 2000); // Delay each conversion by 2 seconds (index * 2000 milliseconds)
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching and converting image:', error);
+    //         });
+    // }
+// });
 
 
 var index = 0;

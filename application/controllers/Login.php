@@ -45,7 +45,7 @@ class Login extends CI_Controller {
                 if($this->session->userdata('user_type') == 'Reporter')  {   
                     redirect('NewsUpload');
                 }elseif($this->session->userdata('user_type') == 'Admin'){
-                    redirect('ManageNews');
+                    redirect('newsLetter');
                 }else{
                     redirect('Login'); 
                 }  

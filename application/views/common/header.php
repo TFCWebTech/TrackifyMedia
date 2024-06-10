@@ -119,7 +119,6 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
                 </div>
                 <?php
                     if($this->session->userdata('user_id')){ 
@@ -150,11 +149,11 @@
             </li>
             <?php
             } ?>
-            <li class="nav-item <?php print ($this->uri->segment(1)=='ManageNews')?'active':''; ?>">
+            <!-- <li class="nav-item <?php print ($this->uri->segment(1)=='ManageNews')?'active':''; ?>">
                 <a class="nav-link" href="<?php echo site_url('ManageNews');?>">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Manage News</span></a>
-            </li>
+            </li> -->
             <?php
              if($this->session->userdata('user_type') == 'Reporter'){?>
             <li class="nav-item <?php print ($this->uri->segment(1)=='EditReporter')?'active':''; ?>">

@@ -56,7 +56,7 @@ function addKeywordInput() {
     input.setAttribute('type', 'text');
     input.classList.add('form-control');
     input.setAttribute('placeholder', 'Enter Keywords');
-    input.setAttribute('name', 'Keywords');
+    input.setAttribute('name', 'Keywords[]');
     input.setAttribute('required', 'required');
 
     formGroup.appendChild(label);
@@ -145,7 +145,7 @@ function addKeywordInput2() {
 
 <!-- The Modal -->
 <div class="modal" id="myModal">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog ">
     <div class="modal-content">
 
       <!-- Modal Header -->
@@ -159,19 +159,19 @@ function addKeywordInput2() {
       <div class="modal-body">
             <form onsubmit="return validateForm()" action="<?php echo site_url('ManageClient/addClient')?>" method="post">
              <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label class="px-1 font-weight-bold" for="user_type">Client Name </label>
                     <input type="text" class="form-control" placeholder="Enter Client Name" name="client_name" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label class="px-1 font-weight-bold" for="user_type">Password</label>
                     <input type="password" class="form-control" placeholder="Enter Password" name="client_password" id="password" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label class="px-1 font-weight-bold" for="user_type">Re-Type Password</label>
                     <input type="password" class="form-control" placeholder="Enter Re-Type Password" name="re_password" id="re_password" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label class="px-1 font-weight-bold" for="is_active">Status</label>
                     <select name="is_active" class="form-control">
                         <option >Select</option>
@@ -179,15 +179,15 @@ function addKeywordInput2() {
                         <option value="0">InActive</option>
                     </select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label class="px-1 font-weight-bold" for="Sector">Sector</label>
                     <select name="Sector" class="form-control">
                         <option >Select</option>
                     </select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                 <label class="px-1 font-weight-bold" for="tier_type">Client  </label>
-                        <select class="form-control" name="" id="client_select">
+                        <select class="form-control" name="client_select" id="client_select">
                         <option value="">Select</option>
                             <option value="1">Client</option>
                             <option value="0" selected="">Category</option>
@@ -198,35 +198,35 @@ function addKeywordInput2() {
                 </div>
                 </div>
                 <div class="row" id="hiddenContent">
-                    <div class="col-md-6" >
+                    <div class="col-md-12" >
                         <div class="form-group" >
                             <label class="px-1 font-weight-bold" for="tier_type">Expiry Date  </label>
-                            <input type="text" class="form-control" placeholder="Enter Expiry Date" name="publiction_name" required>
+                            <input type="date" class="form-control" placeholder="Enter Expiry Date" name="e_date" required>
                         </div>
                     </div>
            
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label class="px-1 font-weight-bold" for="tier_type">Version  </label>
-                            <select class="form-control" name="" id="">
-                            <option value="1">ProPR</option>
-                            <option value="2">NewsTrac</option>                            
-                            <option value="3">Taj-Mahal</option>	
-                            <option value="4">Mini Rooster</option>
-                            <option value="5">TV</option>						
+                            <select class="form-control" name="version" id="">
+                            <option value="ProPR">ProPR</option>
+                            <option value="NewsTrac">NewsTrac</option>                            
+                            <option value="Taj-Mahal">Taj-Mahal</option>	
+                            <option value="Mini Rooster">Mini Rooster</option>
+                            <option value="TV">TV</option>						
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label class="px-1 font-weight-bold" for="tier_type">Website URL</label>
-                            <input type="text" class="form-control" placeholder="Enter Website URL" name="publiction_name" required>
+                            <input type="text" class="form-control" placeholder="Enter Website URL" name="website_url" required>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label class="px-1 font-weight-bold" for="tier_type">Send Blank Mail  </label>
-                            <select class="form-control" name="" id="">
+                            <select class="form-control" name="blank_mail" id="">
                             <option value="">Select</option>
                                 <option value="1">Yes</option>
                                 <option value="3">No</option>
@@ -236,7 +236,7 @@ function addKeywordInput2() {
                     </div>
                 </div>
                 <div class="row">
-                <div class="col-md-6" id="additionalKeywords">
+                <div class="col-md-12" id="additionalKeywords">
                     <label class="px-1 font-weight-bold" for="user_type">Add Keywords</label>
                     <input type="text" class="form-control" placeholder="Enter Keywords" name="Keywords[]" required>
                 </div>

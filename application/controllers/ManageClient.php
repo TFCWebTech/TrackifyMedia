@@ -18,16 +18,46 @@ class ManageClient extends CI_Controller {
         $this->load->view('superAdmin/manage_client');
         $this->load->view('common/footer');
     }
-    public function addClient(){
-            $client_name = $this->input->post('client_name');
-	        $client_password = $this->input->post('client_password');
-            $enc_pass = md5($client_password);
-            $is_active = $this->input->post('is_active');
-            $Keywords = $this->input->post('Keywords');
-            
-            // $Keyword = explode(',', $Keywords);
-            //  print_r($Keyword);
-	}
+    public function addClient() {
+        $client_name = $this->input->post('client_name');
+        $client_password = $this->input->post('client_password');
+        $enc_pass = md5($client_password);
+        $is_active = $this->input->post('is_active');
+        $Sector = $this->input->post('Sector');
+        $client = $this->input->post('client_select');
+        $e_date = $this->input->post('e_date');
+        $version = $this->input->post('version');
+        $website_url = $this->input->post('website_url');
+        $blank_mail = $this->input->post('blank_mail');
+        $Keyword = $this->input->post('Keywords');
+    
+        $Keywords_string = implode(',', $Keyword);
+        $data = [
+            'client_name' => $client_name,
+            'password' => $enc_pass,
+            'cilent_status' => $is_active,
+            'sector_id' => $Sector,
+            'client_type' => $client,
+            'expiry_date' => $e_date,
+            'version' => $version,
+            'website_url' => $website_url,
+            'blank_mail' => $blank_mail,
+            'client_keywords' => $Keywords_string,
+        ];
+    
+        // print_r($data); 
+    
+        $result = $this->db->insert('client', $data);
+    
+        // Uncomment the line above if you want to insert data into the database
+    
+        if($result){
+            $this->session->set_flashdata('success', 'Client added successfully');
+            redirect('ManageClient/ClientInfo');
+        }
+    
+    }
+    
     public function ClientInfo(){
         $data['get_clients'] = $this->client->getClients();
         $this->load->view('common/header');

@@ -51,13 +51,13 @@ class ManageReporter extends CI_Controller {
 	        	'user_name' => $reporter_name,
 	        	'user_password' => $enc_pass,
 	        	'user_status' => $is_active,
-				'user_type_id' => '2'
+				'user_type' => 'Reporter'
 	        );
-				// echo "done";
-				// print_r($data);
+				
 				$this->reporter->insert('user', $data);
+
 				$this->session->set_flashdata('success', 'Reporter Added Successfully.');
-	       		redirect('ManageReporter');
+	       		redirect('ManageReporter/ReporterInfo');
 	    }
 	}
     

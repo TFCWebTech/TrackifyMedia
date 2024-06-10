@@ -39,6 +39,14 @@ th {
                 text-align: center;
             }
         }
+        p{
+            margin-top:0px !important;
+            margin-bottom:0px !important;
+        }
+        h5 , h6{
+            margin-top: 0px !important;
+            margin-bottom: 0px !important;
+        }
 </style>
 </head>
 <div class="container" >
@@ -148,7 +156,7 @@ th {
                 </table>
                 </div>
                 <div class="body-content" style="padding:10px 15px 0px 15px;">
-                    <h4 style="background-color: #6D6B6B; color: #ffffff; padding:4px;"> <?php echo $details['client_name']; ?></h4>
+                    <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;"> <?php echo $details['client_name']; ?></h4>
                     <?php
                     foreach ($get_client_details[0]['client_news'] as $key => $news) { ?>
                         <h5 ><a href="<?php echo site_url('NewsLetter/DisplayNews/'.$news['news_details_id']);?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
@@ -156,20 +164,20 @@ th {
                             <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                             <?php echo $news['summary']; ?>
                             </p>
-                         <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?></p>  
-                         <p>Publication :<span> <?php echo $news['publication_id']; ?></span>, Agency :<span> <?php echo $news['agencies_id']; ?></span>  </p>  
-                         <p>Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> </p>                   
+                         <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> 
+                         Publication :<span> <?php echo $news['publication_id']; ?></span>, Agency :<span> <?php echo $news['agencies_id']; ?></span>   
+                         Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> </p>                   
                          <hr>
                     <?php }
                     ?>
                 </div>
                 <div class="body-content" style="padding:10px 15px 0px 15px;">
-                    <h4 style="background-color: #6D6B6B; color: #ffffff; padding:4px;"> Competition</h4>
+                    <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;"> Competition</h4>
                 </div>
                 <?php 
                 foreach ($get_client_details[0]['compititors_data'] as $key => $compititor) { ?>
                     <div class="body-content" style="padding:10px 15px 0px 15px;">
-                        <h4 style="background-color: #6D6B6B; color: #ffffff; padding:4px;"> <?php echo $compititor['Competitor_name']; ?></h4>
+                        <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;"> <?php echo $compititor['Competitor_name']; ?></h4>
 
                         <?php
                         foreach ($compititor['news'] as $key => $news) { ?>
@@ -178,9 +186,9 @@ th {
                                 <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                                 <?php echo $news['summary']; ?>
                                 </p>
-                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?></p>  
-                             <p>Publication :<span> <?php echo $news['publication_id']; ?></span>, Agency :<span> <?php echo $news['agencies_id']; ?></span>  </p>  
-                             <p>Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> </p>                   
+                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?>  
+                             Publication :<span> <?php echo $news['publication_id']; ?></span>, Agency :<span> <?php echo $news['agencies_id']; ?></span>  
+                             Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> </p>                   
                              <hr>
                         <?php }
                         ?>
@@ -189,12 +197,12 @@ th {
                 ?>
 
 <div class="body-content" style="padding:10px 15px 0px 15px;">
-                    <h4 style="background-color: #6D6B6B; color: #ffffff; padding:4px;"> Industry</h4>
+                    <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;"> Industry</h4>
                 </div>
                 <?php 
                 foreach ($get_client_details[0]['industry_data'] as $key => $Industry) { ?>
                     <div class="body-content" style="padding:10px 15px 0px 15px;">
-                        <h4 style="background-color: #6D6B6B; color: #ffffff; padding:4px;"> <?php echo $Industry['Industry_name']; ?></h4>
+                        <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;"> <?php echo $Industry['Industry_name']; ?></h4>
 
                         <?php
                         foreach ($compititor['news'] as $key => $news) { ?>
@@ -203,9 +211,9 @@ th {
                                 <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                                 <?php echo $news['summary']; ?>
                                 </p>
-                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?></p>  
-                             <p>Publication :<span> <?php echo $news['publication_id']; ?></span>, Agency :<span> <?php echo $news['agencies_id']; ?></span>  </p>  
-                             <p>Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> </p>                   
+                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?>
+                             Publication :<span> <?php echo $news['publication_id']; ?></span>, Agency :<span> <?php echo $news['agencies_id']; ?></span>   
+                             Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> </p>                   
                              <hr>
                         <?php }
                         ?>

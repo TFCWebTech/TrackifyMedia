@@ -182,7 +182,7 @@ th {
                 <?php }
                 ?>
 
-<div class="body-content" style="padding:10px 15px 0px 15px;">
+                <div class="body-content" style="padding:10px 15px 0px 15px;">
                     <h4 style="background-color: #6D6B6B; color: #ffffff; padding:4px;"> Industry</h4>
                 </div>
                 <?php 
