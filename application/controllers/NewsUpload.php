@@ -80,7 +80,6 @@ class NewsUpload extends CI_Controller {
 				$allClients = array_merge($allClients, $getclient);
 			}
 		}
-	
 		$allKeys = array_unique($allKeys);
 		$allClients = array_unique($allClients);
 	
@@ -118,7 +117,6 @@ class NewsUpload extends CI_Controller {
 							'competitor_id' => $getcompetitor_data_id[$j] ?? null,
 							'Industry_id' => $getIndustry_data_id[$j] ?? null,
 						);
-						
 						// print_r($client_competitor);
 						$this->reporter->insert('client_competetor_industry', $client_competitor);
 					}
@@ -130,13 +128,17 @@ class NewsUpload extends CI_Controller {
 				 $editor = $this->input->post('editor' . $i);
 				 $pageNo = $this->input->post('page_no' . $i);
 				 $image_id = $this->input->post('image_id' . $i);
-				 
+				//  $height = $this->input->post('height' . $i);
+				//  $width = $this->input->post('width' . $i);
 				$newsArtical = array(
 					'news_details_id' => $newsDetailsId,
 					'news_artical' => $editor,
 					'page_no' => $pageNo,
 					'artical_images_id' => $image_id,
+					// 'image_height' => $height,
+					// 'image_width	' => $width,
 				);
+
 				$this->reporter->insert('news_artical', $newsArtical);
 			}
 		}

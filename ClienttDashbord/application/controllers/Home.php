@@ -27,8 +27,17 @@ class Home extends CI_Controller {
         $data['geography_graph_daily'] = $this->newsLetter->get_geography_data_by_timeframe('daily', $client_id, $from, $to);
         $data['geography_graph_weekly'] = $this->newsLetter->get_geography_data_by_timeframe('weekly', $client_id, $from, $to);
         $data['geography_graph_monthly'] = $this->newsLetter->get_geography_data_by_timeframe('monthly', $client_id, $from, $to);
-        // print_r($data['geography_graph_monthly']);
+
+        $data['media_graph_daily'] = $this->newsLetter->get_media_data_by_timeframe('daily', $client_id, $from, $to);
+        $data['media_graph_weekly'] = $this->newsLetter->get_media_data_by_timeframe('weekly', $client_id, $from, $to);
+        $data['media_graph_monthly'] = $this->newsLetter->get_media_data_by_timeframe('monthly', $client_id, $from, $to);
+
+        $data['publication_graph_daily'] = $this->newsLetter->get_Publication_data_by_timeframe('daily', $client_id, $from, $to);
+        $data['publication_graph_weekly'] = $this->newsLetter->get_Publication_data_by_timeframe('weekly', $client_id, $from, $to);
+        $data['publication_graph_monthly'] = $this->newsLetter->get_Publication_data_by_timeframe('monthly', $client_id, $from, $to);
         
+        // print_r($data['publication_graph_daily']);
+
         $this->load->view('common/header');
         $this->load->view('index', $data);
         $this->load->view('common/footer');

@@ -176,10 +176,8 @@
                         <button class="btn btn-secondary" onclick="updateChart3('weekly')">Weekly</button>
                         <button class="btn btn-secondary" onclick="updateChart3('monthly')">Monthly</button>
                     </div>
-                    
                 </div>
             </div>
-
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Media</h6>
@@ -281,12 +279,16 @@
                 <div id="geographyverticalBarChart" class="chart-container-5">
                     <canvas id="geographyVerticalBarChart"></canvas>
                 </div>
+                <div id="geographytableChart" class="chart-container-5">
+                    <canvas id="geographyTableChart"></canvas>
+                </div>
                 <div class="my-4">
                     <!-- <button class="btn btn-primary" onclick="showChart5('geographyareaChart')">Area Chart</button> -->
                     <button class="btn btn-primary" onclick="showChart5('geographypieChart')">Pie Chart</button>
                     <button class="btn btn-primary" onclick="showChart5('geographybarChart')">Bar Chart</button>
                     <button class="btn btn-primary" onclick="showChart5('geographylineChart')">Line Chart</button>
                     <button class="btn btn-primary" onclick="showChart5('geographyverticalBarChart')">Column Chart</button>
+                    <button class="btn btn-primary" onclick="showChartTable('geographytableChart')"> Table </button>
                 </div>
             </div>
 
@@ -595,6 +597,7 @@
             }]
         },
         options: {
+            indexAxis: 'y',
             maintainAspectRatio: false,
             scales: {
                 y: {
@@ -718,7 +721,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Earnings',
+                label: '',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 0.1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -765,7 +768,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Revenue',
+                label: '',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -773,6 +776,7 @@
             }]
         },
         options: {
+            indexAxis: 'y',
             maintainAspectRatio: false,
             scales: {
                 y: {
@@ -820,7 +824,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Expenses',
+                label: '',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -852,20 +856,29 @@
     }
 
     function updateChart3(timeFrame) {
-        let data, labels;
-
+        let data = [];
+        let labels = [];
+        var mediaGraphDaily = <?php echo json_encode($media_graph_daily); ?>;
+        var mediaGraphWeekly = <?php echo json_encode($media_graph_weekly); ?>;
+        var mediaGraphMonthly = <?php echo json_encode($media_graph_monthly); ?>;
         switch (timeFrame) {
             case 'daily':
-                labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                data = [12, 19, 3, 5, 2, 3, 7]; 
+                for (var i = 0; i < mediaGraphDaily.length; i++) {
+                labels.push(`${mediaGraphDaily[i].label} - ${mediaGraphDaily[i].MediaType}`);
+                data.push(mediaGraphDaily[i].count);
                 break;
+                }
             case 'weekly':
-                labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-                data = [20, 30, 10, 40]; 
+                for (var i = 0; i < mediaGraphWeekly.length; i++) {
+                labels.push(`${mediaGraphWeekly[i].label} - ${mediaGraphWeekly[i].MediaType}`);
+                data.push(mediaGraphWeekly[i].count);
+            }
                 break;
             case 'monthly':
-                labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                data = [30, 40, 20, 50, 60, 70, 80, 90, 100, 110, 120, 130]; 
+                for (var i = 0; i < mediaGraphMonthly.length; i++) {
+                labels.push(`${mediaGraphMonthly[i].label} - ${mediaGraphMonthly[i].MediaType}`);
+                data.push(mediaGraphMonthly[i].count);
+                }
                 break;
         }
 
@@ -944,7 +957,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Revenue',
+                label: '',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -952,6 +965,7 @@
             }]
         },
         options: {
+            indexAxis: 'y',
             maintainAspectRatio: false,
             scales: {
                 y: {
@@ -1031,20 +1045,29 @@
     }
 
     function updateChart4(timeFrame) {
-        let data, labels;
-
+        let data = [];
+        let labels = [];
+        var publicationGraphDaily = <?php echo json_encode($publication_graph_daily); ?>;
+        var publicationGraphWeekly = <?php echo json_encode($publication_graph_weekly); ?>;
+        var publicationGraphMonthly = <?php echo json_encode($publication_graph_monthly); ?>;
         switch (timeFrame) {
             case 'daily':
-                labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                data = [12, 19, 3, 5, 2, 3, 7]; 
+                for (var i = 0; i < publicationGraphDaily.length; i++) {
+                labels.push(`${publicationGraphDaily[i].label} - ${publicationGraphDaily[i].MediaOutlet}`);
+                data.push(publicationGraphDaily[i].count);
+                }
                 break;
             case 'weekly':
-                labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-                data = [20, 30, 10, 40]; 
+                for (var i = 0; i < publicationGraphWeekly.length; i++) {
+                labels.push(`${publicationGraphWeekly[i].label} - ${publicationGraphWeekly[i].MediaOutlet}`);
+                data.push(publicationGraphWeekly[i].count);
+                }
                 break;
             case 'monthly':
-                labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                data = [30, 40, 20, 50, 60, 70, 80, 90, 100, 110, 120, 130]; 
+                for (var i = 0; i < publicationGraphMonthly.length; i++) {
+                labels.push(`${publicationGraphMonthly[i].label} - ${publicationGraphMonthly[i].MediaOutlet}`);
+                data.push(publicationGraphMonthly[i].count);
+                } 
                 break;
         }
 
@@ -1122,7 +1145,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Revenue',
+                label: '',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -1250,6 +1273,7 @@
         });
         chart.update();
     }
+    
 
 
     //journalist
@@ -1509,9 +1533,6 @@
     showChart6('journalistlineChart');
     handleChartTypeChange();
 </script>
-
-
-
 <script>
         function getCurrentDate() {
             const date = new Date();

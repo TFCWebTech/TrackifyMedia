@@ -284,56 +284,144 @@ function checkSelection() {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
- $(document).ready(function() {
-    let counter = 0; // Initialize the counter variable
+//  $(document).ready(function() {
+//     let counter = 0; // Initialize the counter variable
 
-    $('#image_upload').on('change', function() {
-        const files = this.files; // Get all selected files
-        const formData = new FormData();
+//     $('#image_upload').on('change', function() {
+//         const files = this.files; // Get all selected files
+//         const formData = new FormData();
 
-        // Append each file to FormData object
-        for (let i = 0; i < files.length; i++) {
-            formData.append('image_upload[]', files[i]); // Use [] to indicate array
-        }
+//         // Append each file to FormData object
+//         for (let i = 0; i < files.length; i++) {
+//             formData.append('image_upload[]', files[i]); // Use [] to indicate array
+//         }
+//         // Get CSRF token from meta tag
+//         const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-        // Get CSRF token from meta tag
-        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+//         // Send AJAX request to store the images
+//         $.ajax({
+//             type: 'POST',
+//             url: "<?php echo site_url('Reporter/saveArticalImage')?>",
+//             data: formData,
+//             processData: false,
+//             contentType: false,
+//             headers: {
+//                 'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
+//             },
+//             success: function(response) {
+//                 if (response.success) {
+//                     var imageData = response.image_data;
+//                     console.log("Image Data:", imageData);
+//                     var i = 1;
+//                     imageData.forEach(function(image) {
+//                         var imageUrl = image.image_url;
+//                         var imageId = image.article_images_id;
+//                         console.log("Image URL:", imageUrl);
+//                         console.log("Image ID:", imageId);
+//                         // demo(i);
+//                         imageToText(imageUrl, i, imageId);
+//                         i++;
+//                     });
+//                 } else {
+//                     console.error("Error:", response.error);
+//                 }
+//             },
+//             error: function(xhr, status, error) {
+//                 console.error("AJAX Error:", error);
+//             }
+//         });
+//     });
 
-        // Send AJAX request to store the images
-        $.ajax({
-            type: 'POST',
-            url: "<?php echo site_url('Reporter/saveArticalImage')?>",
-            data: formData,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
-            },
-            success: function(response) {
-                if (response.success) {
-                    var imageData = response.image_data;
-                    console.log("Image Data:", imageData);
-                    var i = 1;
-                    imageData.forEach(function(image) {
-                        var imageUrl = image.image_url;
-                        var imageId = image.article_images_id;
-                        console.log("Image URL:", imageUrl);
-                        console.log("Image ID:", imageId);
-                        // demo(i);
-                        imageToText(imageUrl, i, imageId);
-                        i++;
+$(document).ready(function() {
+            let counter = 0; // Initialize the counter variable
+
+            $('#image_upload').on('change', function() {
+                const files = this.files; // Get all selected files
+                const formData = new FormData();
+
+                // Function to read images and calculate dimensions
+                function readImages(files, callback) {
+                    let images = [];
+                    let loadedImages = 0;
+
+                    Array.from(files).forEach(file => {
+                        const img = new Image();
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            img.src = e.target.result;
+                        };
+                        
+                        img.onload = function() {
+                            console.log(`File: ${file.name}, Width: ${img.width}px, Height: ${img.height}px`);
+                            images.push({
+                                file: file,
+                                width: img.width,
+                                height: img.height
+                            });
+                            loadedImages++;
+                            if (loadedImages === files.length) {
+                                callback(images);
+                            }
+                        };
+                        
+                        reader.readAsDataURL(file);
                     });
-                } else {
-                    console.error("Error:", response.error);
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX Error:", error);
-            }
-        });
-    });
 
-        function imageToText(imageUrl, index , imageId) {
+                readImages(files, function(images) {
+                    images.forEach(image => {
+                        formData.append('image_upload[]', image.file); // Append each file to FormData object
+                    });
+
+                    // Get CSRF token from meta tag
+                    const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                    // Send AJAX request to store the images
+                    $.ajax({
+                        type: 'POST',
+                        url: "<?php echo site_url('Reporter/saveArticalImage')?>",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                var imageData = response.image_data;
+                                console.log("Image Data:", imageData);
+                                var i = 1;
+                                imageData.forEach(function(image, index) {
+                                    var imageUrl = image.image_url;
+                                    var imageId = image.article_images_id;
+                                    console.log("Image URL:", imageUrl);
+                                    console.log("Image ID:", imageId);
+                                    
+                                    // Get dimensions from images array
+                                    var imageWidth = images[index].width;
+                                    var imageHeight = images[index].height;
+                                    
+                                    console.log(`Calling imageToText with URL: ${imageUrl}, Index: ${i}, ID: ${imageId}, Width: ${imageWidth}, Height: ${imageHeight}`);
+                                    
+                                    // Call imageToText function with dimensions
+                                    imageToText(imageUrl, i, imageId, imageWidth, imageHeight);
+                                    i++;
+                                });
+                            } else {
+                                console.error("Error:", response.error);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX Error:", error);
+                        }
+                    });
+                });
+            });
+        });
+
+        function imageToText(imageUrl, index, imageId, width, height) {
+            console.log(`Image URL: ${imageUrl}, Index: ${index}, Image ID: ${imageId}, Width: ${width}, Height: ${height}`);
         // Fetch the image content as a Blob
         fetch(imageUrl)
             .then(response => response.blob())
@@ -375,6 +463,8 @@ function checkSelection() {
                                         
                                         let data = '<div class="col-md-6"><div class="row mt-2">';
                                         data += '<div class="col-md-12">';
+                                        // data += '<input type="text" name="height' + index + '" class="form-control" value="' + height + '">';
+                                        // data += '<input type="text" name="width' + index + '" class="form-control" value="' width + '">';
                                         data += '<input type="text" name="image_id' + index + '" class="form-control" value="' + imageId + '">';
                                         data += '<textarea class="form-control" name="editor' + index + '" id="getNews' + editorId + '"></textarea>';
                                         data += '</div></div>';
@@ -480,7 +570,7 @@ function checkSelection() {
                 console.error('Error fetching and converting image:', error);
             });
     }
-});
+// });
 
 
     // function imageToText(imageUrl, index , imageId) {
