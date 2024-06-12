@@ -50,19 +50,34 @@ class Home extends CI_Controller {
 
         redirect('Home/allGraphs/'.$from.'/'.$to);
     }
-    
-    // public function allJournalistGraphs($from = null, $to = null)
-    // {
-    //     $client_id = $this->session->userdata('client_id');
-    //     // echo $client_id;
-    //     $data['Journalist_graph_daily'] = $this->newsLetter->get_journalist_data_by_timeframe('daily', $client_id, $from, $to);
-    //     $data['Journalist_graph_weekly'] = $this->newsLetter->get_journalist_data_by_timeframe('weekly', $client_id, $from, $to);
-    //     $data['Journalist_graph_monthly'] = $this->newsLetter->get_journalist_data_by_timeframe('monthly', $client_id, $from, $to);
-    //     print_r($data['Journalist_graph_weekly']);
-    //     // $this->load->view('common/header');
-    //     // $this->load->view('index', $data);
-    //     // $this->load->view('common/footer');
-    // }
+
+    // Pro Compare Charts
+    public function CompareCharts($from = null, $to = null)
+    {
+        $client_id = $this->session->userdata('client_id');
+        // echo $client_id;
+        $compititers_data = $this->newsLetter->getCompData('daily', $client_id, $from, $to, '');
+        $clients_news_count = $this->newsLetter->getClientNewsCount('daily', $client_id, $from, $to);
+
+        $compititers_data[] = array(
+            'label' => $this->session->userdata('client_name'),
+            'count' => $clients_news_count
+        );
+        $data['get_quantity_compare_data'] = $compititers_data;
+        //Media Data
+
+        $data['media_data'] = $this->newsLetter->getMediaData('daily', $client_id, $from, $to);
+        
+        //Publication Data
+        $data['Publication_data'] = $this->newsLetter->getPublicationData('daily', $client_id, $from, $to);
+        // echo '<pre>';
+        // print_r($data['Publication_data']);
+        // echo '</pre>';
+        $this->load->view('common/header');
+        $this->load->view('compare_charts', $data);
+        $this->load->view('common/footer');
+    }
+
 
 
 
@@ -73,6 +88,8 @@ class Home extends CI_Controller {
         $this->load->view('common/footer');
 
     }
+
+
 
 }
 ?>

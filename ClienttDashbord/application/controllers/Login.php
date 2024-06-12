@@ -36,7 +36,7 @@ class Login extends CI_Controller {
                     );
                     // print_r($Start_session);
                     $this->session->set_userdata($Start_session);
-                    redirect('Home'); 
+                    redirect('Home/allGraphs'); 
 
             } else {
                     $this->session->set_flashdata('error','Your credentials are incorrect');
@@ -47,7 +47,6 @@ class Login extends CI_Controller {
             redirect('Login');
         }
     }
-
 	
  	public function Logout()
  	{

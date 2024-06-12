@@ -128,11 +128,15 @@
             <hr class="sidebar-divider my-0">
 
             <li class="nav-item <?php print ($this->uri->segment(1)=='Home')?'active':''; ?>">
-                    <a class="nav-link" href="<?php echo site_url('Home');?>">
+                    <a class="nav-link" href="<?php echo site_url('Home/allGraphs');?>">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
                 </li>
-       
+                <li class="nav-item <?php print ($this->uri->segment(2)=='CompareCharts')?'active':''; ?>">
+                    <a class="nav-link" href="<?php echo site_url('Home/CompareCharts');?>">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Pro Compare</span></a>
+                </li>
              <!-- Divider -->
              <hr class="sidebar-divider d-none d-md-block">
 

@@ -324,6 +324,219 @@ class NewsLetter_Model extends CI_Model
         $query = $this->db->query($sql, $params);
         return $query->result_array();
     }
+
+    function getClientNewsCount($timeframe, $client_id, $from = null, $to = null) {
+        // WHERE FIND_IN_SET(?, client_id) > 0
+        $this->db->select('*');
+        $this->db->from('news_details');
+
+        if ($from !== null && $to !== null) {
+            $this->db->where('nd.create_at >=', $from);
+            $this->db->where('nd.create_at <=', $to);
+        }
+
+        $this->db->group_start();
+        $this->db->where("FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
+        $this->db->group_end();
+        
+        return $this->db->count_all_results();
+    }
+
+    public function getCompData($timeframe, $client_id, $from = null, $to = null, $gidMediaType = null, $gidMediaOutlet = null)
+    {
+        $this->db->select('*');
+        $this->db->from('competitor');
+        $this->db->where('client_id', $client_id);
+        $result = $this->db->get()->result_array();
+        $outArr = array();
+        foreach ($result as $row){
+            $news_count = $this->getCompNewsByKey($row['Keywords'], $client_id, $from, $to, $gidMediaType, $gidMediaOutlet);
+            $outArr[] = array(
+                'label' => $row['Competitor_name'],
+                'count' => $news_count
+            );
+        }
+        return $outArr;
+    }
+
+    public function getCompNewsByKey($Keywords, $client_id, $from = null, $to = null, $gidMediaType, $gidMediaOutlet)
+    {
+        
+        $this->db->select('*');
+        $this->db->from('news_details');
+
+        if ($from !== null && $to !== null) {
+            $this->db->where('create_at >=', $from);
+            $this->db->where('create_at <=', $to);
+        }
+
+        if($gidMediaType !== null) {
+            $this->db->where('media_type_id', $gidMediaType);
+        }
+
+        if($gidMediaOutlet !== null) {
+            $this->db->where('publication_id', $gidMediaOutlet);
+        }
+
+        $this->db->group_start();
+        $this->db->where("NOT FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
+        $this->db->group_end();
+        
+        $this->db->group_start();
+        foreach (explode(',', $Keywords) as $keyword) {
+            $keyword = trim($keyword); // Trim any whitespace around keywords
+            $this->db->or_where("FIND_IN_SET('$keyword', keywords) >", 0);
+        }
+        $this->db->group_end();
+        return $this->db->count_all_results();
+        // $query = $this->db->get();
+        // $result = $query->result_array(); 
+        // return $result; 
+    }
+
+    public function getMediaData($timeframe, $client_id, $from = null, $to = null){
+        $this->db->select('*');
+        $this->db->from('mediatype');
+        $result = $this->db->get()->result_array();
+        $outArr = array();
+        foreach ($result as $row){
+            $news_data = $this->getNewsDetails($row['gidMediaType'], $client_id, $from , $to );
+            $outArr[] = array(
+                'Media_name' => $row['MediaType'],
+                'Count' => $news_data,
+                'Client_name' =>$this->session->userdata('client_name')
+            );
+
+            $comp_data = $this->getCompData('daily', $client_id, $from, $to, $row['gidMediaType']);
+            foreach ($comp_data as $key => $value) {
+               
+                $outArr[] = array(
+                    'Media_name' => $row['MediaType'],
+                    'Count' => $value['count'],
+                    'Client_name' => $value['label']
+                );
+            }
+            
+        }
+
+        $groupedData = array();
+
+        foreach ($outArr as $record) {
+            $mediaName = $record['Media_name'];
+            if (!isset($groupedData[$mediaName])) {
+                $groupedData[$mediaName] = array();
+            }
+            $groupedData[$mediaName][] = $record;
+        }
+
+        return $groupedData;
+    }
+
+    public function getNewsDetails($gidMediaType, $client_id, $from = null, $to = null){
+        $this->db->select('*');
+        $this->db->from('news_details');
+        $this->db->where('media_type_id', $gidMediaType); 
+        if ($from !== null && $to !== null) {
+            $this->db->where('create_at >=', $from);
+            $this->db->where('create_at <=', $to);
+        }
+
+        $this->db->group_start();
+        $this->db->where("FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
+        $this->db->group_end();
+
+       return $this->db->count_all_results();       
+    }
+
+    public function getPublicationData($timeframe, $client_id, $from = null, $to = null) {
+        $this->db->select('*');
+        $this->db->from('mediaoutlet');
+        $result = $this->db->get()->result_array();
+        $outArr = array();
+    
+        foreach ($result as $row) {
+            $news_data = $this->getNewsDetails2($row['gidMediaOutlet'], $client_id, $from, $to);
+            $outArr[] = array(
+                'Publication_name' => $row['MediaOutlet'],
+                'Count' => $news_data,
+                'Client_name' => $this->session->userdata('client_name')
+            );
+    
+            $comp_data = $this->getCompData('daily', $client_id, $from, $to, $row['gidMediaOutlet']);
+            foreach ($comp_data as $key => $value) {
+                $outArr[] = array(
+                    'Publication_name' => $row['MediaOutlet'],
+                    'Count' => $value['count'],
+                    'Client_name' => $value['label']
+                );
+            }
+        }
+    
+        // Sort the array by Count in descending order
+        usort($outArr, function ($a, $b) {
+            return $b['Count'] - $a['Count'];
+        });
+    
+        // Get only the top 5 records
+        $outArr = array_slice($outArr, 0, 5);
+    
+        $groupedData = array();
+        foreach ($outArr as $record) {
+            $PublicationName = $record['Publication_name'];
+            if (!isset($groupedData[$PublicationName])) {
+                $groupedData[$PublicationName] = array();
+            }
+            $groupedData[$PublicationName][] = $record;
+        }
+    
+        return $groupedData;
+    }
+    
+    public function getNewsDetails2($gidMediaOutlet, $client_id, $from = null, $to = null){
+        $this->db->select('*');
+        $this->db->from('news_details');
+        $this->db->where('publication_id', $gidMediaOutlet); 
+        if ($from !== null && $to !== null) {
+            $this->db->where('create_at >=', $from);
+            $this->db->where('create_at <=', $to);
+        }
+
+        $this->db->group_start();
+        $this->db->where("FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
+        $this->db->group_end();
+
+       return $this->db->count_all_results();       
+    }
+
+
+    public function get_quantity_compare_data_by_timeframe($timeframe, $client_id, $from = null, $to = null) {
+        // Ensure the $client_id is properly escaped
+        if (!is_array($client_id)) {
+            $client_id = array($client_id);
+        }
+    
+        $client_ids = implode(',', array_map('intval', $client_id));
+        
+        $this->db->select('com.Competitor_name, c.client_name ,COUNT(nd.news_details_id) as news_count');
+        $this->db->from('news_details as nd');
+        $this->db->join('competitor as com', 'com.client_id = nd.client_id', 'left');
+        $this->db->join('client as c', 'c.client_id = nd.client_id', 'left');
+        // Add condition for client_id
+        $this->db->where("FIND_IN_SET(nd.client_id, '{$client_ids}') > 0");
+        
+        // Optionally add date filtering if $from and $to are provided
+        if ($from !== null && $to !== null) {
+            $this->db->where('nd.create_at >=', $from);
+            $this->db->where('nd.create_at <=', $to);
+        }
+    
+        // Group by competitor name to count the news entries per competitor
+        $this->db->group_by('com.Competitor_name');
+        
+        $query = $this->db->get();
+        return $query->result_array(); 
+    }
+    
     
 }   
 ?>
