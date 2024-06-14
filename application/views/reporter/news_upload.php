@@ -418,7 +418,6 @@ $(document).ready(function() {
                     });
                 });
             });
-        });
 
         function imageToText(imageUrl, index, imageId, width, height) {
             console.log(`Image URL: ${imageUrl}, Index: ${index}, Image ID: ${imageId}, Width: ${width}, Height: ${height}`);
@@ -433,7 +432,7 @@ $(document).ready(function() {
 
                         // Make the API request with the base64-encoded image
                         $.ajax({
-                            url: 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBKPb2Kqnd_L5WEab0ZaiDHuy9tc_eA5AA', 
+                            url: 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBjnr10MeuuR2VECFkJvZB6jDZIkSzljCA', 
                             type: 'POST',
                             contentType: 'application/json',
                             data: JSON.stringify({
@@ -457,15 +456,13 @@ $(document).ready(function() {
                                         var description = response.responses[0].textAnnotations[0].description;
                                         console.log(description);
 
-
                                         var textareaId = 'editor_' + index; // Unique ID for textarea
                                         var editorId = 'editor_instance_' + index;   // Unique ID for CKEditor instance
-                                        
                                         let data = '<div class="col-md-6"><div class="row mt-2">';
                                         data += '<div class="col-md-12">';
-                                        // data += '<input type="text" name="height' + index + '" class="form-control" value="' + height + '">';
-                                        // data += '<input type="text" name="width' + index + '" class="form-control" value="' width + '">';
-                                        data += '<input type="text" name="image_id' + index + '" class="form-control" value="' + imageId + '">';
+                                        data += '<input type="text" name="height' + index + '" class="form-control" value="' + height + '" hidden>';
+                                        data += '<input type="text" name="width' + index + '" class="form-control" value="' + width + '" hidden>';
+                                        data += '<input type="text" name="image_id' + index + '" class="form-control" value="' + imageId + '" hidden>';
                                         data += '<textarea class="form-control" name="editor' + index + '" id="getNews' + editorId + '"></textarea>';
                                         data += '</div></div>';
                                         data += '<div class="col-md-12" id="keyword_container_' + index + '"></div>'; // Placeholder for keywords
@@ -570,7 +567,7 @@ $(document).ready(function() {
                 console.error('Error fetching and converting image:', error);
             });
     }
-// });
+});
 
 
     // function imageToText(imageUrl, index , imageId) {

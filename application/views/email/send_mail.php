@@ -151,9 +151,9 @@ th {
                             <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                             <?php echo $news['summary']; ?>
                             </p>
-                         <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?></p>  
-                         <p>Publication :<span> <?php echo $news['publication_id']; ?></span>, Agency :<span> <?php echo $news['agencies_id']; ?></span>  </p>  
-                         <p>Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span></p>                   
+                            <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
+                         Publication :<span style="color:blue;"> <?php echo $news['publication_id']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['journalist_id']; ?></span>  , 
+                         Edition : <span style="color:blue;"> <?php echo $news['edition_id']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['supplement_id']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> </p>                   
                          <hr>
                     <?php }
                     ?>
@@ -172,10 +172,10 @@ th {
                                 <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                                 <?php echo $news['summary']; ?>
                                 </p>
-                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?></p>  
-                             <p>Publication :<span> <?php echo $news['publication_id']; ?></span>, Agency :<span> <?php echo $news['agencies_id']; ?></span>  </p>  
-                             <p>Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> </p>                   
-                             <hr>
+                                <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
+                         Publication :<span style="color:blue;"> <?php echo $news['publication_id']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['journalist_id']; ?></span>  , 
+                         Edition : <span style="color:blue;"> <?php echo $news['edition_id']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['supplement_id']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> </p>                   
+                         <hr>
                         <?php }
                         ?>
                     </div>
@@ -197,10 +197,10 @@ th {
                                 <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                                 <?php echo $news['summary']; ?>
                                 </p>
-                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?></p>  
-                             <p>Publication :<span> <?php echo $news['publication_id']; ?></span>, Agency :<span> <?php echo $news['agencies_id']; ?></span>  </p>  
-                             <p>Edition : <span> <?php echo $news['edition_id']; ?> </span>, No of pages:<span> <?php echo $news['page_count']; ?></span></p>                   
-                             <hr>
+                                <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
+                         Publication :<span style="color:blue;"> <?php echo $news['publication_id']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['journalist_id']; ?></span>  , 
+                         Edition : <span style="color:blue;"> <?php echo $news['edition_id']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['supplement_id']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> </p>                   
+                         <hr>
                         <?php }
                         ?>
                     </div>

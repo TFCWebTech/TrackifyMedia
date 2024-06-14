@@ -44,13 +44,9 @@ class ManageClient extends CI_Controller {
             'blank_mail' => $blank_mail,
             'client_keywords' => $Keywords_string,
         ];
-    
         // print_r($data); 
-    
         $result = $this->db->insert('client', $data);
-    
         // Uncomment the line above if you want to insert data into the database
-    
         if($result){
             $this->session->set_flashdata('success', 'Client added successfully');
             redirect('ManageClient/ClientInfo');

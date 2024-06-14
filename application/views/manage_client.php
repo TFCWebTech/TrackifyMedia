@@ -107,6 +107,7 @@ function addKeywordInput2() {
                     <th>Client Name</th>
                     <th>Keywords</th>
                     <th>Status</th>
+                    <th>Add Email</th>
                     <th>Add Competitor</th>
                     <!-- <th>Created At</th> -->
                     <th> Email Template</th>
@@ -126,6 +127,7 @@ function addKeywordInput2() {
                     <?php }else {?>
                         <td>NA</td>
                     <?php }?>
+                    <td class="text-center"><a class="btn btn-primary" data-toggle="modal" data-target="#addEmail"  onclick="addEmail(<?php echo $values['client_id'];?>)" > ADD</a></td>
                     <td class="text-center"><a class="btn btn-primary" data-toggle="modal" data-target="#addCompitetor"  onclick="addCompetotor(<?php echo $values['client_id'];?>)" > ADD</a></td>
                     <!-- <td><?php echo date('d/ F /Y', strtotime($values['create_at'])); ?></td> -->
                     <td class="text-center"><a class="btn btn-primary" href="<?php echo site_url('EmailTemplate/CreateTemplate/'.$values['client_id']);?>"> ADD</a></td>
@@ -251,7 +253,6 @@ function addKeywordInput2() {
   </div>
 </div>
 
-
 <div class="modal" id="addCompitetor">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -294,6 +295,36 @@ function addKeywordInput2() {
     </div>
   </div>
 </div>
+
+<div class="modal" id="addEmail">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Add Email </h4>
+        <!-- Correct close button for Bootstrap 4 -->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+            <form action="<?php echo site_url('ManageClient/addEmail')?>" method="post">
+                <div class="form-group" >
+                <input type="text" id="client_id_1" name="client_id_1" hidden> 
+                    <label class="px-1 font-weight-bold" for="user_type">Add Email</label>
+                    <input type="text" class="form-control" placeholder="Enter Email" name="client_email" required>
+                </div>
+                <div class="text-right pt-2">
+                 <button type="submit" class="btn btn-primary">ADD</button>
+                </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
     $('table').DataTable();
 
@@ -318,6 +349,10 @@ clientSelect.addEventListener("change", function() {
 <script>
     function addCompetotor(client){
         $('#client_id').val(client);
+    }
+
+    function addEmail(client){
+        $('#client_id_1').val(client);
     }
 </script>
 

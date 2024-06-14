@@ -184,7 +184,7 @@
             <li class="nav-item <?php print ($this->uri->segment(2)=='ManageIndustry')?'active':''; ?>">
                 <a class="nav-link" href="<?php echo site_url('ManageIndustry');?>">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Manage ManageIndustry</span></a>
+                    <span>Manage Industry</span></a>
             </li>
             
             <?php

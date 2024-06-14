@@ -70,7 +70,6 @@ class NewsLetter extends CI_Controller {
             $this->session->set_flashdata('success', 'Mail Send Successfully');
             redirect('NewsLetter/newsMail/' . $client_id);
         }
-        
    }
 
    public function sendMailToMultipleClient() {
@@ -124,6 +123,34 @@ class NewsLetter extends CI_Controller {
     }
     $this->session->set_flashdata('success', 'Mails processed');
     redirect('NewsLetter');
+    }
+
+    public function delteNews(){
+        $news_details_id = $this->input->post('news_details_id');
+        $client_id = $this->input->post('client_id');
+
+        $response = array(
+            'news_details_id' => $news_details_id,
+            'client_id' => $client_id,
+            'is_delete' => 1
+        );
+        // print_r($response);
+        $this->newsLetter->insert('delete_news', $response);
+        echo json_encode(array('status' => 'success', 'message' => 'News deleted successfully', 'news_details_id' => $news_details_id));
+    }
+
+    public function hideNews(){
+        $news_details_id = $this->input->post('news_details_id');
+        $client_id = $this->input->post('client_id');
+
+        $response = array(
+            'news_details_id' => $news_details_id,
+            'client_id' => $client_id,
+            'is_hide' => 1
+        );
+        // print_r($response);
+        $this->newsLetter->insert('delete_news', $response);
+        echo json_encode(array('status' => 'success', 'message' => 'News deleted successfully', 'news_details_id' => $news_details_id));
     }
 }
 ?>

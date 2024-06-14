@@ -55,20 +55,20 @@
     margin-top: 0.5rem !important;
 }
 </style>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-md-12 d-flex justify-content-end ">
-                    <form method="post" action="<?php echo site_url('Home/filterGraphs'); ?>">
+                    <form method="post" action="<?php echo site_url('Home/compareFilterGraphs2'); ?>">
                     <div class="d-flex ">
-                        
                             <label for="from-date"> From: </label> &nbsp;
                             <input id="from-date" name="from" class="form-control" type="date" value="<?php echo $this->uri->segment(3); ?>" required> &nbsp;
                             <label for="to-date"> To: </label> &nbsp;
                             <input id="to-date" name="to" class="form-control" type="date" value="<?php echo $this->uri->segment(4); ?>" required>
                             &nbsp;<button type="submit" class="bg-primary border-primary text-light"> <i class="fa fa-search "></i></button> 
-                        
                     </div>
                     </form> &nbsp;&nbsp;
                     <!-- <input type="text" name="daterange" value="01/01/2015 - 01/31/2015" /> -->
@@ -116,7 +116,6 @@
 
             <hr>
             <div class="size">
-
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Size</h6>
@@ -146,15 +145,7 @@
                 </div>
             </div>
             <div class="media">
-            <!-- <div class="row">
-                <div class="col-md-12 d-flex justify-content-between">
-                    <div class="mb-4">
-                        <button class="btn btn-secondary" onclick="updateChart3('daily')">Daily</button>
-                        <button class="btn btn-secondary" onclick="updateChart3('weekly')">Weekly</button>
-                        <button class="btn btn-secondary" onclick="updateChart3('monthly')">Monthly</button>
-                    </div>
-                </div>
-            </div> -->
+           
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Media</h6>
@@ -170,21 +161,32 @@
                 <div id="mediaverticalBarChart" class="chart-container-3">
                     <canvas id="mediaVerticalBarChart"></canvas>
                 </div>
+                <div id="showMediaTableData" class="chart-container-3" style="display: none;">
+                    <table id="mediaTable">
+                        <thead>
+                            <tr>
+                                <th>Client Name</th>
+                                <th>Media Type</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be appended here -->
+                        </tbody>
+                    </table>
+                </div>
                 <div class="my-4">
                     <button class="btn btn-primary" onclick="showChart3('mediabarChart')">Bar Chart</button>
                     <button class="btn btn-primary" onclick="showChart3('medialineChart')">Line Chart</button>
                     <button class="btn btn-primary" onclick="showChart3('mediaverticalBarChart')">Column Chart</button>
                 </div>
             </div>
-
             <div class="publication">
-            
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Publication</h6>
                     </div>
                 </div>
-              
                 <div id="publicationbarChart" class="chart-container-4">
                     <canvas id="publicationBarChart"></canvas>
                 </div>
@@ -200,29 +202,11 @@
                     <button class="btn btn-primary" onclick="showChart4('publicationverticalBarChart')">Column Chart</button>
                 </div>
             </div>
-
-
             <div class="geography">
-            <div class="row">
-                <div class="col-md-12 d-flex justify-content-between">
-                    <div class="mb-4">
-                        <button class="btn btn-secondary" onclick="updateChart5('daily')">Daily</button>
-                        <button class="btn btn-secondary" onclick="updateChart5('weekly')">Weekly</button>
-                        <button class="btn btn-secondary" onclick="updateChart5('monthly')">Monthly</button>
-                    </div>
-                    
-                </div>
-            </div>
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <h6 class="text-primary">Overview / Geography</h6>
+                        <h6 class="text-primary">SOV / Geography</h6>
                     </div>
-                </div>
-                <div id="geographyareaChart" class="chart-container-5">
-                    <canvas id="geographyAreaChart"></canvas>
-                </div>
-                <div id="geographypieChart" class="chart-container-5">
-                    <canvas id="geographyPieChart"></canvas>
                 </div>
                 <div id="geographybarChart" class="chart-container-5">
                     <canvas id="geographyBarChart"></canvas>
@@ -233,41 +217,25 @@
                 <div id="geographyverticalBarChart" class="chart-container-5">
                     <canvas id="geographyVerticalBarChart"></canvas>
                 </div>
-                <div id="geographytableChart" class="chart-container-5">
-                    <canvas id="geographyTableChart"></canvas>
-                </div>
                 <div class="my-4">
-                    <!-- <button class="btn btn-primary" onclick="showChart5('geographyareaChart')">Area Chart</button> -->
-                    <button class="btn btn-primary" onclick="showChart5('geographypieChart')">Pie Chart</button>
                     <button class="btn btn-primary" onclick="showChart5('geographybarChart')">Bar Chart</button>
                     <button class="btn btn-primary" onclick="showChart5('geographylineChart')">Line Chart</button>
                     <button class="btn btn-primary" onclick="showChart5('geographyverticalBarChart')">Column Chart</button>
-                    <button class="btn btn-primary" onclick="showChartTable('geographytableChart')"> Table </button>
                 </div>
             </div>
 
             <div class="journalist">
-            <div class="row">
-                <div class="col-md-12 d-flex justify-content-between">
-                    <div class="mb-4">
-                        <button class="btn btn-secondary" onclick="updateChart6('daily')">Daily</button>
-                        <button class="btn btn-secondary" onclick="updateChart6('weekly')">Weekly</button>
-                        <button class="btn btn-secondary" onclick="updateChart6('monthly')">Monthly</button>
-                    </div>
-                    
-                </div>
-            </div>
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Journalist</h6>
                     </div>
                 </div>
-                <div id="journalistareaChart" class="chart-container-6">
+                <!-- <div id="journalistareaChart" class="chart-container-6">
                     <canvas id="journalistAreaChart"></canvas>
                 </div>
                 <div id="journalistpieChart" class="chart-container-6">
                     <canvas id="journalistPieChart"></canvas>
-                </div>
+                </div> -->
                 <div id="journalistbarChart" class="chart-container-6">
                     <canvas id="journalistBarChart"></canvas>
                 </div>
@@ -279,7 +247,7 @@
                 </div>
                 <div class="my-4">
                     <!-- <button class="btn btn-primary" onclick="showChart6('journalistareaChart')">Area Chart</button> -->
-                    <button class="btn btn-primary" onclick="showChart6('journalistpieChart')">Pie Chart</button>
+                    <!-- <button class="btn btn-primary" onclick="showChart6('journalistpieChart')">Pie Chart</button> -->
                     <button class="btn btn-primary" onclick="showChart6('journalistbarChart')">Bar Chart</button>
                     <button class="btn btn-primary" onclick="showChart6('journalistlineChart')">Line Chart</button>
                     <button class="btn btn-primary" onclick="showChart6('journalistverticalBarChart')">Column Chart</button>
@@ -334,7 +302,7 @@
     let pieChart = new Chart(pieChartCtx, {
         type: 'doughnut',
         data: {
-            labels: ['Direct', 'Social', 'Referral'],
+            labels: [],
             datasets: [{
                 data: [],
                 backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
@@ -469,7 +437,6 @@
                 }
                 break;
         }        
-
         updateChartData(areaChart, labels, data);
         updateChartData(pieChart, labels.slice(0, 3), data.slice(0, 3)); 
         updateChartData(barChart, labels, data);
@@ -485,6 +452,8 @@
         });
         chart.update();
     }
+
+
     const sizeAreaChartCtx = document.getElementById('sizeAreaChart').getContext('2d');
     const sizePieChartCtx = document.getElementById('sizePieChart').getContext('2d');
     const sizeBarChartCtx = document.getElementById('sizeBarChart').getContext('2d');
@@ -664,7 +633,6 @@
     }
 
   // media
-   
     const mediaBarChartCtx = document.getElementById('mediaBarChart').getContext('2d');
     const mediaLineChartCtx = document.getElementById('mediaLineChart').getContext('2d');
     const mediaVerticalBarChartCtx = document.getElementById('mediaVerticalBarChart').getContext('2d');
@@ -806,6 +774,8 @@
             }
         }
     });
+
+    
     function showChart3(chartId) {
         const charts = document.querySelectorAll('.chart-container-3');
         charts.forEach(chart => {
@@ -865,23 +835,90 @@
     }
 
 
-//Publication
+   
+    //Publication
     const publicationBarChartCtx = document.getElementById('publicationBarChart').getContext('2d');
     const publicationLineChartCtx = document.getElementById('publicationLineChart').getContext('2d');
     const publicationVerticalBarChartCtx = document.getElementById('publicationVerticalBarChart').getContext('2d');
 
+    let Publication_news_data = <?php echo json_encode($Publication_data); ?>;
+    let publication_dataset_line = [];
+    let publication_dataset_bar = [];
+    let publication_dataset_column = [];
+    let publication_lable = [];
+    let pub_clientNames = new Set();
+
+    for (let publication in Publication_news_data) {
+        if (Publication_news_data.hasOwnProperty(publication)) {
+            console.log("Publication:", publication);
+            publication_lable.push(publication);
+            // Collect client names
+            Publication_news_data[publication].forEach(news => pub_clientNames.add(news.Client_name));
+        }
+    }
+
+    pub_clientNames = Array.from(pub_clientNames);
+
+    // Create final data array
+    let publication_final_data = pub_clientNames.map(clientName => {
+        let counts = [];
+        for (let publication in Publication_news_data) {
+            let publicationData = Publication_news_data[publication];
+            let count = publicationData
+                .filter(news => news.Client_name === clientName)
+                .reduce((sum, news) => sum + news.Count, 0);
+            counts.push(count);
+        }
+        return {
+            label: clientName,
+            count: counts
+        };
+    });
+
+    console.log("Publication final data:", publication_final_data);
+    function getRandomColor(opacity) {
+        let r = Math.floor(Math.random() * 255);
+        let g = Math.floor(Math.random() * 255);
+        let b = Math.floor(Math.random() * 255);
+        return {
+            background: `rgba(${r}, ${g}, ${b}, ${opacity})`,
+            border: `rgba(${r}, ${g}, ${b}, 1)`
+        };
+    }
+
+    for (let i = 0; i < publication_final_data.length; i++) {
+        let color = getRandomColor(0.1);
+        publication_dataset_line.push({
+            label: publication_final_data[i]['label'],
+            data: publication_final_data[i]['count'],
+            backgroundColor: color.background,
+            borderColor: color.border,
+            borderWidth: 2,
+            fill: true
+        });
+
+        publication_dataset_bar.push({
+            label: publication_final_data[i]['label'],
+            data: publication_final_data[i]['count'],
+            backgroundColor: color.background,
+            borderColor: color.border,
+            borderWidth: 1
+        });
+
+        publication_dataset_column.push({
+            label: publication_final_data[i]['label'],
+            data: publication_final_data[i]['count'],
+            backgroundColor: color.background,
+            borderColor: color.border,
+            borderWidth: 1
+        });
+    }
 
     let publicationBarChart = new Chart(publicationBarChartCtx, {
         type: 'bar',
         data: {
-            labels: [],
-            datasets: [{
-                label: '',
-                data: [],
-                backgroundColor: 'rgba(78, 115, 223, 1)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 1
-            }]
+            labels: publication_lable, // Corrected from 'label' to 'labels'
+            datasets: publication_dataset_column // Corrected from 'data' to 'datasets'
         },
         options: {
             indexAxis: 'y',
@@ -902,15 +939,8 @@
     let publicationLineChart = new Chart(publicationLineChartCtx, {
         type: 'line',
         data: {
-            labels: [],
-            datasets: [{
-                label: '',
-                data: [],
-                backgroundColor: 'rgba(78, 115, 223, 0.1)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 2,
-                fill: true
-            }]
+            labels: publication_lable, // Corrected from 'label' to 'labels'
+            datasets: publication_dataset_line // Corrected from 'data' to 'datasets'
         },
         options: {
             maintainAspectRatio: false,
@@ -930,14 +960,8 @@
     let publicationVerticalBarChart = new Chart(publicationVerticalBarChartCtx, {
         type: 'bar',
         data: {
-            labels: [],
-            datasets: [{
-                label: 'Expenses',
-                data: [],
-                backgroundColor: 'rgba(78, 115, 223, 1)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 1
-            }]
+            labels: publication_lable, // Corrected from 'label' to 'labels'
+            datasets: publication_dataset_column // Corrected from 'data' to 'datasets'
         },
         options: {
             maintainAspectRatio: false,
@@ -962,7 +986,7 @@
         document.getElementById(chartId).classList.add('active');
         console.log(`Showing chart: ${chartId}`);
     }
-
+  
     function updateChart4(timeFrame) {
         let data = [];
         let labels = [];
@@ -998,78 +1022,95 @@
         console.log(`Updated size charts for: ${timeFrame}`);
     }
     function updateChartData4(chart, labels, data) {
-        chart.data.labels = labels;
-        chart.data.datasets.forEach(dataset => {
-            dataset.data = data;
-        });
+        // chart.data.labels = labels;
+        // chart.data.datasets.forEach(dataset => {
+        //     dataset.data = data;
+        // });
         chart.update();
     }
 
-    //geography
-    const geographyAreaChartCtx = document.getElementById('geographyAreaChart').getContext('2d');
-    const geographyPieChartCtx = document.getElementById('geographyPieChart').getContext('2d');
+    //geography 
     const geographyBarChartCtx = document.getElementById('geographyBarChart').getContext('2d');
     const geographyLineChartCtx = document.getElementById('geographyLineChart').getContext('2d');
     const geographyVerticalBarChartCtx = document.getElementById('geographyVerticalBarChart').getContext('2d');
+    
+    let geography_news_data = <?php echo json_encode($geography_data); ?>;
+    let geography_dataset_line = [];
+    let geography_dataset_bar = [];
+    let geography_dataset_column = [];
+    let geography_lable = [];
+    let geography_clientNames = new Set();
 
-    let geographyAreaChart = new Chart(geographyAreaChartCtx, {
-        type: 'line',
-        data: {
-            labels: [],
-            datasets: [{
-                label: 'Earnings',
-                data: [],
-                backgroundColor: 'rgba(78, 115, 223, 0.1)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 2,
-                fill: true
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return value + '';
-                        }
-                    }
-                }
-            }
+    for (let geography in geography_news_data) {
+        if (geography_news_data.hasOwnProperty(geography)) {
+            console.log("geography:", geography);
+            geography_lable.push(geography);
+            // Collect client names
+            geography_news_data[geography].forEach(news => geography_clientNames.add(news.Client_name));
         }
+    }
+
+    geography_clientNames = Array.from(geography_clientNames);
+    // Create final data array
+    let geography_final_data = geography_clientNames.map(clientName => {
+        let counts = [];
+        for (let geography in geography_news_data) {
+            let geographyData = geography_news_data[geography];
+            let count = geographyData
+                .filter(news => news.Client_name === clientName)
+                .reduce((sum, news) => sum + news.Count, 0);
+            counts.push(count);
+        }
+        return {
+            label: clientName,
+            count: counts
+        };
     });
 
-    let geographyPieChart = new Chart(geographyPieChartCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Direct', 'Social', 'Referral'],
-            datasets: [{
-                data: [],
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }
-    });
+    console.log("geography final data:", geography_final_data);
+    function getRandomColor(opacity) {
+        let r = Math.floor(Math.random() * 255);
+        let g = Math.floor(Math.random() * 255);
+        let b = Math.floor(Math.random() * 255);
+        return {
+            background: `rgba(${r}, ${g}, ${b}, ${opacity})`,
+            border: `rgba(${r}, ${g}, ${b}, 1)`
+        };
+    }
+
+    for (let i = 0; i < geography_final_data.length; i++) {
+        let color = getRandomColor(0.1);
+        geography_dataset_line.push({
+            label: geography_final_data[i]['label'],
+            data: geography_final_data[i]['count'],
+            backgroundColor: color.background,
+            borderColor: color.border,
+            borderWidth: 2,
+            fill: true
+        });
+
+        geography_dataset_bar.push({
+            label: geography_final_data[i]['label'],
+            data: geography_final_data[i]['count'],
+            backgroundColor: color.background,
+            borderColor: color.border,
+            borderWidth: 1
+        });
+
+        geography_dataset_column.push({
+            label: geography_final_data[i]['label'],
+            data: geography_final_data[i]['count'],
+            backgroundColor: color.background,
+            borderColor: color.border,
+            borderWidth: 1
+        });
+    }
 
     let geographyBarChart = new Chart(geographyBarChartCtx, {
         type: 'bar',
-        data: {
-            labels: [],
-            datasets: [{
-                label: '',
-                data: [],
-                backgroundColor: 'rgba(78, 115, 223, 1)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 1
-            }]
+         data: {
+            labels: geography_lable, // Corrected from 'label' to 'labels'
+            datasets: geography_dataset_bar // Corrected from 'data' to 'datasets'
         },
         options: {
             indexAxis: 'y',
@@ -1090,15 +1131,8 @@
     let geographyLineChart = new Chart(geographyLineChartCtx, {
         type: 'line',
         data: {
-            labels: [],
-            datasets: [{
-                label: '',
-                data: [],
-                backgroundColor: 'rgba(78, 115, 223, 0.1)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 2,
-                fill: true
-            }]
+            labels: geography_lable, // Corrected from 'label' to 'labels'
+            datasets: geography_dataset_line // Corrected from 'data' to 'datasets'
         },
         options: {
             maintainAspectRatio: false,
@@ -1118,14 +1152,8 @@
     let geographyVerticalBarChart = new Chart(geographyVerticalBarChartCtx, {
         type: 'bar',
         data: {
-            labels: [],
-            datasets: [{
-                label: 'Expenses',
-                data: [],
-                backgroundColor: 'rgba(78, 115, 223, 1)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 1
-            }]
+            labels: geography_lable, // Corrected from 'label' to 'labels'
+            datasets: geography_dataset_column // Corrected from 'data' to 'datasets'
         },
         options: {
             maintainAspectRatio: false,
@@ -1178,86 +1206,104 @@
             break;
         }
 
-        updateChartData5(geographyAreaChart, labels, data);
-        updateChartData5(geographyPieChart, labels.slice(0, 3), data.slice(0, 3)); 
         updateChartData5(geographyBarChart, labels, data);
         updateChartData5(geographyLineChart, labels, data);
         updateChartData5(geographyVerticalBarChart, labels, data);
         console.log(`Updated size charts for: ${timeFrame}`);
     }
     function updateChartData5(chart, labels, data) {
-        chart.data.labels = labels;
-        chart.data.datasets.forEach(dataset => {
-            dataset.data = data;
-        });
+        // chart.data.labels = labels;
+        // chart.data.datasets.forEach(dataset => {
+        //     dataset.data = data;
+        // });
         chart.update();
     }
 
     //journalist
-    const journalistAreaChartCtx = document.getElementById('journalistAreaChart').getContext('2d');
-    const journalistPieChartCtx = document.getElementById('journalistPieChart').getContext('2d');
+   
     const journalistBarChartCtx = document.getElementById('journalistBarChart').getContext('2d');
     const journalistLineChartCtx = document.getElementById('journalistLineChart').getContext('2d');
     const journalistVerticalBarChartCtx = document.getElementById('journalistVerticalBarChart').getContext('2d');
 
-    let journalistAreaChart = new Chart(journalistAreaChartCtx, {
-        type: 'line',
-        data: {
-            labels: [],
-            datasets: [{
-                label: '',
-                data: [],
-                backgroundColor: 'rgba(78, 115, 223, 0.1)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 2,
-                fill: true
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return value + '';
-                        }
-                    }
-                }
-            }
+    
+    let Journalist_news_data = <?php echo json_encode($Journalist_data); ?>;
+    let Journalist_dataset_line = [];
+    let Journalist_dataset_bar = [];
+    let Journalist_dataset_column = [];
+    let Journalist_lable = [];
+    let Journalist_clientNames = new Set();
+
+    for (let Journalist in Journalist_news_data) {
+        if (Journalist_news_data.hasOwnProperty(Journalist)) {
+            console.log("Journalist:", Journalist);
+            Journalist_lable.push(Journalist);
+            // Collect client names
+            Journalist_news_data[Journalist].forEach(news => Journalist_clientNames.add(news.Client_name));
         }
+    }
+
+    Journalist_clientNames = Array.from(Journalist_clientNames);
+    // Create final data array
+    let Journalist_final_data = Journalist_clientNames.map(clientName => {
+        let counts = [];
+        for (let Journalist in Journalist_news_data) {
+            let JournalistData = Journalist_news_data[Journalist];
+            let count = JournalistData
+                .filter(news => news.Client_name === clientName)
+                .reduce((sum, news) => sum + news.Count, 0);
+            counts.push(count);
+        }
+        return {
+            label: clientName,
+            count: counts
+        };
     });
 
-    let journalistPieChart = new Chart(journalistPieChartCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Direct', 'Social', 'Referral'],
-            datasets: [{
-                data: [],
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }
-    });
+    console.log("Journalist final data:", Journalist_final_data);
+    function getRandomColor(opacity) {
+        let r = Math.floor(Math.random() * 255);
+        let g = Math.floor(Math.random() * 255);
+        let b = Math.floor(Math.random() * 255);
+        return {
+            background: `rgba(${r}, ${g}, ${b}, ${opacity})`,
+            border: `rgba(${r}, ${g}, ${b}, 1)`
+        };
+    }
+
+    for (let i = 0; i < Journalist_final_data.length; i++) {
+        let color = getRandomColor(0.1);
+        Journalist_dataset_line.push({
+            label: Journalist_final_data[i]['label'],
+            data: Journalist_final_data[i]['count'],
+            backgroundColor: color.background,
+            borderColor: color.border,
+            borderWidth: 2,
+            fill: true
+        });
+
+        Journalist_dataset_bar.push({
+            label: Journalist_final_data[i]['label'],
+            data: Journalist_final_data[i]['count'],
+            backgroundColor: color.background,
+            borderColor: color.border,
+            borderWidth: 1
+        });
+
+        Journalist_dataset_column.push({
+            label: Journalist_final_data[i]['label'],
+            data: Journalist_final_data[i]['count'],
+            backgroundColor: color.background,
+            borderColor: color.border,
+            borderWidth: 1
+        });
+    }
+
 
     let journalistBarChart = new Chart(journalistBarChartCtx, {
         type: 'bar',
         data: {
-            labels: [],
-            datasets: [{
-                label: '',
-                data: [],
-                backgroundColor: 'rgba(78, 115, 223, 1)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 1
-            }]
+            labels: Journalist_lable, // Corrected from 'label' to 'labels'
+            datasets: Journalist_dataset_bar // Corrected from 'data' to 'datasets'
         },
         options: {
             indexAxis: 'y',
@@ -1278,15 +1324,8 @@
     let journalistLineChart = new Chart(journalistLineChartCtx, {
         type: 'line',
         data: {
-            labels: [],
-            datasets: [{
-                label: '',
-                data: [],
-                backgroundColor: 'rgba(78, 115, 223, 0.1)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 2,
-                fill: true
-            }]
+            labels: Journalist_lable, // Corrected from 'label' to 'labels'
+            datasets: Journalist_dataset_line // Corrected from 'data' to 'datasets'
         },
         options: {
             maintainAspectRatio: false,
@@ -1306,15 +1345,8 @@
     let journalistVerticalBarChart = new Chart(journalistVerticalBarChartCtx, {
         type: 'bar',
         data: {
-            labels: [],
-            datasets: [{
-                
-                label: '',
-                data: [],
-                backgroundColor: 'rgba(78, 115, 223, 1)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 1
-            }]
+            labels: Journalist_lable, // Corrected from 'label' to 'labels'
+            datasets: Journalist_dataset_column // Corrected from 'data' to 'datasets'
         },
         options: {
             maintainAspectRatio: false,
@@ -1368,18 +1400,16 @@
                 break;
         }
 
-        updateChartData6(journalistAreaChart, labels, data);
-        updateChartData6(journalistPieChart, labels.slice(0, 3), data.slice(0, 3)); 
         updateChartData6(journalistBarChart, labels, data);
         updateChartData6(journalistLineChart, labels, data);
         updateChartData6(journalistVerticalBarChart, labels, data);
         console.log(`Updated size charts for: ${timeFrame}`);
     }
     function updateChartData6(chart, labels, data) {
-        chart.data.labels = labels;
-        chart.data.datasets.forEach(dataset => {
-            dataset.data = data;
-        });
+        // chart.data.labels = labels;
+        // chart.data.datasets.forEach(dataset => {
+        //     dataset.data = data;
+        // });
         chart.update();
     }
 

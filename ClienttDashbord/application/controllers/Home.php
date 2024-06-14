@@ -58,7 +58,6 @@ class Home extends CI_Controller {
         // echo $client_id;
         $compititers_data = $this->newsLetter->getCompData('daily', $client_id, $from, $to, '');
         $clients_news_count = $this->newsLetter->getClientNewsCount('daily', $client_id, $from, $to);
-
         $compititers_data[] = array(
             'label' => $this->session->userdata('client_name'),
             'count' => $clients_news_count
@@ -67,19 +66,27 @@ class Home extends CI_Controller {
         //Media Data
 
         $data['media_data'] = $this->newsLetter->getMediaData('daily', $client_id, $from, $to);
-        
-        //Publication Data
+       
         $data['Publication_data'] = $this->newsLetter->getPublicationData('daily', $client_id, $from, $to);
+
+        $data['geography_data'] = $this->newsLetter->getGeographyData('daily', $client_id, $from, $to);
+        $data['Journalist_data'] = $this->newsLetter->getJoutnalistData('daily', $client_id, $from, $to);
         // echo '<pre>';
-        // print_r($data['Publication_data']);
+        // print_r($data['Journalist_data']);
         // echo '</pre>';
+
         $this->load->view('common/header');
         $this->load->view('compare_charts', $data);
         $this->load->view('common/footer');
     }
 
+    public function compareFilterGraphs2()
+    {
+        $from = $this->input->post('from');
+        $to = $this->input->post('to');
 
-
+        redirect('Home/CompareCharts/'.$from.'/'.$to);
+    }
 
     public function DisplayNews($news_details_id){
         $data['news_details'] = $this->newsLetter->getNewsDataById($news_details_id);

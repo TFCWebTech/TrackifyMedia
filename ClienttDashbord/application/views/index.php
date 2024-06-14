@@ -96,7 +96,6 @@
                     </div>
                 </div>
 
-            
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Quantity</h6>
@@ -139,7 +138,6 @@
                     
                 </div>
             </div>
-
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h6 class="text-primary">Overview / Size</h6>
@@ -200,7 +198,7 @@
                 </div>
                 <div class="my-4">
                     <!-- <button class="btn btn-primary" onclick="showChart3('mediaareaChart')">Area Chart</button> -->
-                    <button class="btn btn-primary" onclick="showChart3('mediapieChart')">Pie Chart</button>
+                    <button class="btn btn-primary" onclick="showChart3('mediapieChart')">Stacked  Chart</button>
                     <button class="btn btn-primary" onclick="showChart3('mediabarChart')">Bar Chart</button>
                     <button class="btn btn-primary" onclick="showChart3('medialineChart')">Line Chart</button>
                     <button class="btn btn-primary" onclick="showChart3('mediaverticalBarChart')">Column Chart</button>
@@ -215,7 +213,6 @@
                         <button class="btn btn-secondary" onclick="updateChart4('weekly')">Weekly</button>
                         <button class="btn btn-secondary" onclick="updateChart4('monthly')">Monthly</button>
                     </div>
-                    
                 </div>
             </div>
                 <div class="row">
@@ -240,13 +237,12 @@
                 </div>
                 <div class="my-4">
                     <!-- <button class="btn btn-primary" onclick="showChart4('publicationareaChart')">Area Chart</button> -->
-                    <button class="btn btn-primary" onclick="showChart4('publicationpieChart')">Pie Chart</button>
+                    <button class="btn btn-primary" onclick="showChart4('publicationpieChart')">Stacked Chart</button>
                     <button class="btn btn-primary" onclick="showChart4('publicationbarChart')">Bar Chart</button>
                     <button class="btn btn-primary" onclick="showChart4('publicationlineChart')">Line Chart</button>
                     <button class="btn btn-primary" onclick="showChart4('publicationverticalBarChart')">Column Chart</button>
                 </div>
             </div>
-
 
             <div class="geography">
             <div class="row">
@@ -284,7 +280,7 @@
                 </div>
                 <div class="my-4">
                     <!-- <button class="btn btn-primary" onclick="showChart5('geographyareaChart')">Area Chart</button> -->
-                    <button class="btn btn-primary" onclick="showChart5('geographypieChart')">Pie Chart</button>
+                    <button class="btn btn-primary" onclick="showChart5('geographypieChart')">Stacked Chart</button>
                     <button class="btn btn-primary" onclick="showChart5('geographybarChart')">Bar Chart</button>
                     <button class="btn btn-primary" onclick="showChart5('geographylineChart')">Line Chart</button>
                     <button class="btn btn-primary" onclick="showChart5('geographyverticalBarChart')">Column Chart</button>
@@ -325,7 +321,7 @@
                 </div>
                 <div class="my-4">
                     <!-- <button class="btn btn-primary" onclick="showChart6('journalistareaChart')">Area Chart</button> -->
-                    <button class="btn btn-primary" onclick="showChart6('journalistpieChart')">Pie Chart</button>
+                    <button class="btn btn-primary" onclick="showChart6('journalistpieChart')">Stacked Chart</button>
                     <button class="btn btn-primary" onclick="showChart6('journalistbarChart')">Bar Chart</button>
                     <button class="btn btn-primary" onclick="showChart6('journalistlineChart')">Line Chart</button>
                     <button class="btn btn-primary" onclick="showChart6('journalistverticalBarChart')">Column Chart</button>
@@ -354,7 +350,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Earnings',
+                label: '',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 0.1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -744,24 +740,65 @@
         }
     });
 
+    // let mediaPieChart = new Chart(mediaPieChartCtx, {
+    //     type: 'doughnut',
+    //     data: {
+    //         labels: ['Direct', 'Social', 'Referral'],
+    //         datasets: [{
+    //             data: [],
+    //             backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
+    //         }]
+    //     },
+    //     options: {
+    //         maintainAspectRatio: false,
+    //         plugins: {
+    //             legend: {
+    //                 position: 'bottom'
+    //             }
+    //         }
+    //     }
+    // });
+
     let mediaPieChart = new Chart(mediaPieChartCtx, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
-            labels: ['Direct', 'Social', 'Referral'],
-            datasets: [{
-                data: [],
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
-            }]
+            labels: [],
+            datasets: [
+                {
+                    label: '',
+                    data: [],
+                    backgroundColor: 'rgba(78, 115, 223, 0.5)',
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: '',
+                    data: [],
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
         },
         options: {
             maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                },
+                x: {
+                    stacked: true
                 }
             }
         }
     });
+
 
     let mediaBarChart = new Chart(mediaBarChartCtx, {
         type: 'bar',
@@ -933,20 +970,60 @@
         }
     });
 
+    // let publicationPieChart = new Chart(publicationPieChartCtx, {
+    //     type: 'doughnut',
+    //     data: {
+    //         labels: ['Direct', 'Social', 'Referral'],
+    //         datasets: [{
+    //             data: [],
+    //             backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
+    //         }]
+    //     },
+    //     options: {
+    //         maintainAspectRatio: false,
+    //         plugins: {
+    //             legend: {
+    //                 position: 'bottom'
+    //             }
+    //         }
+    //     }
+    // });
+
     let publicationPieChart = new Chart(publicationPieChartCtx, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
-            labels: ['Direct', 'Social', 'Referral'],
-            datasets: [{
-                data: [],
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
-            }]
+            labels: [],
+            datasets: [
+                {
+                    label: '',
+                    data: [],
+                    backgroundColor: 'rgba(78, 115, 223, 0.5)',
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: '',
+                    data: [],
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
         },
         options: {
             maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                },
+                x: {
+                    stacked: true
                 }
             }
         }
@@ -1121,20 +1198,60 @@
         }
     });
 
+    // let geographyPieChart = new Chart(geographyPieChartCtx, {
+    //     type: 'doughnut',
+    //     data: {
+    //         labels: ['Direct', 'Social', 'Referral'],
+    //         datasets: [{
+    //             data: [],
+    //             backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
+    //         }]
+    //     },
+    //     options: {
+    //         maintainAspectRatio: false,
+    //         plugins: {
+    //             legend: {
+    //                 position: 'bottom'
+    //             }
+    //         }
+    //     }
+    // });
+
     let geographyPieChart = new Chart(geographyPieChartCtx, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
-            labels: ['Direct', 'Social', 'Referral'],
-            datasets: [{
-                data: [],
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
-            }]
+            labels: [],
+            datasets: [
+                {
+                    label: '',
+                    data: [],
+                    backgroundColor: 'rgba(78, 115, 223, 0.5)',
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: '',
+                    data: [],
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
         },
         options: {
             maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                },
+                x: {
+                    stacked: true
                 }
             }
         }
@@ -1311,20 +1428,59 @@
         }
     });
 
-    let journalistPieChart = new Chart(journalistPieChartCtx, {
-        type: 'doughnut',
+    // let journalistPieChart = new Chart(journalistPieChartCtx, {
+    //     type: 'doughnut',
+    //     data: {
+    //         labels: ['Direct', 'Social', 'Referral'],
+    //         datasets: [{
+    //             data: [],
+    //             backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
+    //         }]
+    //     },
+    //     options: {
+    //         maintainAspectRatio: false,
+    //         plugins: {
+    //             legend: {
+    //                 position: 'bottom'
+    //             }
+    //         }
+    //     }
+    // });
+        let journalistPieChart = new Chart(journalistPieChartCtx, {
+        type: 'bar',
         data: {
-            labels: ['Direct', 'Social', 'Referral'],
-            datasets: [{
-                data: [],
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
-            }]
+            labels: [],
+            datasets: [
+                {
+                    label: '',
+                    data: [],
+                    backgroundColor: 'rgba(78, 115, 223, 0.5)',
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: '',
+                    data: [],
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
         },
         options: {
             maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                },
+                x: {
+                    stacked: true
                 }
             }
         }

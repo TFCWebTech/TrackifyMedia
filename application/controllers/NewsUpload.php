@@ -128,15 +128,15 @@ class NewsUpload extends CI_Controller {
 				 $editor = $this->input->post('editor' . $i);
 				 $pageNo = $this->input->post('page_no' . $i);
 				 $image_id = $this->input->post('image_id' . $i);
-				//  $height = $this->input->post('height' . $i);
-				//  $width = $this->input->post('width' . $i);
+				 $height = $this->input->post('height' . $i);
+				 $width = $this->input->post('width' . $i);
 				$newsArtical = array(
 					'news_details_id' => $newsDetailsId,
 					'news_artical' => $editor,
 					'page_no' => $pageNo,
 					'artical_images_id' => $image_id,
-					// 'image_height' => $height,
-					// 'image_width	' => $width,
+					'image_height' => $height,
+					'image_width	' => $width,
 				);
 
 				$this->reporter->insert('news_artical', $newsArtical);
