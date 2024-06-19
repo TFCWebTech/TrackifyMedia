@@ -23,6 +23,13 @@ class NewsUpload extends CI_Controller {
     }
     public function index()
     {
+		$data['get_agency'] = $this->reporter->getagency();
+		$data['get_journalist'] = $this->reporter->getjournalist();
+		$data['get_news_city'] = $this->reporter->getnewscity();
+		$data['get_supplements'] = $this->reporter->getsupplements();
+		$data['get_edition'] = $this->reporter->getEdition();
+		$data['get_publication'] = $this->reporter->getPublication();
+		$data['get_media_type'] = $this->reporter->getMediaType();
 		$data['get_keywords'] = $this->reporter->getAllKeywords();
 		$data['get_clients'] = $this->reporter->getClients();
         $this->load->view('common/header');

@@ -6,7 +6,12 @@ class NewsLetter_Model extends CI_Model
         $this->db->insert($table, $data);
         return $this->db->insert_id();
     }
- 
+    public function update($table, $colIdName, $id, $data)
+    {
+        $this->db->where($colIdName, $id);
+        $result = $this->db->update($table, $data);
+        return $result;
+    }
     // public function getClients(){
     //     $sql="SELECT * FROM `client`  ";
     //     $query = $this->db->query($sql);
@@ -63,26 +68,94 @@ class NewsLetter_Model extends CI_Model
         $this->db->where('client_id', $client_id);
         return $this->db->get()->row_array();
     }
-    
-    public function getClientTemplateDetails($client_id){
-        $this->db->where_in('client_id', $client_id); 
+
+    public function getEmailsByClientId($client_id)
+    {
         $this->db->select('*');
+        $this->db->from('client_emails');
+        $this->db->where('client_id', $client_id);
+        return $this->db->get()->result_array();
+    }
+    
+    // public function getClientById($client_id)
+    // {
+    //     // Select all columns from the 'client' table
+    //     $this->db->select('*');
+    //     $this->db->from('client');
+    //     $this->db->where('client_id', $client_id);
+        
+    //     // Execute the query and get the result set
+    //     $query = $this->db->get();
+    //     $clients = $query->result_array();
+        
+    //     // Initialize an array to hold the output
+    //     $outArr = [];
+        
+    //     // Iterate through each client and fetch their emails
+    //     foreach ($clients as $client) {
+    //         $client['client_email'] = $this->getEmails($client['client_id']);
+    //         $outArr[] = $client;
+    //     }
+        
+    //     // Return the final array with clients and their emails
+    //     return $outArr;
+    // }
+    
+    // public function getEmails($client_id)
+    // {
+    //     // Select all columns from the 'client_emails' table
+    //     $this->db->select('client_email');
+    //     $this->db->from('client_emails');
+    //     $this->db->where('client_id', $client_id);
+    //     // Execute the query and get the result set
+    //     $query = $this->db->get();
+    //     $result = $query->result_array();
+        
+    //     // Return the emails
+    //     return $result;
+    // }
+    
+    // public function getClientTemplateDetails($client_id){
+    //     $this->db->where_in('client_id', $client_id); 
+    //     $this->db->select('*');
+    //     $this->db->from('mail_template as mt');
+    //     $this->db->join('quick_links as ql','mt.mail_template_id = ql.mail_template_id', 'left');
+    //     $query = $this->db->get();
+    //     $clients = $query->result_array(); 
+    //     $outArr = [];
+    //     foreach ($clients as $client) {
+    //         $client['client_news'] = $this->getNewsDetails($client['client_id']);
+    //         $client['compititors_data'] = $this->getCompData($client['client_id']);
+    //         $client['industry_data'] = $this->getIndustryData($client['client_id']);
+    //         // $client['client_news'] = $client_news; 
+    //         // $compitetorIndustry['compitetor_industry'] = $compitetor_industry; 
+    //         // $outArr[] = $compitetorIndustry;
+    //         $outArr[] = $client;
+    //     }
+    //     return $outArr;
+    // }
+
+    public function getClientTemplateDetails($client_id){
+        $this->db->select('mt.*');
         $this->db->from('mail_template as mt');
-        $this->db->join('quick_links as ql','mt.mail_template_id = ql.mail_template_id', 'left');
+        $this->db->where_in('mt.client_id', $client_id);
+        $this->db->group_by('mt.mail_template_id'); // Ensure unique mail_template records
         $query = $this->db->get();
-        $clients = $query->result_array(); 
-        $outArr = [];
-        foreach ($clients as $client) {
+        $clients = $query->result_array();
+    
+        foreach ($clients as &$client) {
+            $this->db->select('*');
+            $this->db->from('quick_links');
+            $this->db->where('mail_template_id', $client['mail_template_id']);
+            $client['quick_links'] = $this->db->get()->result_array();
+    
             $client['client_news'] = $this->getNewsDetails($client['client_id']);
             $client['compititors_data'] = $this->getCompData($client['client_id']);
             $client['industry_data'] = $this->getIndustryData($client['client_id']);
-            // $client['client_news'] = $client_news; 
-            // $compitetorIndustry['compitetor_industry'] = $compitetor_industry; 
-            // $outArr[] = $compitetorIndustry;
-            $outArr[] = $client;
         }
-        return $outArr;
+        return $clients;
     }
+    
 
     public function getNewsDetails($client_id) {
         $date = date('Y-m-d');
@@ -237,5 +310,13 @@ class NewsLetter_Model extends CI_Model
         return $this->db->get()->result_array();
     }
     
+
+    public function getNewsByNewsDetailsId($news_details_id)
+    {
+        $this->db->select('*');
+        $this->db->from('news_details');
+        $this->db->where('news_details_id', $news_details_id);
+        return $this->db->get()->result_array();
+    }
 }
 ?>

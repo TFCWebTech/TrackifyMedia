@@ -51,9 +51,25 @@ class ManageClient extends CI_Controller {
             $this->session->set_flashdata('success', 'Client added successfully');
             redirect('ManageClient/ClientInfo');
         }
+    }   
     
+    public function addUsersEmail(){
+        $client_id = $this->input->post('client_id_1');
+        $client_email = $this->input->post('client_email');
+        $report_service = $this->input->post('report_service');
+        $data = [
+            'client_id' => $client_id,
+            'client_email' => $client_email,
+            'report_service' => $report_service
+        ];
+        // print_r($data);
+        $result = $this->db->insert('client_emails', $data);
+        if($result){
+            $this->session->set_flashdata('success', 'Email added successfully');
+            redirect('ManageClient/ClientInfo');
+        }
     }
-    
+
     public function ClientInfo(){
         $data['get_clients'] = $this->client->getClients();
         $this->load->view('common/header');

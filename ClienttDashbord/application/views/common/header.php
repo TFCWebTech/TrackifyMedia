@@ -137,6 +137,11 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Pro Compare</span></a>
                 </li>
+                <li class="nav-item <?php print ($this->uri->segment(2)=='Report')?'active':''; ?>">
+                    <a class="nav-link" href="<?php echo site_url('Report');?>">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Pro Report</span></a>
+                </li>
              <!-- Divider -->
              <hr class="sidebar-divider d-none d-md-block">
 

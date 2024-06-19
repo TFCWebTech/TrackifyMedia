@@ -63,55 +63,37 @@
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Media Type </label>
                                             <select class="form-control" name="media_type" id="media_type" onchange="checkSelection()">
-                                            <option value="">Select</option>
-                                                <option value="Magazine">Magazine</option>
-                                                <option value="NewsPaper">NewsPaper</option>
-                                                <option value="Online" >Online</option>
-                                                <option value="Video">Video</option>
-                                                <option value="TV">TV</option>
+                                            <option disbled>Select</option>
+                                            <?php foreach($get_media_type as $values){?>
+                                            <option value="<?php echo $values['gidMediaType'];?>"> <?php echo $values['MediaType'];?></option>
+                                            <?php }?>
                                             </select>
-                                        </div>
+                                        </div>  
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="publication">Publication</label>
                                             <select class="form-control" name="publication" id="publication">
-                                                <option value="">Select</option>
-                                                <option value="4Ps">4Ps</option>
-                                                <option value="50 Fashion Brand Icons">50 Fashion Brand Icons</option>
-                                                <option value="Aag">Aag</option>
-                                                <option value="Abraxas Lifestyle Magazine">Abraxas Lifestyle Magazine</option>
-                                                <option value="Acaai News">Acaai News</option>
-                                                <option value="Accommodation Times">Accommodation Times</option>
-                                                <option value="ACE">ACE</option>
+                                            <option disbled>Select</option>
+                                            <?php foreach($get_publication as $values){?>
+                                            <option value="<?php echo $values['gidMediaOutlet'];?>"> <?php echo $values['MediaOutlet'];?></option>
+                                            <?php }?>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="edition">Edition</label>
                                             <select class="form-control" name="edition" id="edition">
-                                                <option value="">Select</option>
-                                                <option value="National">National</option>
+                                            <option disbled>Select</option>
+                                            <?php foreach($get_edition as $values){?>
+                                            <option value="<?php echo $values['gidEdition'];?>"> <?php echo $values['Edition'];?></option>
+                                            <?php }?>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="SupplementId">Supplement</label>
                                             <select  class="form-control" name="SupplementId" id="SupplementId" accesskey="s">
-                                                <option value="">Select</option>
-                                                <option value="A Celebration Of Life"> A Celebration Of Life </option>
-                                                <option value="Baja Saeindia"> Baja Saeindia </option>
-                                                <option value="bangaloreplus"> bangaloreplus </option>
-                                                <option value="Bankers Trust"> Bankers Trust </option>
-                                                <option value="Banking annual"> Banking annual </option>
-                                                <option value="Banking Technology"> Banking Technology </option>
-                                                <option value="Banking Technology Award 2015"> Banking Technology Award 2015 </option>
-                                                <option value="BENGAL Towards Economic Resurgence"> BENGAL Towards Economic Resurgence  </option>
-                                                <option value="Bhubaneswar"> Bhubaneswar </option>
-                                                <option value="Big Bike Guide"> Big Bike Guide </option>
-                                                <option value="bizjournal.com"> bizjournal.com </option>
-                                                <option value="Blink"> Blink </option>
-                                                <option value="Brands in the ascendance"> Brands in the ascendance  </option>
-                                                <option value="BS1000 Annual"> BS1000 Annual </option>
-                                                <option value="Business Day"> Business Day </option>
-                                                <option value="Celebrating a second life"> Celebrating a second life </option>
-                                                <option value="Chandigarh Spokesman"> Chandigarh Spokesman </option>
+                                            <option disbled>Select</option>
+                                            <?php foreach($get_supplements as $values){?>
+                                            <option value="<?php echo $values['gidSupplement'];?>"> <?php echo $values['Supplement'];?></option>
+                                            <?php }?>
                                             </select>
                                         </div>  
                                         <!-- <div class="col-md-2">
@@ -129,17 +111,14 @@
                                             <select class="form-control" name="journalist_name" id="journalist_name">
                                             <option value="">Select</option>
                                             <optgroup label="News Agencies">
-                                                <option value="Agencies">Agencies</option>
-                                                <option value="Associated Press">Associated Press</option>
-                                                <option value="Bloomberg">Bloomberg</option>
-                                                <option value="Bureau">Bureau</option>
-                                                <option value="Correspondent">Correspondent</option>
-                                                <option value="PTI">PTI</option>
-                                                <option value="Reuters">Reuters</option>
-                                                <option value="The New York Times">The New York Times</option>
+                                            <?php foreach($get_agency as $values){?>
+                                            <option value="<?php echo $values['gidAgency'];?>"> <?php echo $values['Agency'];?></option>
+                                            <?php }?>
                                             </optgroup>
-                                            <optgroup label="Journalist Names">
-                                                <option value="Jitendra">Jitendra</option>
+                                            <optgroup label="Journalist Names"> 
+                                            <?php foreach($get_journalist as $values){?>
+                                            <option value="<?php echo $values['gidJournalist'];?>"> <?php echo $values['Journalist'];?></option>
+                                            <?php }?>
                                             </optgroup>
                                             </select>
                                         </div>
@@ -172,11 +151,13 @@
                                                 </select>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3"> 
                                             <label class="px-1 font-weight-bold" for="NewsCity"> News City</label>
                                             <select  class="form-control"  name="NewsCity" id="NewsCity">
-                                                <option value="0">Select</option>
-                                                <option value="Nashik">Nashik</option>
+                                            <option disbled>Select</option>
+                                            <?php foreach($get_news_city as $values){?>
+                                            <option value="<?php echo $values['gidNewscity'];?>"> <?php echo $values['CityName'];?></option>
+                                            <?php }?>
                                                 </select>
                                             </select>
                                         </div>

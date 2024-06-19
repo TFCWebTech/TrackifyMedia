@@ -15,6 +15,43 @@ class Reporter_Model extends CI_Model
         return $query->result_array();
     }
     
+    public function getMediaType(){
+        $this->db->select('gidMediaType, MediaType');
+        $this->db->from('mediatype');
+        return $this->db->get()->result_array();
+    }
+
+        public function getPublication(){
+        $this->db->select('gidMediaOutlet, MediaOutlet');
+        $this->db->from('mediaoutlet');
+        return $this->db->get()->result_array();
+    }
+    public function getEdition(){
+        $this->db->select('gidEdition, Edition');
+        $this->db->from('edition');
+        return $this->db->get()->result_array();
+    }
+    public function getsupplements(){
+        $this->db->select('gidSupplement, Supplement');
+        $this->db->from('supplements');
+        return $this->db->get()->result_array();
+    }
+    public function getnewscity(){
+        $this->db->select('gidNewscity, CityName');
+        $this->db->from('newscity');
+        return $this->db->get()->result_array();
+    }
+    public function getjournalist(){
+        $this->db->select('gidJournalist, Journalist');
+        $this->db->from('journalist');
+        return $this->db->get()->result_array();
+    }
+    public function getagency(){
+        $this->db->select('gidAgency, Agency');
+        $this->db->from('Agency');
+        return $this->db->get()->result_array();
+    }
+    
     public function getKeywords() {
        
         $sql = "SELECT client_keywords FROM `client`; ";

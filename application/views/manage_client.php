@@ -30,6 +30,9 @@ margin-bottom: 5px !important;
 .hidden {
     display: none;
   }
+  .table-container-responsive{
+            overflow-x: auto;
+        }
 </style>
 <script>
 function validateForm() {
@@ -101,17 +104,19 @@ function addKeywordInput2() {
         </div>
         <div class="row">
             <div class="col-md-12">
-            <table class="table table-bordered table-hover dt-responsive">
+            <div class=" table-container-responsive">
+            <table class="table table-bordered table-hover">
+            <!-- <table class="table table-bordered table-hover dt-responsive"> -->
                 <thead >
                 <tr>
                     <th>Client Name</th>
                     <th>Keywords</th>
                     <th>Status</th>
-                    <th>Add Email</th>
+                    <th>Add User Email</th>
                     <th>Add Competitor</th>
                     <!-- <th>Created At</th> -->
                     <th> Email Template</th>
-                    <th>Action</th>
+                    <!-- <th>Action</th> -->
                 </tr>
                 </thead>
                 <tbody>
@@ -127,20 +132,20 @@ function addKeywordInput2() {
                     <?php }else {?>
                         <td>NA</td>
                     <?php }?>
-                    <td class="text-center"><a class="btn btn-primary" data-toggle="modal" data-target="#addEmail"  onclick="addEmail(<?php echo $values['client_id'];?>)" > ADD</a></td>
+                    <td class="text-center"><a class="btn btn-primary" data-toggle="modal" data-target="#addEmail"  onclick="addEmail('<?php echo $values['client_id'];?>','<?php echo $values['client_name'];?>')" > ADD</a></td>
                     <td class="text-center"><a class="btn btn-primary" data-toggle="modal" data-target="#addCompitetor"  onclick="addCompetotor(<?php echo $values['client_id'];?>)" > ADD</a></td>
                     <!-- <td><?php echo date('d/ F /Y', strtotime($values['create_at'])); ?></td> -->
                     <td class="text-center"><a class="btn btn-primary" href="<?php echo site_url('EmailTemplate/CreateTemplate/'.$values['client_id']);?>"> ADD</a></td>
-                    <td>
+                    <!-- <td>
                         &nbsp; <i class="fa fa-edit text-primary" onclick="editUserType('')" data-toggle="modal" data-target="#editModal" title="Edit"></i>&nbsp; 
                         <i class="fa fa-trash text-danger" onclick="deleteUserType('')" data-toggle="modal" data-target="#deleteModal" title="Delete"></i>&nbsp;
-                        <!-- <i class="fa fa-trash text-danger" onclick="deleteUserType('')" data-toggle="modal" data-target="#deleteModal" title="Delete"></i> -->
-                        </td>
+                        </td> -->
                 </tr>
                 <?php } ?>
                 </tbody>
             
             </table>
+            </div>
             </div>
         </div>
 </div>
@@ -302,21 +307,34 @@ function addKeywordInput2() {
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Add Email </h4>
+        <h4 class="modal-title">Add User Email <span id="client_name_1"></span> </h4>
         <!-- Correct close button for Bootstrap 4 -->
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-
       <!-- Modal Body -->
       <div class="modal-body">
-            <form action="<?php echo site_url('ManageClient/addEmail')?>" method="post">
+            <form action="<?php echo site_url('ManageClient/addUsersEmail')?>" method="post">
                 <div class="form-group" >
-                <input type="text" id="client_id_1" name="client_id_1" hidden> 
-                    <label class="px-1 font-weight-bold" for="user_type">Add Email</label>
+                    <input type="text" id="client_id_1" name="client_id_1" hidden> 
+                    <label class="px-1 font-weight-bold" for="user_mails">Add Email</label>
                     <input type="text" class="form-control" placeholder="Enter Email" name="client_email" required>
                 </div>
+                    <div class="form-group mt-2">
+                        <label class="px-1 font-weight-bold" for="report_Service">Report Service </label>
+                    <div class="d-flex justify-content-start px-2">
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="report_service_1" name="report_service" value="1" checked>
+                            <label class="form-check-label" for="report_service_1">YES</label>
+                        </div> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="report_service_2" name="report_service" value="0">
+                            <label class="form-check-label" for="report_service_2">NO</label>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="text-right pt-2">
                  <button type="submit" class="btn btn-primary">ADD</button>
                 </div>
@@ -350,9 +368,9 @@ clientSelect.addEventListener("change", function() {
     function addCompetotor(client){
         $('#client_id').val(client);
     }
-
-    function addEmail(client){
+    function addEmail(client , client_name){
         $('#client_id_1').val(client);
+        $('#client_name_1').val(client_name);
     }
 </script>
 

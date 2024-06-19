@@ -186,6 +186,18 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Manage Industry</span></a>
             </li>
+
+            <li class="nav-item <?php print ($this->uri->segment(2)=='ManagePublication')?'active':''; ?>">
+                <a class="nav-link" href="<?php echo site_url('ManagePublication');?>">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Manage Publication</span></a>
+            </li>
+
+            <!-- <li class="nav-item <?php print ($this->uri->segment(2)=='ManageUser')?'active':''; ?>">
+                <a class="nav-link" href="<?php echo site_url('ManageUser');?>">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Manage Publication</span></a>
+            </li> -->
             
             <?php
             } ?>
