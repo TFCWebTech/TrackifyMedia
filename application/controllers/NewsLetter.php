@@ -20,11 +20,12 @@ class NewsLetter extends CI_Controller {
         $this->load->view('news_letter', $data);
         $this->load->view('common/footer');
     }
+
     public function newsMail($client_id){
         $data['details'] = $this->newsLetter->getClientById($client_id);
         $data['get_client_details'] = $this->newsLetter->getClientTemplateDetails($client_id);
         // echo '<pre>';
-        // print_r($data['details']);
+        // print_r($data['get_client_details']);
         // echo '</pre>';
         $this->load->view('common/header');
         $this->load->view('mail_letter', $data);
@@ -40,12 +41,38 @@ class NewsLetter extends CI_Controller {
     $this->load->view('common/footer');
    }
 
-   public function getEmail(){
-    $client_id = $this->input->post('client_id');
-    $client_mails = $this->newsLetter->getEmailsByClientId($client_id);
-    // print_r($client_mails);
-    echo json_encode($client_mails);
-   }
+   public function getEmail() {
+    $c_id = $this->input->post('client_id');
+    // $c_id = 2;
+    $get_client_email = $this->newsLetter->getclientsforEmail();
+    
+    $client_emails = [];
+    $client_ids = [];
+
+    foreach ($get_client_email as $client) {
+        // Check if the client_id exists in the clients column
+        if (!empty($client['clients'])) {
+            $clients_array = explode(',', $client['clients']);
+            if (in_array($c_id, $clients_array)) {
+                $client_emails[] = ['client_email' => $client['email']];
+                $client_ids[] = $client['client_id'];
+            }
+        }
+    }
+
+    // Ensure uniqueness if needed
+    $client_ids = array_unique($client_ids);
+
+    // Return JSON response
+    $response = [
+        'emails' => $client_emails,
+        'client_id' => $client_ids, // Note this is an array now
+        'c_id' => $c_id
+    ];
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+}
 
    public function newsupdate(){
     $news_details_id = $this->input->post('news_details_id');
@@ -125,42 +152,89 @@ class NewsLetter extends CI_Controller {
     $this->session->set_flashdata('success', 'Information updated Successfully');
 }
 
-
-   public function sendMail(){
+public function sendMail() {
+    $client_id = $this->input->post('client_id');
+    $index = $this->input->post('index');
+    $client_ids = $this->input->post('client_ids');
     
-    $clientMails = $this->input->post('clientMails');
-        // $data['details'] = $this->newsLetter->getClientById($client_id);
-        // $email = $data['details']['email'];
-        // $data['get_client_details'] = $this->newsLetter->getClientTemplateDetails($client_id);
+    // Fetch client details and template details once outside the loop if needed
+    $data['details'] = $this->newsLetter->getClientById($client_id);
+    $data['get_client_details'] = $this->newsLetter->getClientTemplateDetails($client_id);
 
-        // echo '<pre>';
-        // print_r($data['details']);
-        // echo '</pre>';
-        // $config = Array(
-        //     'protocol' => 'smtp',
-        //     'smtp_host' => 'master.herosite.pro',
-        //     '_smtp_auth' => TRUE,
-        //     'smtp_port' => 465,
-        //     'smtp_user' => 'admin@pressbro.com',
-        //     'smtp_pass' => 'Vajra@5566',
-        //     'smtp_crypto' => 'ssl',
-        //     'mailtype' => 'html',
-        //     'charset' => 'utf-8'
-        // );
-        // $this->load->library('email', $config);
-        // $this->email->set_newline("\r\n");
-        // $this->email->set_mailtype("html");
-        // $this->email->from('admin@pressbro.com', 'Test');
-        // $this->email->to($email);
-        // $this->email->subject('News');
-        // $this->email->message($this->load->view('email/send_mail', $data, TRUE));
-        // $result = $this->email->send();
-        // if($result){
-        //     $this->session->set_flashdata('success', 'Mail Send Successfully');
-        //     redirect('NewsLetter/newsMail/' . $client_id);
-        // }
-   }
+    // Array to store all news_details_id
+    $news_details_ids = [];
 
+    // Check if client details contain 'client_news' and extract 'news_details_id'
+    if (!empty($data['get_client_details'][0]['client_news'])) {
+        foreach ($data['get_client_details'][0]['client_news'] as $news) {
+            if (isset($news['news_details_id'])) {
+                $news_details_id = $news['news_details_id'];
+                $news_details_ids[] = $news_details_id;
+                
+                // Prepare data for update
+                $update_data = array(
+                    'client_id' => $client_ids,
+                    'is_send' => '1'
+                );
+                // Update news_details table
+                $this->newsLetter->update('news_details', 'news_details_id', $news_details_id, $update_data);
+            }
+        }
+    }
+
+    $mail_sent = false; // Flag to check if at least one email was successfully sent
+
+    for ($i = 1; $i <= $index; $i++) {
+        $clientMails = $this->input->post('clientMails' . $i);
+
+        if ($clientMails) {
+            foreach ($clientMails as $email) {
+                // Load email library and configure email parameters
+                $config = Array(
+                    'protocol' => 'smtp',
+                        'smtp_host' => 'master.herosite.pro',
+                        '_smtp_auth' => TRUE,
+                        'smtp_port' => 465,
+                        'smtp_user' => 'admin@pressbro.com',
+                        'smtp_pass' => 'Vajra@5566',
+                        'smtp_crypto' => 'ssl',
+                        'mailtype' => 'html',
+                        'charset' => 'utf-8'
+                );  
+
+                $this->load->library('email', $config);
+                $this->email->set_newline("\r\n");
+                $this->email->set_mailtype("html");
+                $this->email->from('admin@pressbro.com', 'Test');
+                $this->email->to($email);
+                $this->email->subject('News');
+                $this->email->message($this->load->view('email/send_mail', $data, TRUE));
+
+                // Send email
+                if ($this->email->send()) {
+                    // Set flag if at least one email is successfully sent
+                    $mail_sent = true;
+                } else {
+                    // Display error message if email sending failed
+                    echo $this->email->print_debugger();
+                    $this->session->set_flashdata('error', 'Failed to send email.');
+                }
+            }
+        } else {
+            echo "No emails found for clientMails" . $i . "<br>";
+        }
+
+    }
+
+    if ($mail_sent) {
+        $this->session->set_flashdata('success', 'News sent successfully.');
+    } else {
+        $this->session->set_flashdata('error', 'Failed to send email(s).');
+    }
+
+    redirect('NewsLetter/newsMail/' . $client_id);
+}
+     
    public function sendMailToMultipleClient() {
     $client_ids = $this->input->post('client_id');
     

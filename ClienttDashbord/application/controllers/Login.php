@@ -30,9 +30,11 @@ class Login extends CI_Controller {
             if($Client) {
                 $client_id = $Client['client_id'];
                 $client_name = $Client['client_name'];
+                $clients = $Client['clients'];
                 $Start_session = array (
                     'client_id' => $client_id,
                     'client_name' => $client_name,
+                    'clients' => $clients,
                     );
                     // print_r($Start_session);
                     $this->session->set_userdata($Start_session);

@@ -21,6 +21,7 @@ class ManageIndustry extends CI_Controller {
         $this->load->view('superAdmin/industry', $data);
         $this->load->view('common/footer');
     }
+    
     public function addIndustry(){
             $client_name = $this->input->post('industry_name');
             $is_active = $this->input->post('is_active');

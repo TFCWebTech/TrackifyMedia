@@ -10,7 +10,7 @@ class Reporter_Model extends CI_Model
 
     public function getReporterData()
     {
-        $sql="SELECT * FROM `user`; ";
+        $sql = "SELECT * FROM `user` WHERE `user_name` = 'reporter' ;";
         $query = $this->db->query($sql);
         return $query->result_array();
     }

@@ -22,6 +22,7 @@ class NewsLetter_Model extends CI_Model
         // Fetch all clients from the 'client' table
         $this->db->select('*');
         $this->db->from('client');
+        $this->db->where('client_type','Company');
         $query = $this->db->get();
         $clients = $query->result_array(); 
     
@@ -69,14 +70,19 @@ class NewsLetter_Model extends CI_Model
         return $this->db->get()->row_array();
     }
 
-    public function getEmailsByClientId($client_id)
-    {
-        $this->db->select('*');
-        $this->db->from('client_emails');
-        $this->db->where('client_id', $client_id);
-        return $this->db->get()->result_array();
-    }
+    // public function getEmailsByClientId($client_id)
+    // {
+    //     $this->db->select('*');
+    //     $this->db->from('client_emails');
+    //     $this->db->where('client_id', $client_id);
+    //     return $this->db->get()->result_array();
+    // }
     
+    public function getclientsforEmail(){
+        $this->db->select('*');
+            $this->db->from('client');
+            return $this->db->get()->result_array();
+    }
     // public function getClientById($client_id)
     // {
     //     // Select all columns from the 'client' table
@@ -144,11 +150,8 @@ class NewsLetter_Model extends CI_Model
         $clients = $query->result_array();
     
         foreach ($clients as &$client) {
-            $this->db->select('*');
-            $this->db->from('quick_links');
-            $this->db->where('mail_template_id', $client['mail_template_id']);
-            $client['quick_links'] = $this->db->get()->result_array();
-    
+           
+            $client['get_quick_links'] = $this->getQuickLinks($client['mail_template_id']);
             $client['client_news'] = $this->getNewsDetails($client['client_id']);
             $client['compititors_data'] = $this->getCompData($client['client_id']);
             $client['industry_data'] = $this->getIndustryData($client['client_id']);
@@ -156,27 +159,32 @@ class NewsLetter_Model extends CI_Model
         return $clients;
     }
     
-
-    public function getNewsDetails($client_id) {
-        $date = date('Y-m-d');
-    
-        // Use subquery to exclude news_details_id from delete_news with the respective client_id
-        $this->db->select('nd.*, (SELECT COUNT(news_artical_id) FROM news_artical WHERE news_artical.news_details_id = nd.news_details_id) as page_count');
-        $this->db->from('news_details as nd');
-        $this->db->where('DATE(nd.create_at)', $date);
-        $this->db->group_start();
-        $this->db->like('nd.client_id', ',' . $client_id . ',');
-        $this->db->or_like('nd.client_id', $client_id . ',');
-        $this->db->or_like('nd.client_id', ',' . $client_id);
-        $this->db->or_where('nd.client_id', $client_id);
-        $this->db->group_end();
-        $this->db->where('NOT EXISTS (SELECT 1 FROM delete_news dn WHERE dn.news_details_id = nd.news_details_id AND dn.client_id = ' . $this->db->escape($client_id) . ')', null, false);
-    
-        $query = $this->db->get();
-        $result = $query->result_array();
-    
-        return $result;
+    public function getQuickLinks($mail_template_id){
+            $this->db->select('*');
+            $this->db->from('quick_links');
+            $this->db->where('mail_template_id', $mail_template_id);
+            return $this->db->get()->result_array();
     }
+    // public function getNewsDetails($client_id) {
+    //     $date = date('Y-m-d');
+    
+    //     // Use subquery to exclude news_details_id from delete_news with the respective client_id
+    //     $this->db->select('nd.*, (SELECT COUNT(news_artical_id) FROM news_artical WHERE news_artical.news_details_id = nd.news_details_id) as page_count');
+    //     $this->db->from('news_details as nd');
+    //     $this->db->where('DATE(nd.create_at)', $date);
+    //     $this->db->group_start();
+    //     $this->db->like('nd.client_id', ',' . $client_id . ',');
+    //     $this->db->or_like('nd.client_id', $client_id . ',');
+    //     $this->db->or_like('nd.client_id', ',' . $client_id);
+    //     $this->db->or_where('nd.client_id', $client_id);
+    //     $this->db->group_end();
+    //     $this->db->where('NOT EXISTS (SELECT 1 FROM delete_news dn WHERE dn.news_details_id = nd.news_details_id AND dn.client_id = ' . $this->db->escape($client_id) . ')', null, false);
+    
+    //     $query = $this->db->get();
+    //     $result = $query->result_array();
+    
+    //     return $result;
+    // }
 
     // public function getNewsDetails($client_id) {
     //     $date = date('Y-m-d');
@@ -196,26 +204,28 @@ class NewsLetter_Model extends CI_Model
     //     return $result; 
     // }
 
-    // public function getNewsDetails($client_id) {
-    //     $date = date('Y-m-d');
-    //     $this->db->select('nd.*, mout.*, ed.gidEdition , ed.Edition, s.gidSupplement, s.Supplement, j.gidJournalist, j.Journalist, (SELECT COUNT(na.news_artical_id) FROM news_artical as na WHERE na.news_details_id = nd.news_details_id) as page_count');
-    //     $this->db->from('news_details as nd');
-    //     $this->db->join('mediaoutlet as mout', 'nd.publication_id = mout.gidMediaOutlet', 'left');
-    //     $this->db->join('edition as ed', 'nd.edition_id = ed.gidEdition', 'left');
-    //     $this->db->join('supplements as s', 'nd.supplement_id = s.gidSupplement', 'left');
-    //     $this->db->join('journalist as j', 'nd.journalist_id = j.gidJournalist', 'left');
-    //     $this->db->where('DATE(nd.create_at)', $date);
-    //     $this->db->group_start(); 
-    //     $this->db->like('nd.client_id', ',' . $client_id . ',');
-    //     $this->db->or_like('nd.client_id', $client_id . ',');
-    //     $this->db->or_like('nd.client_id', ',' . $client_id);
-    //     $this->db->or_where('nd.client_id', $client_id);
-    //     $this->db->group_end(); 
+    public function getNewsDetails($client_id) {
+        $date = date('Y-m-d');
+        $this->db->select('nd.*, mout.*, ed.gidEdition , ed.Edition, s.gidSupplement, s.Supplement, j.gidJournalist, j.Journalist, (SELECT COUNT(na.news_artical_id) FROM news_artical as na WHERE na.news_details_id = nd.news_details_id) as page_count');
+        $this->db->from('news_details as nd');
+        $this->db->join('mediaoutlet as mout', 'nd.publication_id = mout.gidMediaOutlet', 'left');
+        $this->db->join('edition as ed', 'nd.edition_id = ed.gidEdition', 'left');
+        $this->db->join('supplements as s', 'nd.supplement_id = s.gidSupplement', 'left');
+        $this->db->join('journalist as j', 'nd.journalist_id = j.gidJournalist', 'left');
+        $this->db->where('DATE(nd.create_at)', $date);
+        $this->db->where('is_send', 0);
+        $this->db->group_start(); 
+        $this->db->like('nd.company', ',' . $client_id . ',');
+        $this->db->or_like('nd.company', $client_id . ',');
+        $this->db->or_like('nd.company', ',' . $client_id);
+        $this->db->or_where('nd.company', $client_id);
+        $this->db->group_end(); 
+        $this->db->where('NOT EXISTS (SELECT 1 FROM delete_news dn WHERE dn.news_details_id = nd.news_details_id AND dn.client_id = ' . $this->db->escape($client_id) . ')', null, false);
     
-    //     $query = $this->db->get();
-    //     $result = $query->result_array(); 
-    //     return $result; 
-    // }    
+        $query = $this->db->get();
+        $result = $query->result_array(); 
+        return $result; 
+    }    
 
     public function getCompIndustry($client_id){
         $date = date('Y-m-d');
@@ -233,6 +243,19 @@ class NewsLetter_Model extends CI_Model
     
         return $result; 
     }
+    public function getCompData($client_id)
+    {
+        $this->db->select('*');
+        $this->db->from('competitor');
+        $this->db->where('client_id', $client_id);
+        $result = $this->db->get()->result_array();
+        $outArr = array();
+        foreach ($result as $row){
+            $row['news'] = $this->getCompNewsByKey($row['Keywords'], $client_id);
+            $outArr[] = $row;
+        }
+        return $outArr;
+    }
     
     public function getIndustryData($client_id){
         $this->db->select('*');
@@ -247,31 +270,58 @@ class NewsLetter_Model extends CI_Model
         return $outArr;
     }
 
-    public function getCompData($client_id)
-    {
-        $this->db->select('*');
-        $this->db->from('competitor');
-        $this->db->where('client_id', $client_id);
-        $result = $this->db->get()->result_array();
-        $outArr = array();
-        foreach ($result as $row){
-            $row['news'] = $this->getCompNewsByKey($row['Keywords'], $client_id);
-            $outArr[] = $row;
-        }
-        return $outArr;
-    }
+   
+
+    // public function getCompNewsByKey($Keywords, $client_id)
+    // {
+    //     $date = date('Y-m-d');
+        
+    //     $this->db->select('news_details.*, (SELECT COUNT(news_artical_id) FROM news_artical WHERE news_artical.news_details_id = news_details.news_details_id) as page_count');
+    //     $this->db->from('news_details');
+    //     $this->db->where('DATE(create_at)', $date);
+    //     $this->db->where('is_send', 0);
+
+    //     $this->db->group_start();
+    //     $this->db->where("NOT FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
+    //     $this->db->group_end();
+        
+    //     $this->db->group_start();
+    //     foreach (explode(',', $Keywords) as $keyword) {
+    //         $keyword = trim($keyword); // Trim any whitespace around keywords
+    //         $this->db->or_where("FIND_IN_SET('$keyword', keywords) >", 0);
+    //     }
+    //     $this->db->group_end();
+    //     $query = $this->db->get();
+    //     $result = $query->result_array(); 
+    //     return $result; 
+    // }
 
     public function getCompNewsByKey($Keywords, $client_id)
     {
         $date = date('Y-m-d');
         
-        $this->db->select('news_details.*, (SELECT COUNT(news_artical_id) FROM news_artical WHERE news_artical.news_details_id = news_details.news_details_id) as page_count');
-        $this->db->from('news_details');
-        $this->db->where('DATE(create_at)', $date);
+        // $this->db->select('news_details.*, (SELECT COUNT(news_artical_id) FROM news_artical WHERE news_artical.news_details_id = news_details.news_details_id) as page_count');
+        // $this->db->from('news_details');
+        // $this->db->where('DATE(create_at)', $date);
+        // $this->db->where('is_send', 0);
+
+
+        $this->db->select('nd.*, mout.*, ed.gidEdition , ed.Edition, s.gidSupplement, s.Supplement, j.gidJournalist, j.Journalist, (SELECT COUNT(na.news_artical_id) FROM news_artical as na WHERE na.news_details_id = nd.news_details_id) as page_count');
+        $this->db->from('news_details as nd');
+        $this->db->join('mediaoutlet as mout', 'nd.publication_id = mout.gidMediaOutlet', 'left');
+        $this->db->join('edition as ed', 'nd.edition_id = ed.gidEdition', 'left');
+        $this->db->join('supplements as s', 'nd.supplement_id = s.gidSupplement', 'left');
+        $this->db->join('journalist as j', 'nd.journalist_id = j.gidJournalist', 'left');
+        $this->db->where('DATE(nd.create_at)', $date);
         $this->db->where('is_send', 0);
+        // $this->db->group_start(); 
+        // $this->db->like('nd.client_id', ',' . $client_id . ',');
+        // $this->db->or_like('nd.client_id', $client_id . ',');
+        // $this->db->or_like('nd.client_id', ',' . $client_id);
+        // $this->db->or_where('nd.client_id', $client_id);
 
         $this->db->group_start();
-        $this->db->where("NOT FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
+        $this->db->where("NOT FIND_IN_SET('$client_id', company)", NULL, FALSE);
         $this->db->group_end();
         
         $this->db->group_start();
@@ -280,6 +330,8 @@ class NewsLetter_Model extends CI_Model
             $this->db->or_where("FIND_IN_SET('$keyword', keywords) >", 0);
         }
         $this->db->group_end();
+        $this->db->where('NOT EXISTS (SELECT 1 FROM delete_news dn WHERE dn.news_details_id = nd.news_details_id AND dn.client_id = ' . $this->db->escape($client_id) . ')', null, false);
+    
         $query = $this->db->get();
         $result = $query->result_array(); 
         return $result; 

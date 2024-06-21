@@ -246,15 +246,30 @@
 <!-- this div is for footer --->
 </div>
 <script>
+// function checkSelection() {
+//     console.log('hello');
+//     var selectElement = document.getElementById('media_type');
+//     var selectedValue = selectElement.value;
+
+//     if (selectedValue == 'Online') {
+//         console.log('helloas');
+//         addMoreFields();
+//     }
+// }
 function checkSelection() {
+    console.log('hello'); // Initial check to see if the function is being called
     var selectElement = document.getElementById('media_type');
     var selectedValue = selectElement.value;
 
-    if (selectedValue === 'Online') {
+    console.log('Selected value:', selectedValue); // Log the selected value
+
+    if (selectedValue === '015304b714940c28695d592c9ac10355d0d9a45f') {
+        console.log('helloas'); // Check if the condition is met
         addMoreFields();
+    } else {
+        console.log('The selected value is not Online'); // Log if the condition is not met
     }
 }
-
 </script>
 <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>

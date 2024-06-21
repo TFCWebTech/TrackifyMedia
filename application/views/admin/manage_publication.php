@@ -180,7 +180,7 @@ margin-bottom: 5px !important;
       <div class="modal-body">
             <form action="<?php echo site_url('ManagePublication/updatedPublication')?>" method="post">
                 <div class="form-group">
-                    <input type="text" id="gidMediaOutlet_id">
+                    <input type="text" name="gidMediaOutlet_id" id="gidMediaOutlet_id" hidden>
                     <label class="px-1 font-weight-bold" for="user_type">Publication Name </label>
                     <input type="text" class="form-control" placeholder="Enter Publication Name" id="publiction_name" name="publiction_name" required>
                 </div>

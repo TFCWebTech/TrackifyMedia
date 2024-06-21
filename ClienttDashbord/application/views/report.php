@@ -30,24 +30,34 @@ margin-bottom: 5px !important;
     /* } */
 </style>
 <div class="container" >
-    
+    <div class="row">
+        <div class="col-md-12">
+            <h6 class="text-primary font-weight-bold p-2">
+                Reports
+            </h6>
+        </div>
+    </div>
         <!-- <div class="card p-3 my-2"  id="headlineSearchSection" > -->
             <form>
                 <div class="row">
                     <div class="col-md-12 card p-3">
                         <div class="row ">
-                            <div class="col-md-6">
-                                <h6 class="text-primary font-weight-bold p-2">
-                                    Reports
-                                </h6>
+                            <div class="col-md-6 d-flex">
+                                    <label class="px-1 font-weight-bold mt-1" for="publication_type">Select Client</label>
+                                    <select class="form-control" name="select_client" id="select_client" style="width:200px;">
+                                    <option disbled>Select</option>
+                                            <?php foreach($clients as $values){?>
+                                            <option value="<?php echo $values['client_id'];?>"> <?php echo $values['client_name'];?></option>
+                                            <?php }?>
+                                    </select>
                             </div>
                             <div class="col-md-6 text-right d-flex">
-                                <label class="px-2 font-weight-bold" >Date  </label>
+                                <label class="px-2 font-weight-bold mt-1" >Date </label>
                                 <input type="date" name="from_date" id="from_date" class="form-control px-2 mx-1"> 
                                 <input type="date" name="to_date" id="to_date" class="form-control px-2 mx-1"> 
                             </div>
                         </div>
-                        <div class="border-with-text" data-heading="Filter Options">
+                        <div class="border-with-text mt-3" data-heading="Filter Options">
                             <div class="row">
                                 <div class="col-md-4">
                                     <label class="px-1 font-weight-bold" for="publication_type">Publication Type</label>
@@ -240,8 +250,9 @@ margin-bottom: 5px !important;
                     <h6>Summary:</h6>
                     <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;"><?php echo $news['summary']; ?></p>
                     <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                    Publication :<span style="color:blue;"><?php echo $news['publication_id']; ?></span>, Journalist / Agency :<span style="color:blue;"><?php echo $news['journalist_id']; ?></span>,
-                    Edition : <span style="color:blue;"><?php echo $news['edition_id']; ?></span>, Supplement : <span style="color:blue;"><?php echo $news['supplement_id']; ?></span>, No of pages:<span style="color:blue;"><?php echo $news['page_count']; ?></span>, Circulation Figure:<span></span>, qAVE(Rs.) :<span></span></p>
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
+                            </p>
                     <hr>
                 <?php }
                 ?>
@@ -259,8 +270,9 @@ margin-bottom: 5px !important;
                         <h6>Summary:</h6>
                         <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;"><?php echo $news['summary']; ?></p>
                         <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                        Publication :<span style="color:blue;"><?php echo $news['publication_id']; ?></span>, Journalist / Agency :<span style="color:blue;"><?php echo $news['journalist_id']; ?></span>,
-                        Edition : <span style="color:blue;"><?php echo $news['edition_id']; ?></span>, Supplement : <span style="color:blue;"><?php echo $news['supplement_id']; ?></span>, No of pages:<span style="color:blue;"><?php echo $news['page_count']; ?></span>, Circulation Figure:<span></span>, qAVE(Rs.) :<span></span></p>
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
+                            </p>
                         <hr>
                     <?php }
                     ?>
@@ -342,40 +354,47 @@ function downloadWord() {
             Cities: Cities,
         },
         success: function(response) {
-        console.log("Update successful", response);
+    console.log("Update successful", response);
 
-        var clientName = response.client_name;
-        var fromDate = response.from_date;
-        var toDate = response.to_date;
-        var data = response.data;
+    var clientName = response.client_name;
+    var fromDate = response.from_date;
+    var toDate = response.to_date;
+    var data = response.data;
 
-        // Construct CSV content from JSON data
-        var csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Client Name: " + clientName + "\n";
-        csvContent += "Date Range: " + fromDate + " to " + toDate + "\n\n";
-        csvContent += "News Date, Head Line, Edition, Supplement, Page No, Height, Width \n";
+    // Construct CSV content from JSON data
+    var csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Client Name: " + clientName + "\n";
+    csvContent += "Date Range: " + fromDate + " to " + toDate + "\n\n";
+    csvContent += "News Date, Headline, Edition, Supplement, Page No, Height, Width\n";
 
-        data.forEach(function(row) {
-            csvContent += row.create_at + "," +
-                          row.head_line + "," +
-                          row.Edition + "," +
-                          row.Supplement + "," +
-                          row.page_no + "," +
-                          row.image_height + "," +
-                          row.image_width + "\n";
+    data.forEach(function(row) {
+        var createDate = new Date(row.create_at);
+        var formattedDate = createDate.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
         });
 
-        // Create a hidden link element to trigger the download
-        var encodedUri = encodeURI(csvContent);
-        var link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "data.csv");
-        document.body.appendChild(link); // Required for FF
-        link.click();
+        csvContent += (row.create_at ? formattedDate : "NA") + "," +
+                      (row.head_line || "NA") + "," +
+                      (row.Edition || "NA") + "," +
+                      (row.Supplement || "NA") + "," +
+                      (row.page_no || "NA") + "," +
+                      (row.image_height || "NA") + "," +
+                      (row.image_width || "NA") + "\n";
+    });
 
-        // Remove the link from the body
-        document.body.removeChild(link);
-    },
+    // Create a hidden link element to trigger the download
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "data.csv");
+    document.body.appendChild(link); // Required for FF
+    link.click();
+
+    // Remove the link from the body
+    document.body.removeChild(link);
+},
     error: function(xhr, status, error) {
         console.error("Error:", error);
     }
@@ -387,7 +406,203 @@ function downloadWord() {
     $('table').DataTable();
 </script>
 
+
 <script>
+    function downloadPDF() {
+    var select_client = document.getElementById('select_client').value;
+    var from_date = document.getElementById('from_date').value;
+    var to_date = document.getElementById('to_date').value;
+    var publication_type = document.getElementById('publication_type').value;
+    var Cities = document.getElementById('Cities').value;
+    console.log('select client:', select_client);
+    console.log('From Date:', from_date); // Debugging line
+    console.log('To Date:', to_date); // Debugging line
+    console.log('Publication Type:', publication_type); // Debugging line
+    console.log('Cities:', Cities); // Debugging line
+
+    $.ajax({
+        type: "POST",
+        url: "<?php echo site_url('Report/downloadPDF'); ?>",
+        dataType: 'json', // Expecting JSON response
+        data: {
+            select_client: select_client,
+            from_date: from_date,
+            to_date: to_date,
+            publication_type: publication_type,
+            Cities: Cities,
+        },
+        success: function(response) {
+        // Log the response to see what's coming back
+        console.log(response);
+
+        // Check if response is actually JSON
+        if (typeof response === 'object' && response !== null) {
+            // Proceed with your logic to update the HTML content
+            var details = response.details;
+            var getClientDetails = response.get_client_details;
+
+        var printContent = `
+            <div class="container" id="printData">
+                <div class="row">
+                    <div class="col-md-12 text-right mb-2">
+                        
+                    </div>
+                </div>
+                <div class="card" style="background-color: #F9F9F9;">
+                    <div class="header" style="background-color: ` + getClientDetails[0].header_background_color + `; padding:5px 10px;">
+                        <table cellpadding="0" cellspacing="0" style="width:100%;">
+                            <tr>
+                                <td align="left">
+                                    ${getClientDetails[0].logo_position === 'Left' ? `<img src="` + getClientDetails[0].header_logo_url + `" alt="logo" style="width:100px;">` : ''}
+                                    ${getClientDetails[0].trackify_link_status == 1 ? `<a href="` + getClientDetails[0].trackify_link + `" style="font-size:12px; color:#ffffff;">powered by trackify media</a>` : ''}
+                                </td>
+                                <td align="center">
+                                    ${getClientDetails[0].logo_position === 'Center' ? `<img src="` + getClientDetails[0].header_logo_url + `" alt="logo" style="width:100px;">` : ''}
+                                    <h5>
+                                        <a style="font-size:` + getClientDetails[0].header_title_font_size + `px; color:` + getClientDetails[0].header_title_font_color + `;">` + getClientDetails[0].header_title_name + `</a><br>
+                                        <span style="display:block; font-size: 12px;">` + new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }) + `<br>
+                                        </span>
+                                    </h5>
+                                </td>
+                                <td align="right">
+                                    ${getClientDetails[0].logo_position === 'Right' ? `<img src="` + getClientDetails[0].header_logo_url + `" alt="logo" style="width:100px;">` : ''}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-12 mt-3 table-wrapper">
+                        <table>
+                            <tr style="background-color: #6D6B6B; color: #ffffff;">
+                                <th>Quick Links</th>
+                                <th>Access Other Services</th>
+                            </tr>
+                            ${getClientDetails.map(detail => `
+                                ${detail.quick_links_position == '1' ? `
+                                    <tr style="background-color: #DCD5D5; color: #ffffff;">
+                                        <td><p>` + detail.quick_links_name + `</p></td>
+                                        <td><a href="">Login</a></td>
+                                    </tr>` : ''}
+                                ${detail.quick_links_position == '2' ? `
+                                    <tr style="background-color: #DCD5D5; color: #ffffff;">
+                                        <td>` + detail.quick_links_name + ` (` + detail.compititors_data.length + `)</td>
+                                        <td></td>
+                                    </tr>` : ''}
+                                ${detail.quick_links_position == '3' ? `
+                                    <tr style="background-color: #DCD5D5; color: #ffffff;">
+                                        <td>` + detail.quick_links_name + ` (` + detail.industry_data.length + `)</td>
+                                        <td></td>
+                                    </tr>` : ''}
+                                ${detail.quick_links_position == '4' ? `
+                                    <tr style="background-color: #DCD5D5; color: #ffffff;">
+                                        <td>` + detail.quick_links_name + ` (` + detail.compititors_data.length + `)</td>
+                                        <td></td>
+                                    </tr>` : ''}
+                                ${detail.quick_links_position == '5' ? `
+                                    <tr style="background-color: #DCD5D5; color: #ffffff;">
+                                        <td>` + detail.quick_links_name + ` (` + detail.industry_data.length + `)</td>
+                                        <td></td>
+                                    </tr>` : ''}
+                                ${detail.quick_links_position == '6' ? `
+                                    <tr style="background-color: #DCD5D5; color: #ffffff;">
+                                        <td>` + detail.quick_links_name + ` (` + detail.compititors_data.length + `)</td>
+                                        <td></td>
+                                    </tr>` : ''}
+                            `).join('')}
+                            <tr style="background-color: #DCD5D5; color: #ffffff;">
+                                <td></td>
+                                <td><a href="">Customerservice@trackify.info</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="body-content" style="padding:10px 15px 0px 15px;">
+                        <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;">` + details.client_name + `</h4>
+                        ${getClientDetails[0].client_news.map(news => `
+                            <h5><a style="color: ` + getClientDetails[0].content_headline_color + `;font-size: ` + getClientDetails[0].content_headline_font_size + `;font-family: ` + getClientDetails[0].content_headline_font + `;">` + news.head_line + `</a></h5>
+                            <h6>Summary:</h6>
+                            <p style="color: ` + getClientDetails[0].content_news_summary_color + `;font-size: ` + getClientDetails[0].content_news_summary_font_size + `;">` + news.summary + `</p>
+                            <p>Date: ` + new Date(news.create_at).toLocaleDateString('en-GB') + `, 
+                            Publication: <span style="color:blue;">` + news.MediaOutlet + `</span>, Journalist / Agency: <span style="color:blue;">` + news.Journalist + `</span>, 
+                            Edition: <span style="color:blue;">` + news.Edition + `</span>, Supplement: <span style="color:blue;">` + news.Supplement + `</span>, No of pages: <span style="color:blue;">` + news.page_count + `</span>, Circulation Figure: <span></span>, qAVE(Rs.): <span></span></p>
+                            <hr>
+                        `).join('')}
+                    </div>
+                    <div class="body-content" style="padding:10px 15px 0px 15px;">
+                        <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;">Competition</h4>
+                    </div>
+                    ${getClientDetails[0].compititors_data.map(compititor => `
+                        <div class="body-content" style="padding:10px 15px 0px 15px;">
+                            <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;">` + compititor.Competitor_name + `</h4>
+                            ${compititor.news.map(news => `
+                                <h5><a  style="color: ` + getClientDetails[0].content_headline_color + `;font-size: ` + getClientDetails[0].content_headline_font_size + `;font-family: ` + getClientDetails[0].content_headline_font + `;">` + news.head_line + `</a></h5>
+                                <h6>Summary:</h6>
+                                <p style="color: ` + getClientDetails[0].content_news_summary_color + `;font-size: ` + getClientDetails[0].content_news_summary_font_size + `;">` + news.summary + `</p>
+                                <p>Date: ` + new Date(news.create_at).toLocaleDateString('en-GB') + `, 
+                                Publication: <span style="color:blue;">` + news.MediaOutlet + `</span>, Journalist / Agency: <span style="color:blue;">` + news.Journalist + `</span>, 
+                                Edition: <span style="color:blue;">` + news.Edition + `</span>, Supplement: <span style="color:blue;">` + news.Supplement + `</span>, No of pages: <span style="color:blue;">` + news.page_count + `</span>, Circulation Figure: <span></span>, qAVE(Rs.): <span></span></p>
+                                <hr>
+                            `).join('')}
+                        </div>
+                    `).join('')}
+                    <div class="body-content" style="padding:10px 15px 0px 15px;">
+                        <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;">Industry</h4>
+                    </div>
+                    ${getClientDetails[0].industry_data.map(Industry => `
+                        <div class="body-content" style="padding:10px 15px 0px 15px;">
+                            <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;">` + Industry.Industry_name + `</h4>
+                            ${Industry.news.map(news => `
+                                <h5><a  style="color: ` + getClientDetails[0].content_headline_color + `;font-size: ` + getClientDetails[0].content_headline_font_size + `;font-family: ` + getClientDetails[0].content_headline_font + `;">` + news.head_line + `</a></h5>
+                                <h6>Summary:</h6>
+                                <p style="color: ` + getClientDetails[0].content_news_summary_color + `;font-size: ` + getClientDetails[0].content_news_summary_font_size + `;">` + news.summary + `</p>
+                                <p>Date: ` + new Date(news.create_at).toLocaleDateString('en-GB') + `, 
+                                Publication: <span style="color:blue;">` + news.MediaOutlet + `</span>, Journalist / Agency: <span style="color:blue;">` + news.Journalist + `</span>, 
+                                Edition: <span style="color:blue;">` + news.Edition + `</span>, Supplement: <span style="color:blue;">` + news.Supplement + `</span>, No of pages: <span style="color:blue;">` + news.page_count + `</span>, Circulation Figure: <span></span>, qAVE(Rs.): <span></span></p>
+                                <hr>
+                            `).join('')}
+                        </div>
+                    `).join('')}
+                    <div class="col-md-12 news-footer" style="background-color: ` + getClientDetails[0].footer_background_color + `;">
+                        <div class="d-flex justify-content-between">
+                            <div class="logo" style="text-align:left;">
+                                ${getClientDetails[0].footer_logo_position === 'Left' ? `<img src="` + getClientDetails[0].footer_logo_url + `" alt="logo" style="width:100px; padding:5px;">` : ''}
+                            </div>
+                            <div class="footer" style="text-align:center;">
+                                ${getClientDetails[0].footer_logo_position === 'Center' ? `<img src="` + getClientDetails[0].footer_logo_url + `" alt="logo" style="width:100px; padding:5px;">` : ''}
+                            </div>
+                            <div class="footer" style="text-align:end;">
+                                ${getClientDetails[0].footer_logo_position === 'Right' ? `<img src="` + getClientDetails[0].footer_logo_url + `" alt="logo" style="width:100px; padding:5px;">` : ''}
+                            </div>
+                        </div>
+                        <p style="font-size:` + getClientDetails[0].footer_title_font_size + `px; color:` + getClientDetails[0].footer_title_font_color + `;text-align: center">` + getClientDetails[0].footer_title_name + `</p>
+                        <p><span style="color:red; font-weight:bold;">This is an auto generated email – please do not reply to this email id</span></p>
+                    </div>
+                </div>
+            </div>`;
+
+           // Insert the updated content into the div
+           $('#printData').html(printContent);
+
+            // Create a new window for printing
+            var newWin = window.open('', 'Print-Window');
+            newWin.document.open();
+            newWin.document.write('<html><head><title>Print</title>');
+            newWin.document.write('<style>/* Include any necessary CSS here */</style>');
+            newWin.document.write('</head><body onload="window.print()">');
+            newWin.document.write($('#printData').html());
+            newWin.document.write('</body></html>');
+            newWin.document.close();
+            setTimeout(function() { newWin.close(); }, 10); // Close window after printing
+            } else {
+            console.error('Invalid JSON response:', response);
+            }
+            },
+            error: function(xhr, status, error) {
+            console.error('AJAX error:', status, error);
+            }
+            });
+}
+</script>
+
+<!-- <script>
 function downloadPDF() {
     // Get the content of the div
     var divToPrint = document.getElementById('printData');
@@ -407,4 +622,4 @@ function downloadPDF() {
     // Set a timeout to close the new window after printing
     setTimeout(function() { newWin.close(); }, 10);
 }
-</script>
+</script> -->

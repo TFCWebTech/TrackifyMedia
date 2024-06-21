@@ -50,6 +50,14 @@
         display: block !important;
         height: 400px;
     }
+    .chart-container-7 {
+        display: none !important;
+        height: 400px;
+    }
+    .chart-container-7.active {
+        display: block !important;
+        height: 400px;
+    }
     label {
     font-size: 0.8rem !important;
     margin-top: 0.5rem !important;
@@ -80,6 +88,7 @@
                                 <option value="Publication">Publication</option>
                                 <option value="Geography">Geography</option>
                                 <option value="Journalist">Journalist</option>
+                                <option value="ave">AVE</option>
                             </select>
                         </div>
                 </div>
@@ -251,6 +260,50 @@
                     <button class="btn btn-primary" onclick="showChart6('journalistbarChart')">Bar Chart</button>
                     <button class="btn btn-primary" onclick="showChart6('journalistlineChart')">Line Chart</button>
                     <button class="btn btn-primary" onclick="showChart6('journalistverticalBarChart')">Column Chart</button>
+                </div>
+            </div>
+
+            <div class="ave">
+           
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h6 class="text-primary">Overview / Media</h6>
+                    </div>
+                </div>
+               <div id="aveareaChart" class="chart-container-7">
+                    <canvas id="aveAreaChart"></canvas>
+                </div>
+                <div id="avepieChart" class="chart-container-7">
+                    <canvas id="avePieChart"></canvas>
+                </div>
+                <div id="avebarChart" class="chart-container-7">
+                    <canvas id="aveBarChart"></canvas>
+                </div>
+                <div id="avelineChart" class="chart-container-7">
+                    <canvas id="aveLineChart"></canvas>
+                </div>
+                <div id="aveverticalBarChart" class="chart-container-7">
+                    <canvas id="aveVerticalBarChart"></canvas>
+                </div>
+                <div id="showaveTableData" class="chart-container-7" style="display: none;">
+                    <table id="mediaTable">
+                        <thead>
+                            <tr>
+                                <th>Client Name</th>
+                                <th>Media Type</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be appended here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="my-4">
+                    <button class="btn btn-primary" onclick="showChart7('avepieChart')">Pie Chart</button>
+                    <button class="btn btn-primary" onclick="showChart7('avebarChart')">Bar Chart</button>
+                    <button class="btn btn-primary" onclick="showChart7('avelineChart')">Line Chart</button>
+                    <button class="btn btn-primary" onclick="showChart7('aveverticalBarChart')">Column Chart</button>
                 </div>
             </div>
         </div>
@@ -453,8 +506,8 @@
         chart.update();
     }
 
-
-    const sizeAreaChartCtx = document.getElementById('sizeAreaChart').getContext('2d');
+//size chart section
+const sizeAreaChartCtx = document.getElementById('sizeAreaChart').getContext('2d');
     const sizePieChartCtx = document.getElementById('sizePieChart').getContext('2d');
     const sizeBarChartCtx = document.getElementById('sizeBarChart').getContext('2d');
     const sizeLineChartCtx = document.getElementById('sizeLineChart').getContext('2d');
@@ -465,7 +518,21 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Earnings',
+                label: 'Small',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 2,
+                fill: true
+            },{
+                label: 'Medium',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 2,
+                fill: true
+            },{
+                label: 'Large',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 0.1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -512,7 +579,19 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Revenue',
+                label: 'Small',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 1
+            },{
+                label: 'Medium',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 1
+            },{
+                label: 'Large',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -540,7 +619,21 @@
         data: {
             labels: [],
             datasets: [{
-                label: '',
+                label: 'Small',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 2,
+                fill: true
+            },{
+                label: 'Medium',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 2,
+                fill: true
+            },{
+                label: 'Large',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 0.1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -568,7 +661,19 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Expenses',
+                label: 'Samll',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 1
+            },{
+                label: 'Medium',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 1
+            },{
+                label: 'Large',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -600,20 +705,54 @@
     }
 
     function updateChart2(timeFrame) {
-        let data, labels;
+       
+        let size_data = <?php echo json_encode($size_data); ?>;
+
+        let labels = [];
+        let data = [
+            [], // For 'small'
+            [], // For 'medium'
+            [], // For 'large'
+        ];
+
+        // Populate labels array and initialize data arrays with zeros
+        size_data.forEach(item => {
+            if (!labels.includes(item.label)) {
+                labels.push(item.label);
+            }
+        });
+
+        // Initialize data arrays with zeros
+        labels.forEach(() => {
+            data[0].push(0); // For 'small'
+            data[1].push(0); // For 'medium'
+            data[2].push(0); // For 'large'
+        });
+
+        // Populate data arrays with counts from size_data
+        size_data.forEach(item => {
+            let labelIndex = labels.indexOf(item.label);
+            if (item.category === 'small') {
+                data[0][labelIndex] = item.count;
+            } else if (item.category === 'medium') {
+                data[1][labelIndex] = item.count;
+            } else if (item.category === 'large') {
+                data[2][labelIndex] = item.count;
+            }
+        });
 
         switch (timeFrame) {
             case 'daily':
-                labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                data = [12, 19, 3, 5, 2, 3, 7]; 
+                labels = labels;
+                data = data; 
                 break;
             case 'weekly':
                 labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-                data = [20, 30, 10, 40]; 
+                data = [[10, 30, 10, 40], [30, 30, 10, 40], [20, 30, 10, 40]]; 
                 break;
             case 'monthly':
                 labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                data = [30, 40, 20, 50, 60, 70, 80, 90, 100, 110, 120, 130]; 
+                data = [[30, 40, 20, 50, 60, 70, 80, 90, 100, 110, 120, 130], [50, 40, 20, 50, 60, 70, 80, 90, 100, 110, 120, 130], [60, 40, 20, 50, 60, 70, 80, 90, 100, 110, 120, 130]]; 
                 break;
         }
 
@@ -626,8 +765,10 @@
     }
     function updateChartData2(chart, labels, data) {
         chart.data.labels = labels;
+        var i = 0;
         chart.data.datasets.forEach(dataset => {
-            dataset.data = data;
+            dataset.data = data[i];
+            i++;
         });
         chart.update();
     }
@@ -671,7 +812,7 @@
         };
     });
 
-    console.log(final_data);
+    console.log('Final media data '+final_data);
     function getRandomColor(opacity) {
     let r = Math.floor(Math.random() * 255);
     let g = Math.floor(Math.random() * 255);
@@ -833,7 +974,6 @@
         // });
         chart.update();
     }
-
 
    
     //Publication
@@ -1413,6 +1553,212 @@
         chart.update();
     }
 
+    //AVE Charts
+    const aveAreaChartCtx = document.getElementById('aveAreaChart').getContext('2d');
+    const avePieChartCtx = document.getElementById('avePieChart').getContext('2d');
+    const aveBarChartCtx = document.getElementById('aveBarChart').getContext('2d');
+    const aveLineChartCtx = document.getElementById('aveLineChart').getContext('2d');
+    const aveVerticalBarChartCtx = document.getElementById('aveVerticalBarChart').getContext('2d');
+
+    let aveAreaChart = new Chart(aveAreaChartCtx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: '',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    let avePieChart = new Chart(avePieChartCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Direct', 'Social', 'Referral'],
+            datasets: [{
+                data: [],
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            let dataset = tooltipItem.dataset;
+                            let total = dataset.data.reduce((sum, value) => sum + value, 0);
+                            let currentValue = dataset.data[tooltipItem.dataIndex];
+                            let percentage = ((currentValue / total) * 100).toFixed(2);
+                            return `${tooltipItem.label}: ${percentage}%`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    let aveBarChart = new Chart(aveBarChartCtx, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: '',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    let aveLineChart = new Chart(aveLineChartCtx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: '',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: function(context) {
+                        let data = context.chart.data.datasets[0].data;
+                        let minValue = Math.min(...data);
+                        return minValue - (minValue / 2); // Calculate the minimum value
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return value + '';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    let aveVerticalBarChart = new Chart(aveVerticalBarChartCtx, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: '',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    function showChart7(chartId) {
+        const charts = document.querySelectorAll('.chart-container-7');
+        charts.forEach(chart => {
+            chart.classList.remove('active');
+        });
+        document.getElementById(chartId).classList.add('active');
+        console.log(`Showing chart: ${chartId}`);
+    }
+
+    function updateChart7(timeFrame) {
+        let ave_data = <?php echo json_encode($ave_data); ?>;
+        let labels = [];
+        let data = [];
+
+        // Extract labels and data from ave_data
+        ave_data.forEach(item => {
+            labels.push(item.label);
+            data.push(item.ave);
+        });
+
+         console.log('Updated Labels:', labels);
+        console.log('Updated Data:', data);
+
+        switch (timeFrame) {
+            case 'daily':
+                labels = labels;
+                data = data; 
+                break;
+            case 'weekly':
+                labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                data = [20, 30, 10, 40]; 
+                break;
+            case 'monthly':
+                labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                data = [30, 40, 20, 50, 60, 70, 80, 90, 100, 110, 120, 130]; 
+                break;
+        }
+
+        updateChartData7(aveAreaChart, labels, data);
+        updateChartData7(avePieChart, labels.slice(0, 3), data.slice(0, 3)); 
+        updateChartData7(aveBarChart, labels, data);
+        updateChartData7(aveLineChart, labels, data);
+        updateChartData7(aveVerticalBarChart, labels, data);
+        console.log(`Updated ave charts for: ${timeFrame}`);
+    }
+    function updateChartData7(chart, labels, data) {
+        chart.data.labels = labels;
+        chart.data.datasets.forEach(dataset => {
+            dataset.data = data;
+        });
+        chart.update();
+    }
+
     function handleChartTypeChange() {
         const selectedValue = document.getElementById('chartTypeSelector').value;
         const quantityCharts = document.querySelector('.quantity');
@@ -1421,6 +1767,7 @@
         const publicationCharts = document.querySelector('.publication');
         const geographyCharts = document.querySelector('.geography');
         const journalistCharts = document.querySelector('.journalist');
+        const aveCharts = document.querySelector('.ave');
         if (selectedValue === 'Quantity') {
             quantityCharts.style.display = 'block';
             sizeCharts.style.display = 'none';
@@ -1428,6 +1775,7 @@
             publicationCharts.style.display = 'none';
             geographyCharts.style.display = 'none';
             journalistCharts.style.display = 'none';
+            aveCharts.style.display = 'none';
         } else if (selectedValue === 'Size') {
             quantityCharts.style.display = 'none';
             sizeCharts.style.display = 'block';
@@ -1435,6 +1783,7 @@
             publicationCharts.style.display = 'none';
             geographyCharts.style.display = 'none';
             journalistCharts.style.display = 'none';
+            aveCharts.style.display = 'none';
         } else if (selectedValue === 'Media') {
             quantityCharts.style.display = 'none';
             sizeCharts.style.display = 'none';
@@ -1442,6 +1791,7 @@
             publicationCharts.style.display = 'none';
             geographyCharts.style.display = 'none';
             journalistCharts.style.display = 'none';
+            aveCharts.style.display = 'none';
         }else if (selectedValue === 'Publication') {
             quantityCharts.style.display = 'none';
             sizeCharts.style.display = 'none';
@@ -1449,6 +1799,7 @@
             publicationCharts.style.display = 'block';
             geographyCharts.style.display = 'none';
             journalistCharts.style.display = 'none';
+            aveCharts.style.display = 'none';
         }else if (selectedValue === 'Geography') {
             quantityCharts.style.display = 'none';
             sizeCharts.style.display = 'none';
@@ -1456,6 +1807,7 @@
             publicationCharts.style.display = 'none';
             geographyCharts.style.display = 'block';
             journalistCharts.style.display = 'none';
+            aveCharts.style.display = 'none';
         }else if (selectedValue === 'Journalist') {
             quantityCharts.style.display = 'none';
             sizeCharts.style.display = 'none';
@@ -1463,6 +1815,15 @@
             publicationCharts.style.display = 'none';
             geographyCharts.style.display = 'none';
             journalistCharts.style.display = 'block';
+            aveCharts.style.display = 'none';
+        } else if(selectedValue === 'ave') {
+            quantityCharts.style.display = 'none';
+            sizeCharts.style.display = 'none';
+            mediaCharts.style.display = 'none';
+            publicationCharts.style.display = 'none';
+            geographyCharts.style.display = 'none';
+            journalistCharts.style.display = 'none';
+            aveCharts.style.display = 'block';
         }
     }
 
@@ -1478,6 +1839,8 @@
     showChart5('geographylineChart');
     updateChart6('daily');
     showChart6('journalistlineChart');
+    updateChart7('daily');
+    showChart7('avelineChart');
     handleChartTypeChange();
 </script>
 <script>

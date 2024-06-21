@@ -66,8 +66,7 @@ function validateForm() {
                     <?php }?>
                     <td><?php echo date('d/ F /Y', strtotime($values['created_at'])); ?></td>
                     <td>
-                                &nbsp; <i class="fa fa-edit text-primary" onclick="editUserType('')" data-toggle="modal" data-target="#editModal" title="Edit"></i>&nbsp; 
-                                <i class="fa fa-trash text-danger" onclick="deleteUserType('')" data-toggle="modal" data-target="#deleteModal" title="Delete"></i>
+                                &nbsp; <i class="fa fa-edit text-primary" data-toggle="modal" data-target="#editUser" onclick="editUser('<?php echo $values['user_id'];?>')" data-toggle="modal" data-target="#editModal" title="Edit"></i>&nbsp; 
                             </td>
                 </tr>
                         <?php } ?>
@@ -100,6 +99,10 @@ function validateForm() {
                     <input type="text" class="form-control" placeholder="Enter Reporter Name" name="reporter_name" required>
                 </div>
                 <div class="form-group">
+                    <label class="px-1 font-weight-bold" for="user_type">Email</label>
+                    <input type="email" class="form-control" placeholder="Enter Email" name="user_email" id="user_email" required>
+                </div>
+                <div class="form-group">
                     <label class="px-1 font-weight-bold" for="user_type">Password</label>
                     <input type="password" class="form-control" placeholder="Enter Password" name="password" id="password" required>
                 </div>
@@ -127,7 +130,78 @@ function validateForm() {
   </div>
 </div>
 
+
+<!-- The Modal -->
+<div class="modal" id="editUser">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Reporter</h4>
+        <!-- Correct close button for Bootstrap 4 -->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+            <form onsubmit="return validateForm()" action="<?php echo site_url('ManageReporter/editReporter')?>" method="post">
+                <div class="form-group">
+                    <input type="text" id="user_id" name="user_id" hidden>
+                    <label class="px-1 font-weight-bold" for="user_type">Reporter Name </label>
+                    <input type="text" class="form-control" placeholder="Enter Reporter Name" name="reporter_name" id="reporter_name" >
+                </div>
+                <div class="form-group">
+                    <label class="px-1 font-weight-bold" for="user_type">Email</label>
+                    <input type="email" class="form-control" placeholder="Enter Email" name="user_email" id="update_user_email" >
+                </div>
+           
+                <div class="form-group">
+                    <label class="px-1 font-weight-bold" for="user_type">Status</label>
+                    <select name="is_active" class="form-control" id="user_status">
+                        <option >Select</option>
+                        <option value="1">Active</option>
+                        <option value="0">InActive</option>
+                    </select>
+                </div>
+                <div class="text-right pt-2">
+                 <button type="submit" class="btn btn-primary">ADD</button>
+                </div>
+        </form>
+      </div>
+
+      
+
+    </div>
+  </div>
+</div>
+
 <script>
+    function editUser(user_id) {
+    var all_reporter = <?php echo json_encode($all_reporter); ?>;
+    var desiredTask = null;
+
+    // Loop through all_reporter array
+    for (var i = 0; i < all_reporter.length; i++) {
+        // Check if the current object's user_id matches the desired user_id
+        if (all_reporter[i].user_id == user_id) {
+            // If a match is found, store the object in desiredTask and break out of the loop
+            desiredTask = all_reporter[i];
+            break;
+        }
+    }
+
+    // Update the DOM elements if desiredTask is found
+    if (desiredTask !== null) {
+        $('#user_id').val(desiredTask.user_id);
+        $('#reporter_name').val(desiredTask.user_name);
+        // Uncomment the next line if you want to update the user email
+        $('#update_user_email').val(desiredTask.user_email);
+        $('#user_status').val(desiredTask.user_status);
+    }
+}
     $('table').DataTable();
 </script>
 </div>

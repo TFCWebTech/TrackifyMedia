@@ -531,14 +531,28 @@
     const sizePieChartCtx = document.getElementById('sizePieChart').getContext('2d');
     const sizeBarChartCtx = document.getElementById('sizeBarChart').getContext('2d');
     const sizeLineChartCtx = document.getElementById('sizeLineChart').getContext('2d');
-    const sizeVerticalBarChartCtx = document.getElementById('sizeVerticalBarChart').getContext('2d');
+    const sizeVerticalBarChartCtx = document.getElementById('sizeVerticalBarChart').getContext('2d')
 
     let sizeAreaChart = new Chart(sizeAreaChartCtx, {
         type: 'line',
         data: {
             labels: [],
             datasets: [{
-                label: 'Earnings',
+                label: 'Small',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 2,
+                fill: true
+            },{
+                label: 'Medium',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 2,
+                fill: true
+            },{
+                label: 'LArge',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 0.1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -585,7 +599,19 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Revenue',
+                label: 'Small',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 1
+            },{
+                label: 'Medium',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 1
+            }, {
+                label: 'large',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -613,7 +639,21 @@
         data: {
             labels: [],
             datasets: [{
-                label: '',
+                label: 'Small',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 2,
+                fill: true
+            },{
+                label: 'Medium',
+                data: [],
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 2,
+                fill: true
+            },{
+                label: 'Large',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 0.1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -641,7 +681,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Expenses',
+                label: '',
                 data: [],
                 backgroundColor: 'rgba(78, 115, 223, 1)',
                 borderColor: 'rgba(78, 115, 223, 1)',
@@ -673,23 +713,100 @@
     }
 
     function updateChart2(timeFrame) {
-        let data, labels;
+      
+      var size_daily_data = <?php echo json_encode($size_daily_data); ?>;
+      var size_weekly_data = <?php echo json_encode($size_weekly_data); ?>;
+      var size_monthly_data = <?php echo json_encode($size_monthly_data); ?>;
 
-        switch (timeFrame) {
+      let labels = [];
+      let data = [
+          [], // For 'small'
+          [], // For 'medium'
+          [], // For 'large'
+      ];
+      switch (timeFrame) {
             case 'daily':
-                labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                data = [12, 19, 3, 5, 2, 3, 7]; 
+                size_daily_data.forEach(item => {
+                    if (!labels.includes(item.label)) {
+                        labels.push(item.label);
+                    }
+                });
+
+                labels.forEach(label => {
+                    // Find the counts for each category (small, medium, large) for the current label
+                    let smallCount = 0, mediumCount = 0, largeCount = 0;
+
+                    size_daily_data.forEach(item => {
+                        if (item.label === label) {
+                            if (item.category === 'small') smallCount = item.count;
+                            else if (item.category === 'medium') mediumCount = item.count;
+                            else if (item.category === 'large') largeCount = item.count;
+                        }
+                    });
+
+                    data[0].push(smallCount);
+                    data[1].push(mediumCount);
+                    data[2].push(largeCount);
+                });
+
+                labels = labels;
+                data = data; 
                 break;
             case 'weekly':
-                labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-                data = [20, 30, 10, 40]; 
+                size_weekly_data.forEach(item => {
+                    if (!labels.includes(item.label)) {
+                        labels.push(item.label);
+                    }
+                });
+
+                labels.forEach(label => {
+                    // Find the counts for each category (small, medium, large) for the current label
+                    let smallCount = 0, mediumCount = 0, largeCount = 0;
+
+                    size_weekly_data.forEach(item => {
+                        if (item.label === label) {
+                            if (item.category === 'small') smallCount = item.count;
+                            else if (item.category === 'medium') mediumCount = item.count;
+                            else if (item.category === 'large') largeCount = item.count;
+                        }
+                    });
+
+                    data[0].push(smallCount);
+                    data[1].push(mediumCount);
+                    data[2].push(largeCount);
+                });
+
+                labels = labels;
+                data = data; 
                 break;
             case 'monthly':
-                labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                data = [30, 40, 20, 50, 60, 70, 80, 90, 100, 110, 120, 130]; 
+                size_monthly_data.forEach(item => {
+                    if (!labels.includes(item.label)) {
+                        labels.push(item.label);
+                    }
+                });
+
+                labels.forEach(label => {
+                    // Find the counts for each category (small, medium, large) for the current label
+                    let smallCount = 0, mediumCount = 0, largeCount = 0;
+
+                    size_monthly_data.forEach(item => {
+                        if (item.label === label) {
+                            if (item.category === 'small') smallCount = item.count;
+                            else if (item.category === 'medium') mediumCount = item.count;
+                            else if (item.category === 'large') largeCount = item.count;
+                        }
+                    });
+
+                    data[0].push(smallCount);
+                    data[1].push(mediumCount);
+                    data[2].push(largeCount);
+                });
+
+                labels = labels;
+                data = data; 
                 break;
         }
-
         updateChartData2(sizeAreaChart, labels, data);
         updateChartData2(sizePieChart, labels.slice(0, 3), data.slice(0, 3)); 
         updateChartData2(sizeBarChart, labels, data);
@@ -699,8 +816,10 @@
     }
     function updateChartData2(chart, labels, data) {
         chart.data.labels = labels;
+        var i = 0;
         chart.data.datasets.forEach(dataset => {
-            dataset.data = data;
+            dataset.data = data[i];
+            i++;
         });
         chart.update();
     }

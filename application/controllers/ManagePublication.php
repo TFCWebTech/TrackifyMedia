@@ -12,6 +12,7 @@ class ManagePublication extends CI_Controller {
 		$this->load->library('form_validation');
         $this->load->model('Manage_Admin_Model', 'manangeAdmin', TRUE);
     }
+
     public function index()
     {
         $data['get_media_type'] = $this->manangeAdmin->mediatype();
@@ -70,7 +71,8 @@ class ManagePublication extends CI_Controller {
         $short_name = $this->input->post('short_name');
         $current_date = new DateTime();
         $formatted_date = $current_date->format('Y-m-d');
-
+        $gidMediaOutlet_id = $this->input->post('gidMediaOutlet_id');
+        
         $data = array(
             'MediaOutlet' => $publiction_name,
             'gidMediaType' => $get_media_type,
@@ -84,7 +86,7 @@ class ManagePublication extends CI_Controller {
             'UpdatedOn' => $formatted_date
             );
             // print_r($data);
-            $this->manangeAdmin->insert('mediaoutlet', $data);
+            $this->manangeAdmin->update('mediaoutlet', 'gidMediaOutlet', $gidMediaOutlet_id, $data);
             $this->session->set_flashdata('success', 'Publication Updated Successfully.');
             redirect('ManagePublication');
     }

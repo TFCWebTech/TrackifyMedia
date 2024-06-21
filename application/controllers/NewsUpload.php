@@ -12,6 +12,7 @@ class NewsUpload extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->load->model('Reporter_Model', 'reporter', TRUE);
     }
+
 	public function newsUpload()
     {
 		$data['csrf_token_name'] = $this->security->get_csrf_token_name();
@@ -21,6 +22,7 @@ class NewsUpload extends CI_Controller {
 		$this->load->view('reporter/reporter_dashbord',$data);
         $this->load->view('common/footer');
     }
+
     public function index()
     {
 		$data['get_agency'] = $this->reporter->getagency();
@@ -50,35 +52,34 @@ class NewsUpload extends CI_Controller {
 		$headline = $this->input->post('headline');
 		$Summary = $this->input->post('Summary');
 
-		// $video_upload = $this->input->post('video_upload');
-		// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		// 	if (isset($_FILES['video_upload']) && $_FILES['video_upload']['error'] == UPLOAD_ERR_OK) {
-		// 		$uploadDir = 'video/';
-		// 		$uploadFile = $uploadDir . basename($_FILES['video_upload']['name']);
-		
-		// 		// Check if the uploaded file is a video
-		// 		$fileType = mime_content_type($_FILES['video_upload']['tmp_name']);
-		// 		if (strpos($fileType, 'video') !== false) {
-		// 			if (move_uploaded_file($_FILES['video_upload']['tmp_name'], $uploadFile)) {
-		// 				echo "File is valid, and was successfully uploaded.\n";
-		// 			} else {
-		// 				echo "Possible file upload attack!\n";
-		// 			}
-		// 		} else {
-		// 			echo "Uploaded file is not a valid video.\n";
-		// 		}
-		// 	} else {
-		// 		echo "Upload failed. Please try again.\n";
-		// 	}
-		// }
-	
 		$allKeys = array();
 		$allClients = array();
 	
 		for ($i = 1; $i <= $index_no; $i++) {
 			$getKeys = $this->input->post('getKeys' . $i);
 			$getclient = $this->input->post('getclient' . $i);
-	
+
+			$pageNo = $this->input->post('page_no' . $i);
+
+			$height = $this->input->post('height' . $i);
+			$width = $this->input->post('width' . $i);
+
+			$size = $height * $width;
+			if ($pageNo == 1) {
+					// If page number is 1, just calculate the size
+					$totalSize = $size; // Assign size directly
+				} else {
+					// If page number is more than 1, add size to the total size
+					$totalSize += $size;
+				}
+				if($totalSize > 1000){
+					$category = 'Large';
+				}elseif($totalSize >= 500 && $totalSize <= 1000){
+					$category = 'Medium';
+				}elseif($totalSize <= 500 ){
+					$category = 'Small';
+				}	
+				
 			if (is_array($getKeys)) {
 				$allKeys = array_merge($allKeys, $getKeys);
 			}
@@ -105,7 +106,10 @@ class NewsUpload extends CI_Controller {
 			'head_line' => $headline,
 			'Summary' => $Summary,
 			'keywords' => $getKeysString,
-			'client_id' => $getclientsString,
+			//'client_id' => $getclientsString,  //change the column name due to store client email id 
+			'company' => $getclientsString,
+			'sizeofArticle' => $totalSize,
+			'category' => $category
 		);
 		// print_r($data);
 		$newsDetailsId = $this->reporter->insert('news_details', $data);
@@ -137,15 +141,15 @@ class NewsUpload extends CI_Controller {
 				 $image_id = $this->input->post('image_id' . $i);
 				 $height = $this->input->post('height' . $i);
 				 $width = $this->input->post('width' . $i);
+
 				$newsArtical = array(
 					'news_details_id' => $newsDetailsId,
 					'news_artical' => $editor,
 					'page_no' => $pageNo,
 					'artical_images_id' => $image_id,
 					'image_height' => $height,
-					'image_width	' => $width,
+					'image_width' => $width,
 				);
-
 				$this->reporter->insert('news_artical', $newsArtical);
 			}
 		}

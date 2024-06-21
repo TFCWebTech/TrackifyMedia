@@ -171,14 +171,6 @@ function addKeywordInput2() {
                     <input type="text" class="form-control" placeholder="Enter Client Name" name="client_name" required>
                 </div>
                 <div class="col-md-12">
-                    <label class="px-1 font-weight-bold" for="user_type">Password</label>
-                    <input type="password" class="form-control" placeholder="Enter Password" name="client_password" id="password" required>
-                </div>
-                <div class="col-md-12">
-                    <label class="px-1 font-weight-bold" for="user_type">Re-Type Password</label>
-                    <input type="password" class="form-control" placeholder="Enter Re-Type Password" name="re_password" id="re_password" required>
-                </div>
-                <div class="col-md-12">
                     <label class="px-1 font-weight-bold" for="is_active">Status</label>
                     <select name="is_active" class="form-control">
                         <option >Select</option>
@@ -192,7 +184,7 @@ function addKeywordInput2() {
                         <option >Select</option>
                     </select>
                 </div>
-                <div class="col-md-12">
+                <!-- <div class="col-md-12">
                 <label class="px-1 font-weight-bold" for="tier_type">Client  </label>
                         <select class="form-control" name="client_select" id="client_select">
                         <option value="">Select</option>
@@ -202,9 +194,9 @@ function addKeywordInput2() {
                             <option value="3">SOV</option>
                             <option value="4">QSOV</option>
                         </select>
-                </div>
-                </div>
-                <div class="row" id="hiddenContent">
+                </div> -->
+                <!-- </div> -->
+                <!-- <div class="row" id="hiddenContent">
                     <div class="col-md-12" >
                         <div class="form-group" >
                             <label class="px-1 font-weight-bold" for="tier_type">Expiry Date  </label>
@@ -241,14 +233,14 @@ function addKeywordInput2() {
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="row">
+                </div> -->
+                <!-- <div class="row"> -->
                 <div class="col-md-12" id="additionalKeywords">
                     <label class="px-1 font-weight-bold" for="user_type">Add Keywords</label>
                     <input type="text" class="form-control" placeholder="Enter Keywords" name="Keywords[]" required>
+                <!-- </div> -->
                 </div>
-                </div>
-                <div class="text-right pt-2">
+                <div class="col-md-12 text-right pt-2">
                     <p onclick="addKeywordInput()"><i class="text-primary cursor"><u> Add More Keywords</u> </i></p>
                  <button type="submit" class="btn btn-primary">ADD</button>
                 </div>
@@ -257,7 +249,7 @@ function addKeywordInput2() {
     </div>
   </div>
 </div>
-
+</div>
 <div class="modal" id="addCompitetor">
   <div class="modal-dialog">
     <div class="modal-content">

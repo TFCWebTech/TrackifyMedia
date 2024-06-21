@@ -82,7 +82,7 @@ th {
                             <?php }
 
                             if ($get_client_details[0]['trackify_link_status'] == 1) { ?>
-                                <a href="<?php echo $get_client_details[0]['trackify_link']; ?>" style="font-size:12px; color:#ffffff;">powered by trackify media</a>
+                                <a href="<?php echo $get_client_details[0]['trackify_link']; ?>" style="font-size:12px; color:#000000;">powered by trackify media</a>
                             <?php }
                             ?>
                             </td>
@@ -114,8 +114,8 @@ th {
                         <th>Quick Links</th>
                         <th>Access Other Services</th>
                     </tr>
-                    <?php if (!empty($get_client_details)): ?>
-                        <?php foreach ($get_client_details as $detail): ?>
+                    <?php if (!empty($get_client_details[0]['get_quick_links'])): ?>
+                        <?php foreach ($get_client_details[0]['get_quick_links'] as $detail): ?>
                             <?php if ($detail['quick_links_position'] == '1'): ?>
                                 <tr style="background-color: #DCD5D5; color: #ffffff;">
                                     <td>
@@ -126,14 +126,14 @@ th {
                             <?php elseif ($detail['quick_links_position'] == '2'): ?>
                                 <tr style="background-color: #DCD5D5; color: #ffffff;">
                                     <td>
-                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($detail['compititors_data']); ?>)
+                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($get_client_details[0]['compititors_data']); ?>)
                                     </td>
                                     <td></td>
                                 </tr>
                             <?php elseif ($detail['quick_links_position'] == '3'): ?>
                                 <tr style="background-color: #DCD5D5; color: #ffffff;">
                                     <td>
-                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($detail['industry_data']); ?>)
+                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($get_client_details[0]['industry_data']); ?>)
                                     </td>
                                     <td>
                                     </td>
@@ -141,7 +141,7 @@ th {
                             <?php elseif ($detail['quick_links_position'] == '4'): ?>
                                 <tr style="background-color: #DCD5D5; color: #ffffff;">
                                     <td>
-                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($detail['compititors_data']); ?>)
+                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($get_client_details[0]['compititors_data']); ?>)
                                     </td>
                                     <td>
                                     </td>
@@ -149,7 +149,7 @@ th {
                             <?php elseif ($detail['quick_links_position'] == '5'): ?>
                                 <tr style="background-color: #DCD5D5; color: #ffffff;">
                                     <td>
-                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($detail['industry_data']); ?>)
+                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($get_client_details[0]['industry_data']); ?>)
                                     </td>
                                     <td>
                                     </td>
@@ -192,8 +192,8 @@ th {
                                 <?php echo $news['summary']; ?>
                             </p>
                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                                Publication :<span style="color:blue;"> <?php echo $news['publication_id']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['journalist_id']; ?></span>  , 
-                                Edition : <span style="color:blue;"> <?php echo $news['edition_id']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['supplement_id']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
                             </p>
                             <hr>
                         </div>
@@ -215,8 +215,8 @@ th {
                             <h6>Summary:</h6>
                             <textarea name="" id="update_summary_<?php echo $news['news_details_id']; ?>" class="form-control"><?php echo $news['summary']; ?></textarea>
                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                                Publication :<span style="color:blue;"> <?php echo $news['publication_id']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['journalist_id']; ?></span>  , 
-                                Edition : <span style="color:blue;"> <?php echo $news['edition_id']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['supplement_id']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
                             </p>
                             <hr>
                         </div>
@@ -252,9 +252,9 @@ th {
                                 <?php echo $news['summary']; ?>
                             </p>
                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                                Publication :<span style="color:blue;"> <?php echo $news['publication_id']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['journalist_id']; ?></span>  , 
-                                Edition : <span style="color:blue;"> <?php echo $news['edition_id']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['supplement_id']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
-                            </p>                   
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
+                            </p>                 
                             <hr>
                         </div>  
                         
@@ -275,8 +275,8 @@ th {
                             <h6>Summary:</h6>
                             <textarea name="" id="com_update_summary_<?php echo $news['news_details_id']; ?>" class="form-control"><?php echo $news['summary']; ?></textarea>
                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                                Publication :<span style="color:blue;"> <?php echo $news['publication_id']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['journalist_id']; ?></span>  , 
-                                Edition : <span style="color:blue;"> <?php echo $news['edition_id']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['supplement_id']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
                             </p>
                             <hr>
                         </div>
@@ -314,9 +314,9 @@ th {
                     <?php echo $news['summary']; ?>
                 </p>
                 <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                    Publication :<span style="color:blue;"> <?php echo $news['publication_id']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['journalist_id']; ?></span>  , 
-                    Edition : <span style="color:blue;"> <?php echo $news['edition_id']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['supplement_id']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
-                </p>                   
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
+                            </p>               
                 <hr>
             </div>  
             
@@ -337,9 +337,9 @@ th {
                 <h6>Summary:</h6>
                 <textarea name="" id="industry_update_summary_<?php echo $news['news_details_id']; ?>" class="form-control"><?php echo $news['summary']; ?></textarea>
                 <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                    Publication :<span style="color:blue;"> <?php echo $news['publication_id']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['journalist_id']; ?></span>  , 
-                    Edition : <span style="color:blue;"> <?php echo $news['edition_id']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['supplement_id']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
-                </p>
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
+                            </p>
                 <hr>
             </div>
         <?php } ?>
@@ -416,38 +416,46 @@ function getEmail(client_id) {
             client_id: client_id
         },
         success: function(response) {
-            console.log("Response:", response);
+    console.log("Response:", response);
 
-            // Clear previous email checkboxes
-            $('#getEmail .modal-body .form-group').empty();
+    // Clear previous email checkboxes
+    $('#getEmail .modal-body .form-group').empty();
+    var i = 0;
 
-            // Handle the response data
-            if (response && response.length > 0) {
-                response.forEach(function(email) {
-                    console.log("Email:", email.client_email);
+    // Append hidden fields for client_id and client_ids outside the loop
+    $('#getEmail .modal-body .form-group').append(
+        '<input type="hidden" name="client_id" value="' + response.c_id + '">' + // Hidden field for client_id
+        '<input type="hidden" name="client_ids" value="' + response.client_id + '" >' // Hidden field for client_ids as JSON string
+    );
 
-                    // Append checkbox for each email
-                    $('#getEmail .modal-body .form-group').append(
-                      
-                        '<div class="form-check">' +
-                            '<label class="form-check-label justify-content-between">' +
-                                '<input type="checkbox" name="clientMails[]" class="form-check-input" value="' + email.client_email + '">' + email.client_email +
-                            '</label>' +
-                        '</div>'
-                    );
-                });
-            } else {
-                console.log("No emails found for this client.");
-                $('#getEmail .modal-body .form-group').append('<p>No emails found for this client.</p>');
-            }
+    // Handle the response data
+    if (response && response.emails && response.emails.length > 0) {
+        response.emails.forEach(function(email) {
+            console.log("Email:", email.client_email);
+            i++;
+            console.log("i value:", i);
 
-            // Show the modal
-            $('#getEmail').modal('show');
-        },
-        error: function(xhr, status, error) {
-            console.error("AJAX Error:", status, error);
-        }
+            // Append checkbox for each email
+            $('#getEmail .modal-body .form-group').append(
+                '<input type="hidden" name="index" value="' + i + '">' +
+                '<div class="form-check">' +
+                    '<label class="form-check-label justify-content-between">' +
+                        '<input type="checkbox" name="clientMails' + i + '[]" class="form-check-input" value="' + email.client_email + '">' + email.client_email +
+                    '</label>' +
+                '</div>'
+            );
+        });
+    } else {
+        console.log("No emails found for this client.");
+        $('#getEmail .modal-body .form-group').append('<p>No emails found for this client.</p>');
+    }
+
+    // Show the modal
+    $('#getEmail').modal('show');
+}
+       
     });
+       
 }
 
 

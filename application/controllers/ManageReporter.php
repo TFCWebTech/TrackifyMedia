@@ -60,6 +60,22 @@ class ManageReporter extends CI_Controller {
 	       		redirect('ManageReporter/ReporterInfo');
 	    }
 	}
+
+
+	public function editReporter(){
+		$user_id = $this->input->post('user_id');
+		$reporter_name = $this->input->post('reporter_name');
+		$user_email = $this->input->post('user_email');
+		$is_active = $this->input->post('is_active');
+		$data = array(
+			'user_name' => $reporter_name,
+			'user_email' => $user_email,
+			'user_status' => $is_active,
+		);
+		$this->reporter->update('user', 'user_id', $user_id, $data);
+			$this->session->set_flashdata('success', 'Reporter Updated Successfully.');
+			   redirect('ManageReporter/ReporterInfo');
+	}
     
 }
 ?>

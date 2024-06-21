@@ -325,6 +325,68 @@ class NewsLetter_Model extends CI_Model
         return $query->result_array();
     }
 
+//pro Analaticis size graph
+    public function get_size_data($timeframe, $client_id, $from, $to) {
+        
+        switch ($timeframe) {
+            case 'daily':
+                $sql = "SELECT DATE_FORMAT(create_at, '%W') as label, COUNT(*)
+ as count, category
+                        FROM news_details
+                        WHERE FIND_IN_SET(?, client_id) > 0";
+                if ($from && $to) {
+                    $sql .= " AND DATE(create_at) BETWEEN ? AND ?";
+                } else {
+                    $sql .= " AND DATE(create_at) >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK)";
+                }
+                $sql .= " GROUP BY label, category
+                          ORDER BY create_at";
+                break;
+
+            case 'weekly':
+                $sql = "SELECT CONCAT('Week ', WEEK(create_at)) as label, COUNT(*)
+ as count, category
+                        FROM news_details
+                        WHERE FIND_IN_SET(?, client_id) > 0";
+                if ($from && $to) {
+                    $sql .= " AND DATE(create_at) BETWEEN ? AND ?";
+                } else {
+                    $sql .= " AND DATE(create_at) >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)";
+                }
+                $sql .= " GROUP BY label, category
+                          ORDER BY create_at";
+                break;
+
+            case 'monthly':
+                $sql = "SELECT DATE_FORMAT(create_at, '%M') as label, COUNT(*) as count, category
+                        FROM news_details
+                        WHERE FIND_IN_SET(?, client_id) > 0";
+                if ($from && $to) {
+                    $sql .= " AND DATE(create_at) BETWEEN ? AND ?";
+                } else {
+                    $sql .= " AND YEAR(create_at) = YEAR(CURDATE())";
+                }
+                $sql .= " GROUP BY label, category
+                          ORDER BY create_at";
+                break;
+
+            default:
+                return [];
+        }
+
+        // Bind parameters
+        $params = [$client_id];
+        if ($from && $to) {
+            $params[] = $from;
+            $params[] = $to;
+        }
+
+        // Execute the query with bound parameters
+        $query = $this->db->query($sql, $params);
+        return $query->result_array();
+    }
+
+
     function getClientNewsCount($timeframe, $client_id, $from = null, $to = null) {
         // WHERE FIND_IN_SET(?, client_id) > 0
         $this->db->select('*');
@@ -467,7 +529,7 @@ class NewsLetter_Model extends CI_Model
                 );
             }
         }
-    
+        
         // Sort the array by Count in descending order
         usort($outArr, function ($a, $b) {
             return $b['Count'] - $a['Count'];
@@ -790,5 +852,254 @@ class NewsLetter_Model extends CI_Model
         return $query->result_array(); 
     }
     
+
+    public function getAVEData($timeframe, $client_id, $from = null, $to = null){
+        $outArr = array();
+        $comp_data = $this->getCompititersWithAVE($client_id, $from, $to);
+        $client_data = $this->getClientAVE($client_id, $from, $to);
+        $comp_data[] = [
+            'label' => $this->session->userdata('client_name'),
+                'count' => $client_data[0]['news_count'],
+                'ave' => $client_data[0]['total_ave']
+            ];
+
+        return $comp_data;
+    }
+
+    public function getCompititersWithAVE($client_id, $from = null, $to = null)
+    {
+        $this->db->select('*');
+        $this->db->from('competitor');
+        $this->db->where('client_id', $client_id);
+        $result = $this->db->get()->result_array();
+        $outArr = array();
+
+        foreach ($result as $row){
+            $news_count = $this->getAVEofClient($row['Keywords'], $client_id, $from, $to);
+            $outArr[] = [
+                'label' => $row['Competitor_name'],
+                'count' => $news_count[0]['news_count'],
+                'ave' => $news_count[0]['total_ave']
+            ];
+        }
+        return $outArr;
+    }
+
+    public function getAVEofClient($Keywords, $client_id, $from = null, $to = null)
+    {
+        
+        $this->db->select('*');
+        $this->db->from('news_details');
+
+        if ($from !== null && $to !== null) {
+            $this->db->where('create_at >=', $from);
+            $this->db->where('create_at <=', $to);
+        }
+
+        $this->db->group_start();
+        $this->db->where("NOT FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
+        $this->db->group_end();
+        
+        $this->db->group_start();
+        foreach (explode(',', $Keywords) as $keyword) {
+            $keyword = trim($keyword); // Trim any whitespace around keywords
+            $this->db->or_where("FIND_IN_SET('$keyword', keywords) >", 0);
+        }
+        $this->db->group_end();
+        // return $this->db->count_all_results();
+        $result = $this->db->get()->result_array();
+
+        $total_ave = 0;
+        $news_count = 0;
+        foreach ($result as $key => $value) {
+            // echo $value['news_details_id'].'/'.$client_id.'<br>';
+
+            $rates_data = $this->getRates($value['media_type_id'], $value['publication_id']);
+            $ave = 0;
+            $news_count++;
+            if (!empty($rates_data)) {
+                $artical_size = 0;
+                if ($value['sizeofArticle'] != null) {
+                    $artical_size = $value['sizeofArticle'];
+                }
+                $rate = $rates_data['Rate'];
+                $Circulation_Fig = $rates_data['Circulation_Fig'];
+                $ave = 3*$artical_size*$rate*$Circulation_Fig;
+            }
+            
+            $total_ave += $ave;
+        }
+
+        // echo $total_ave.' Total AVE'.'<br>';
+        // echo $news_count.' Total Count'.'<br>';
+
+        $outArr = array();
+        $outArr[] = array(
+            'news_count' => $news_count,
+            'total_ave' => $total_ave
+        );
+
+        return $outArr;
+        // $query = $this->db->get();
+        // $result = $query->result_array(); 
+        // return $result; 
+    }
+
+    public function getRates($gidMediaType, $gidMediaOutlet)
+    {
+        $this->db->select('Rate, Circulation_Fig');
+        $this->db->from('AddRate');
+        $this->db->where('gidMediaType', $gidMediaType);
+        // $this->db->where('gidMediaOutlet', $gidMediaOutlet);
+        return $this->db->get()->row_array();
+    }
+
+    function getClientAVE($client_id, $from = null, $to = null) {
+        // WHERE FIND_IN_SET(?, client_id) > 0
+        $this->db->select('*');
+        $this->db->from('news_details');
+
+        if ($from !== null && $to !== null) {
+            $this->db->where('create_at >=', $from);
+            $this->db->where('create_at <=', $to);
+        }
+
+        $this->db->group_start();
+        $this->db->where("FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
+        $this->db->group_end();
+        
+        $result = $this->db->get()->result_array();
+
+        $total_ave = 0;
+        $news_count = 0;
+        foreach ($result as $key => $value) {
+            // echo $value['news_details_id'].'/'.$client_id.'<br>';
+
+            $rates_data = $this->getRates($value['media_type_id'], $value['publication_id']);
+            $ave = 0;
+            $news_count++;
+            if (!empty($rates_data)) {
+                $artical_size = 0;
+                if ($value['sizeofArticle'] != null) {
+                    $artical_size = $value['sizeofArticle'];
+                }
+                $rate = $rates_data['Rate'];
+                $Circulation_Fig = $rates_data['Circulation_Fig'];
+                $ave = 3*$artical_size*$rate*$Circulation_Fig;
+            }
+            
+            $total_ave += $ave;
+        }
+
+        // echo $total_ave.' Total AVE'.'<br>';
+        // echo $news_count.' Total Count'.'<br>';
+
+        $outArr = array();
+        $outArr[] = array(
+            'news_count' => $news_count,
+            'total_ave' => $total_ave
+        );
+
+        return $outArr;
+    }
+
+    public function getSizeDataComp($timeframe, $client_id, $from = null, $to = null){
+        $outArr = array();
+        $comp_data = $this->getCompititersWithSize($client_id, $from, $to);
+        $client_data = $this->getClientSize($client_id, $from, $to);
+        foreach ($client_data as $key => $value) {
+            $outArr[] = [
+                'label' => $this->session->userdata('client_name'),
+                'count' => $value['count'],
+                'category' => $value['category']
+            ];
+        }
+
+        $final_array = array_merge($outArr, $comp_data);
+
+        return $final_array;
+    }
+
+    public function getClientSize($client_id, $from = null, $to = null) {
+        // WHERE FIND_IN_SET(?, client_id) > 0
+        $this->db->select('COUNT(*)
+ as count, category');
+        $this->db->from('news_details');
+        if ($from !== null && $to !== null) {
+            $this->db->where('create_at >=', $from);
+            $this->db->where('create_at <=', $to);
+        }
+
+        $this->db->group_start();
+        $this->db->where("FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
+        $this->db->group_end();
+        
+        // $this->db->group_start();
+        // foreach (explode(',', $Keywords) as $keyword) {
+        //     $keyword = trim($keyword); // Trim any whitespace around keywords
+        //     $this->db->or_where("FIND_IN_SET('$keyword', keywords) >", 0);
+        // }
+        // $this->db->group_end();
+
+        $this->db->group_by('category');
+        $result = $this->db->get()->result_array();
+        // $outArr = array();
+        // $outArr[] = array(
+        //     'news_count' => $news_count,
+        //     'total_ave' => $total_ave
+        // );
+
+        return $result;
+    }
+
+    public function getCompititersWithSize($client_id, $from = null, $to = null)
+    {
+        $this->db->select('*');
+        $this->db->from('competitor');
+        $this->db->where('client_id', $client_id);
+        $result = $this->db->get()->result_array();
+        $outArr = array();
+
+        foreach ($result as $row){
+            $news_count = $this->getSizeofClient($row['Keywords'], $client_id, $from, $to);
+            foreach ($news_count as $key => $value) {
+                $outArr[] = [
+                    'label' => $row['Competitor_name'],
+                    'count' => $value['count'],
+                    'category' => $value['category']
+                ];
+            }
+            
+        }
+        return $outArr;
+    }
+
+    public function getSizeofClient($Keywords, $client_id, $from = null, $to = null)
+    {
+        
+        $this->db->select('COUNT(*) as count, category');
+        $this->db->from('news_details');
+
+        if ($from !== null && $to !== null) {
+            $this->db->where('create_at >=', $from);
+            $this->db->where('create_at <=', $to);
+        }
+
+        $this->db->group_start();
+        $this->db->where("NOT FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
+        $this->db->group_end();
+        
+        $this->db->group_start();
+        foreach (explode(',', $Keywords) as $keyword) {
+            $keyword = trim($keyword); // Trim any whitespace around keywords
+            $this->db->or_where("FIND_IN_SET('$keyword', keywords) >", 0);
+        }
+        $this->db->group_end();
+        // return $this->db->count_all_results();
+        $this->db->group_by('category');
+        $result = $this->db->get()->result_array();
+        return $result;
+        
+    }
 }   
 ?>

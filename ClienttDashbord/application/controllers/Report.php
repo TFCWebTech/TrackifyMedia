@@ -22,39 +22,52 @@ class Report extends CI_Controller {
         $data['publication_type'] = $this->NewsData->getPublicationTypeData();
         $data['news_city'] = $this->NewsData->getNewsCityData();
         $client_id = $this->session->userdata('client_id');
+
         $data['details'] = $this->NewsData->getClientById($client_id);
-        $data['get_client_details'] = $this->NewsData->getClientTemplateDetails($client_id);
+        // Extract clients from the array
+        $clientsString = $data['details']['clients'];
+       
+        $clientIDs = explode(',', $clientsString);
+        $data['clients'] = $this->NewsData->getClients($clientIDs);
+        $firstClient = $data['clients'][0];
+        $firstClientId = $firstClient['client_id'];
+        // $firstClientId = 3;
+        // Convert the string to an array of client IDs
+        $data['get_client_details'] = $this->NewsData->getClientTemplateDetails($firstClientId);
+       
         // echo "<pre>";
-        // print_r($data['news_city']);
+        // print_r($data['get_client_details']);
         // echo "</pre>";
+       
         $this->load->view('common/header');
         $this->load->view('report', $data);
         $this->load->view('common/footer');
+        
     }
 
-    // public function exportWord() {
-    //     try {
-    //         $client_id = $this->session->userdata('client_id');
-    //         $from_date = $this->input->post('from_date');
-    //         $to_date = $this->input->post('to_date');
-    //         $publication_type = $this->input->post('publication_type');
-    //         $Cities = $this->input->post('Cities');
+    public function downloadPDF() {
+        // Set headers to indicate JSON response
+        header('Content-Type: application/json');
+        
+        // Collect necessary POST data
+         $select_client = $this->input->post('select_client');
+        // $select_client = 3;
+         $from_date = $this->input->post('from_date');
+        $to_date = $this->input->post('to_date');
+        $publication_type = $this->input->post('publication_type');
+        $Cities = $this->input->post('Cities');
+    
+        // Fetch data from NewsData model or wherever it's sourced from
+        $data['details'] = $this->NewsData->getClientById($select_client);
+        $data['get_client_details'] = $this->NewsData->getClientTemplateDetails2($select_client, $from_date, $to_date, $publication_type, $Cities);
+    
+        // print_r($data['get_client_details']);
+        // Encode data as JSON
+        echo json_encode($data);
+        exit; // Stop further script execution after sending JSON response
+    }
 
-            
-    //         $WordFileData = $this->NewsData->getReportData($client_id, $from_date, $to_date, $publication_type, $Cities);
-           
-    //         echo '<pre>';
-    //         print_r($WordFileData);
-    //         echo '</pre>';
-    //         // Send response as JSON
-    //         header('Content-Type: application/json');
-    //         echo json_encode($WordFileData);
-    //     } catch (Exception $e) {
-    //         // Handle exceptions
-    //         http_response_code(500); // Internal Server Error
-    //         echo json_encode(array('error' => $e->getMessage()));
-    //     }
-    // }
+    
     public function exportWord() {
         try {
             $client_id = $this->session->userdata('client_id');
