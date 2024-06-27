@@ -166,7 +166,6 @@ margin-bottom: 5px !important;
 <div class="modal" id="updatePublication">
   <div class="modal-dialog">
     <div class="modal-content">
-
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Update Publication</h4>
@@ -175,7 +174,6 @@ margin-bottom: 5px !important;
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-
       <!-- Modal Body -->
       <div class="modal-body">
             <form action="<?php echo site_url('ManagePublication/updatedPublication')?>" method="post">
@@ -206,14 +204,12 @@ margin-bottom: 5px !important;
                 <label class="px-1 font-weight-bold" for="tier_type">Tier Type </label>
                   <select class="form-control" name="tier_type" id="tier_type">
                     <option value="">Select</option>
-              
                   </select>
                 </div>
                 <div class="form-group">
                 <label class="px-1 font-weight-bold" for="tier_type">Publication Language </label>
                   <select class="form-control" name="publication_language" id="publication_language">
                     <option value="">Select</option>
-              
                   </select>
                 </div>
                 <div class="form-group">

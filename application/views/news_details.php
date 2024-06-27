@@ -60,12 +60,16 @@ body {
         if (isset($news_details) && !empty($news_details)) {
             ?>
             <div class="row p-2">
-                <div class="col-md-12 pt-1 ">
-                    <h5 style="color:blue;"><?php echo $news_details['head_line']; ?></h5>
-                    <p><?php echo $news_details['summary']; ?></p>
+                <div class="col-md-12 pt-1 "> 
+                    <h5 style="color:blue;"><a href="<?php echo $news_details['website_url']; ?>"><?php echo $news_details['head_line']; ?> </a></h5>
+                    <label for="">summery</label>
+                    <p><?php echo $news_details['summary']; ?>
+                    <br>Publication: <span style="color:blue;"><?php echo $news_details['MediaOutlet']; ?></span> , Journalist: <span style="color:blue;"><?php echo $news_details['Journalist']; ?></span> , 
+                    Edition: <span style="color:blue;"><?php echo $news_details['Edition']; ?></span>, Supplement: <span style="color:blue;"><?php echo $news_details['Supplement']; ?></span> , Agencies: <span style="color:blue;"><?php echo $news_details['Journalist']; ?></span> , Date: <span style="color:blue;"><?php echo $news_details['create_at']; ?></span></p>
                     <hr>
                 </div>
             </div>
+            
             <?php
                 if (isset($news_details['news_article']) && is_array($news_details['news_article'])) {
                     foreach ($news_details['news_article'] as $index => $article) {
@@ -100,12 +104,7 @@ body {
                 }
                 ?>
                 
-            <div class="row p-2">
-                <div class="col-md-12 px-5">
-                    <p>Publication: <span style="color:blue;"><?php echo $news_details['MediaOutlet']; ?></span> , Journalist: <span style="color:blue;"><?php echo $news_details['Journalist']; ?></span> , 
-                    Edition: <span style="color:blue;"><?php echo $news_details['Edition']; ?></span>, Supplement: <span style="color:blue;"><?php echo $news_details['Supplement']; ?></span> , Agencies: <span style="color:blue;"><?php echo $news_details['Journalist']; ?></span> , Date: <span style="color:blue;"><?php echo $news_details['create_at']; ?></span></p>
-                </div>
-            </div>
+            
         <?php 
         }
         ?>

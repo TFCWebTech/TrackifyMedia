@@ -51,7 +51,8 @@ class NewsUpload extends CI_Controller {
 		$NewsCity = $this->input->post('NewsCity');
 		$headline = $this->input->post('headline');
 		$Summary = $this->input->post('Summary');
-
+		$website_url = $this->input->post('website_url');
+		
 		$allKeys = array();
 		$allClients = array();
 	
@@ -109,7 +110,8 @@ class NewsUpload extends CI_Controller {
 			//'client_id' => $getclientsString,  //change the column name due to store client email id 
 			'company' => $getclientsString,
 			'sizeofArticle' => $totalSize,
-			'category' => $category
+			'category' => $category,
+			'website_url' => $website_url
 		);
 		// print_r($data);
 		$newsDetailsId = $this->reporter->insert('news_details', $data);

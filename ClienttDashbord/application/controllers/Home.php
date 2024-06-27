@@ -99,16 +99,31 @@ class Home extends CI_Controller {
             // Loop through each client ID and gather data
             $compititers_data = [];
             foreach ($client_ids as $id) {
-                $compititers_data = array_merge($compititers_data, $this->newsLetter->getCompData('daily', $id, $from, $to, ''));
+                // Assuming getCompData returns an array with 'label', 'count', and 'ave' keys
+                $comp_data = $this->newsLetter->getCompData('daily', $id, $from, $to, '');
+            
+                // Merge each competitor's data into the main array
+                $compititers_data = array_merge($compititers_data, $comp_data);
             }
-
+            
+            // Get news count and ave for the current client
             $clients_news_count = $this->newsLetter->getClientNewsCount('daily', $client_id, $from, $to);
-            $compititers_data[] = array(
+            
+            // Prepare data structure for the current client
+            $client_data = [
                 'label' => $this->session->userdata('client_name'),
-                'count' => $clients_news_count
-            );
+                'count' => $clients_news_count['news_count'],
+                'ave' => $clients_news_count['total_ave'],
+            ];
+            
+            // Append the current client's data to the competitors data array
+            $compititers_data[] = $client_data;
+            
+            // Assign to the view data
             $data['get_quantity_compare_data'] = $compititers_data;
-
+            
+            // Print or debug the data
+            // print_r($data['get_quantity_compare_data']);
             // Initialize arrays to hold the combined data for each client
             $media_data = [];
             $publication_data = [];
@@ -135,13 +150,12 @@ class Home extends CI_Controller {
             $data['ave_data'] = $ave_data;
             $data['size_data'] = $size_data;
             
+            // print_r($data['size_data']);
             // Uncomment these lines to load views if necessary
             $this->load->view('common/header');
             $this->load->view('compare_charts', $data);
             $this->load->view('common/footer');
         }
-
-        
 
         public function compareFilterGraphs2()
         {

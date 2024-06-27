@@ -29,5 +29,17 @@ class ManageSupplementModal extends CI_Model
         $this->db->order_by('supplement_id', 'DESC');
         return $this->db->get()->result_array();
     }
+
+     public function getMediaOutLet(){
+        $this->db->select('*');
+        $this->db->from('mediaoutlet');
+        return $this->db->get()->result_array();
+    }
+
+    public function getEdition(){
+        $this->db->select('*');
+        $this->db->from('edition');
+        return $this->db->get()->result_array();
+    }
 }
 ?>

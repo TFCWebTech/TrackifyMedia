@@ -182,6 +182,10 @@
                                             <textarea  class="form-control" name="Summary"  rows="4" cols="50">
                                             </textarea>
                                         </div>
+                                        <div class="col-md-12" id="show_url" style="display: none;">
+                                            <label class="px-1 font-weight-bold" for="Summary">Website URL</label>
+                                            <input type="text" class="form-control" placeholder="Enter Website URL" name="website_url" id="website_url">
+                                        </div>
                                     </div>
                         </div>
                     </div>
@@ -257,17 +261,17 @@
 //     }
 // }
 function checkSelection() {
-    console.log('hello'); // Initial check to see if the function is being called
     var selectElement = document.getElementById('media_type');
+    var show_url = document.getElementById('show_url');
     var selectedValue = selectElement.value;
 
-    console.log('Selected value:', selectedValue); // Log the selected value
+    console.log('Selected value:', selectedValue); 
 
     if (selectedValue === '015304b714940c28695d592c9ac10355d0d9a45f') {
-        console.log('helloas'); // Check if the condition is met
         addMoreFields();
     } else {
-        console.log('The selected value is not Online'); // Log if the condition is not met
+        show_url.style.display = 'none'; // Hide the element if the value is not matched
+        console.log('The selected value is not Online'); 
     }
 }
 </script>
@@ -689,7 +693,8 @@ $(document).ready(function() {
 var index = 0;
 function addMoreFields() {
     index++;
-
+    var show_url = document.getElementById('show_url');
+    show_url.style.display = 'block';
     var textareaId = 'editor_' + index; 
     // Create a new textarea element
     let data = '<div class="col-md-6"><div class="row mt-2">';

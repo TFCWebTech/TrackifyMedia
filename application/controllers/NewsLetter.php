@@ -223,15 +223,12 @@ public function sendMail() {
         } else {
             echo "No emails found for clientMails" . $i . "<br>";
         }
-
     }
-
     if ($mail_sent) {
         $this->session->set_flashdata('success', 'News sent successfully.');
     } else {
         $this->session->set_flashdata('error', 'Failed to send email(s).');
     }
-
     redirect('NewsLetter/newsMail/' . $client_id);
 }
      

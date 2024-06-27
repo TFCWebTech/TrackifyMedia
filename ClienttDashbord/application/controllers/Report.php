@@ -45,29 +45,120 @@ class Report extends CI_Controller {
         
     }
 
-    public function downloadPDF() {
-        // Set headers to indicate JSON response
-        header('Content-Type: application/json');
+    // public function downloadPDF() {
+    //     // Set headers to indicate JSON response
+    //     header('Content-Type: application/json');
         
+    //     // Collect necessary POST data
+    //     // $select_client = $this->input->post('select_client');
+    //     $select_client = 3;
+    //     $from_date = $this->input->post('from_date');
+    //     $to_date = $this->input->post('to_date');
+    //     $publication_type = $this->input->post('publication_type');
+    //     $Cities = $this->input->post('Cities');
+    
+    //     // Fetch data from NewsData model or wherever it's sourced from
+    //     $data['details'] = $this->NewsData->getClientById($select_client);
+    //     $data['get_client_details'] = $this->NewsData->getClientTemplateDetails2($select_client, $from_date, $to_date, $publication_type, $Cities);
+    //     // $this->load->view('dowload_pdf', $data);
+
+    //      // Load the TCPDF library
+    //     $this->load->library('tcpdf');
+    //     // Create PDF object
+    //     $pdf = new TCPDF();
+
+    //     // Set some properties of the PDF
+    //     $pdf->SetCreator(PDF_CREATOR);
+    //     $pdf->SetTitle('Your PDF Title');
+
+    //     // Load your view into a variable
+    //     // $data = array(
+    //     //     // Any data you want to pass to the view
+    //     // );
+    //     // $data['user_data'] = $this->home->getUserProfileData('9');
+    //     // $data['all'] = $this->inquiry->generateCertificate('7');
+    //     // $html = $this->load->view('certificate_pdf.php', true);
+
+    //     $html = $this->load->view('dowload_pdf.php',$data, true);
+        
+    //     // Add a page to the PDF
+    //     $pdf->AddPage();
+
+    //     // Set font
+    //     $pdf->SetFont('times', 'N', 12);
+
+    //     // Add the HTML content to the PDF
+    //     $pdf->writeHTML($html, true, false, true, false, '');
+
+    //     // Save the PDF to a folder
+    //     $pdfPath = FCPATH . 'dowload_pdf/';
+    //     $pdfName = 'dowload_pdf.pdf';
+    //     $pdf->Output($pdfPath . $pdfName, 'F');
+
+    //     // Optionally, you can show the PDF in the browser instead of saving it
+    //     $pdf->Output($pdfName, 'I');
+    // }
+
+    
+    public function downloadPDF() {
         // Collect necessary POST data
-         $select_client = $this->input->post('select_client');
-        // $select_client = 3;
-         $from_date = $this->input->post('from_date');
+        $select_client = $this->input->post('select_client'); // Assuming this is passed correctly via AJAX
+        $from_date = $this->input->post('from_date');
         $to_date = $this->input->post('to_date');
         $publication_type = $this->input->post('publication_type');
         $Cities = $this->input->post('Cities');
-    
+        
         // Fetch data from NewsData model or wherever it's sourced from
         $data['details'] = $this->NewsData->getClientById($select_client);
         $data['get_client_details'] = $this->NewsData->getClientTemplateDetails2($select_client, $from_date, $to_date, $publication_type, $Cities);
-    
-        // print_r($data['get_client_details']);
-        // Encode data as JSON
-        echo json_encode($data);
-        exit; // Stop further script execution after sending JSON response
+        
+        // var_dump($data['details']);
+        // var_dump($data['get_client_details']);
+        // Load TCPDF library
+        require_once(APPPATH . 'libraries/tcpdf/tcpdf.php');
+        
+        // Create PDF object
+        $pdf = new TCPDF();
+        
+        // Set properties of the PDF
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle('Your PDF Title');
+        
+        // Load the view file into HTML
+        $html = $this->load->view('dowload_pdf', $data, true); // Assuming 'dowload_pdf.php' is your view file
+        
+        // Add a page to the PDF
+        $pdf->AddPage();
+        
+        // Set font
+        $pdf->SetFont('times', 'N', 12);
+        
+        // Add the HTML content to the PDF
+        $pdf->writeHTML($html, true, false, true, false, '');
+        
+        // Save the PDF to a folder on the server
+        $pdfPath = FCPATH . 'download_pdf/'; // Ensure 'download_pdf' folder exists and is writable
+        if (!is_dir($pdfPath)) {
+            mkdir($pdfPath, 0777, true); // Create directory if it doesn't exist
+        }
+        $pdfName = 'downloaded_pdf.pdf'; // Name of the PDF file
+        $outputPath = $pdfPath . $pdfName;
+        
+        // Save PDF to file
+        $pdf->Output($outputPath, 'F');
+        
+        // Prepare response for AJAX
+        $response = array(
+            'success' => true,
+            'pdf_url' => base_url('download_pdf/' . $pdfName) // URL to download the PDF
+        );
+        
+        // Send JSON response back to AJAX request
+        header('Content-Type: application/json');
+        echo json_encode($response);
     }
-
     
+
     public function exportWord() {
         try {
             $client_id = $this->session->userdata('client_id');

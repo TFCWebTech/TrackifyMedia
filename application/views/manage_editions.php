@@ -1,3 +1,4 @@
+
 <!-- Include the necessary CSS and JS libraries for DataTables -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
@@ -29,6 +30,7 @@ margin-bottom: 5px !important;
         } 
      } 
 </style>
+
 <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 text-right p-2">
@@ -57,9 +59,9 @@ margin-bottom: 5px !important;
                   $i++;
                   ?>
                   <tr>
-                  <td><?php echo $edition['Edition']; ?></td>
                             <td><?php echo $edition['Edition']; ?></td>
-                            <td><?php echo $edition['MediaOutletId']; ?></td>
+                            <td><?php echo $edition['EditionOrder']; ?></td>
+                            <td><?php echo $edition['MediaOutlet']; ?></td>
                             <td>
                       <?php  
                       if($edition['Status'] == 0) {
@@ -70,7 +72,7 @@ margin-bottom: 5px !important;
                       ?>
                     </td>
                       <td><?php echo date('d/m/Y', strtotime($edition['CreatedOn'])); ?></td>
-                   
+                     
                     <td>
                     &nbsp; <i class="fa fa-edit text-primary" onclick="edit('<?php echo $edition['Edition'] ?>')"></i> &nbsp; 
                         <!-- <i class="fa fa-trash text-danger" ></i> -->
@@ -87,7 +89,6 @@ margin-bottom: 5px !important;
         
      
         
-
 <!-- The Modal -->
 <div class="modal" id="myModal">
   <div class="modal-dialog">
@@ -105,30 +106,34 @@ margin-bottom: 5px !important;
       <!-- Modal Body -->
       <div class="modal-body">
       <form id="addEditionForm" action="<?php echo site_url('ManageEditions/add_editions'); ?>" method="post">
-        <div class="form-group">
-            <label class="px-1 font-weight-bold" for="publiction_name">Edition Name </label>
-            <input type="text" class="form-control" placeholder="Enter Edition Name" name="Edition" required>
-        </div>
+    <div class="form-group">
+        <label class="px-1 font-weight-bold" for="publiction_name">Edition Name </label>
+        <input type="text" class="form-control" placeholder="Enter Edition Name" name="Edition" required>
+    </div>
 
-        <div class="form-group">
-            <label class="px-1 font-weight-bold" for="publiction_order">Edition Order </label>
-            <input type="text" class="form-control" placeholder="Enter Edition Order" name="EditionOrder" required>
-        </div>
+    <div class="form-group">
+        <label class="px-1 font-weight-bold" for="publiction_order">Edition Order </label>
+        <input type="text" class="form-control" placeholder="Enter Edition Order" name="EditionOrder" required>
+    </div>
 
-        <div class="form-group">
-            <label class="px-1 font-weight-bold" for="MediaOutletId">Publication </label>
-            <select class="form-control" name="MediaOutletId" >
-                <option value="">Select</option>
-                <!-- Add options dynamically if needed -->
-            </select>
-        </div>
-        <div class="text-right pt-2">
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-      </form>
-      </div>
+    <div class="form-group">
+    <label class="px-1 font-weight-bold" for="media_outlet">Publication </label>
+    <select class="form-control" name="MediaOutletId" >
+        <option value="">Select</option>
+        <?php foreach($get_MediaOutLet as $values){ ?>
+            <option value="<?php echo $values['gidMediaOutlet']; ?>">
+                <?php echo $values['MediaOutlet']; ?>
+            </option>
+        <?php } ?>
+    </select>
+</div>
+          
+    <div class="text-right pt-2">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
 
-      
+</div>
 
     </div>
   </div>
@@ -150,7 +155,8 @@ margin-bottom: 5px !important;
 
       <!-- Modal Body -->
       <div class="modal-body">
-      <form id="addEditionForm" action="<?php echo site_url('ManageEditions/editEditions'); ?>" method="post">
+      <form  action="<?php echo site_url('ManageEditions/editEditions'); ?>" method="post">
+       <input type="text" name="edition_id" id="edition_id" hidden />
         <div class="form-group">
             <label class="px-1 font-weight-bold" for="publiction_name">Edition Name </label>
             <input type="text" class="form-control" placeholder="Enter Edition Name" name="Edition" id="Edition" required>
@@ -162,8 +168,8 @@ margin-bottom: 5px !important;
         </div>
 
         <div class="form-group">
-            <label class="px-1 font-weight-bold" for="MediaOutletId">Publication </label>
-            <select class="form-control" name="MediaOutletId" id="Status" required>
+            <label class="px-1 font-weight-bold" for="MediaOutletId">Status </label>
+            <select class="form-control" name="Status" id="Status">
                 <option value="">Select</option>
                 <option value="1">Active</option>
                 <option value="0">Inactive</option>
@@ -174,9 +180,9 @@ margin-bottom: 5px !important;
         <div class="text-right pt-2">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
+
       </form>
       </div>
-
       
 
     </div>
@@ -191,7 +197,7 @@ margin-bottom: 5px !important;
 </html>
 
 
-    <script>
+<script>
     $('table').DataTable();
 
     function edit(Edition) {
@@ -210,13 +216,20 @@ margin-bottom: 5px !important;
 					break;
 				}
 			}
+
       console.log(desiredTask);
+      $('#edition_id').val(desiredTask.edition_id);
       $('#Edition').val(desiredTask.Edition);
       $('#EditionOrder').val(desiredTask.EditionOrder);
       $('#Status').val(desiredTask.Status);
 
       $('#editModal').modal('show');
     }
+
 </script>
 
+
+
 </div>
+
+            <!-- End of Main Content -->

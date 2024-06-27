@@ -406,7 +406,6 @@ function downloadWord() {
     $('table').DataTable();
 </script>
 
-
 <script>
     function downloadPDF() {
     var select_client = document.getElementById('select_client').value;
@@ -432,173 +431,27 @@ function downloadWord() {
             Cities: Cities,
         },
         success: function(response) {
-        // Log the response to see what's coming back
-        console.log(response);
+            // Log the response to see what's coming back
+            console.log(response);
 
-        // Check if response is actually JSON
-        if (typeof response === 'object' && response !== null) {
-            // Proceed with your logic to update the HTML content
-            var details = response.details;
-            var getClientDetails = response.get_client_details;
-
-        var printContent = `
-            <div class="container" id="printData">
-                <div class="row">
-                    <div class="col-md-12 text-right mb-2">
-                        
-                    </div>
-                </div>
-                <div class="card" style="background-color: #F9F9F9;">
-                    <div class="header" style="background-color: ` + getClientDetails[0].header_background_color + `; padding:5px 10px;">
-                        <table cellpadding="0" cellspacing="0" style="width:100%;">
-                            <tr>
-                                <td align="left">
-                                    ${getClientDetails[0].logo_position === 'Left' ? `<img src="` + getClientDetails[0].header_logo_url + `" alt="logo" style="width:100px;">` : ''}
-                                    ${getClientDetails[0].trackify_link_status == 1 ? `<a href="` + getClientDetails[0].trackify_link + `" style="font-size:12px; color:#ffffff;">powered by trackify media</a>` : ''}
-                                </td>
-                                <td align="center">
-                                    ${getClientDetails[0].logo_position === 'Center' ? `<img src="` + getClientDetails[0].header_logo_url + `" alt="logo" style="width:100px;">` : ''}
-                                    <h5>
-                                        <a style="font-size:` + getClientDetails[0].header_title_font_size + `px; color:` + getClientDetails[0].header_title_font_color + `;">` + getClientDetails[0].header_title_name + `</a><br>
-                                        <span style="display:block; font-size: 12px;">` + new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }) + `<br>
-                                        </span>
-                                    </h5>
-                                </td>
-                                <td align="right">
-                                    ${getClientDetails[0].logo_position === 'Right' ? `<img src="` + getClientDetails[0].header_logo_url + `" alt="logo" style="width:100px;">` : ''}
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="col-md-12 mt-3 table-wrapper">
-                        <table>
-                            <tr style="background-color: #6D6B6B; color: #ffffff;">
-                                <th>Quick Links</th>
-                                <th>Access Other Services</th>
-                            </tr>
-                            ${getClientDetails.map(detail => `
-                                ${detail.quick_links_position == '1' ? `
-                                    <tr style="background-color: #DCD5D5; color: #ffffff;">
-                                        <td><p>` + detail.quick_links_name + `</p></td>
-                                        <td><a href="">Login</a></td>
-                                    </tr>` : ''}
-                                ${detail.quick_links_position == '2' ? `
-                                    <tr style="background-color: #DCD5D5; color: #ffffff;">
-                                        <td>` + detail.quick_links_name + ` (` + detail.compititors_data.length + `)</td>
-                                        <td></td>
-                                    </tr>` : ''}
-                                ${detail.quick_links_position == '3' ? `
-                                    <tr style="background-color: #DCD5D5; color: #ffffff;">
-                                        <td>` + detail.quick_links_name + ` (` + detail.industry_data.length + `)</td>
-                                        <td></td>
-                                    </tr>` : ''}
-                                ${detail.quick_links_position == '4' ? `
-                                    <tr style="background-color: #DCD5D5; color: #ffffff;">
-                                        <td>` + detail.quick_links_name + ` (` + detail.compititors_data.length + `)</td>
-                                        <td></td>
-                                    </tr>` : ''}
-                                ${detail.quick_links_position == '5' ? `
-                                    <tr style="background-color: #DCD5D5; color: #ffffff;">
-                                        <td>` + detail.quick_links_name + ` (` + detail.industry_data.length + `)</td>
-                                        <td></td>
-                                    </tr>` : ''}
-                                ${detail.quick_links_position == '6' ? `
-                                    <tr style="background-color: #DCD5D5; color: #ffffff;">
-                                        <td>` + detail.quick_links_name + ` (` + detail.compititors_data.length + `)</td>
-                                        <td></td>
-                                    </tr>` : ''}
-                            `).join('')}
-                            <tr style="background-color: #DCD5D5; color: #ffffff;">
-                                <td></td>
-                                <td><a href="">Customerservice@trackify.info</a></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="body-content" style="padding:10px 15px 0px 15px;">
-                        <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;">` + details.client_name + `</h4>
-                        ${getClientDetails[0].client_news.map(news => `
-                            <h5><a style="color: ` + getClientDetails[0].content_headline_color + `;font-size: ` + getClientDetails[0].content_headline_font_size + `;font-family: ` + getClientDetails[0].content_headline_font + `;">` + news.head_line + `</a></h5>
-                            <h6>Summary:</h6>
-                            <p style="color: ` + getClientDetails[0].content_news_summary_color + `;font-size: ` + getClientDetails[0].content_news_summary_font_size + `;">` + news.summary + `</p>
-                            <p>Date: ` + new Date(news.create_at).toLocaleDateString('en-GB') + `, 
-                            Publication: <span style="color:blue;">` + news.MediaOutlet + `</span>, Journalist / Agency: <span style="color:blue;">` + news.Journalist + `</span>, 
-                            Edition: <span style="color:blue;">` + news.Edition + `</span>, Supplement: <span style="color:blue;">` + news.Supplement + `</span>, No of pages: <span style="color:blue;">` + news.page_count + `</span>, Circulation Figure: <span></span>, qAVE(Rs.): <span></span></p>
-                            <hr>
-                        `).join('')}
-                    </div>
-                    <div class="body-content" style="padding:10px 15px 0px 15px;">
-                        <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;">Competition</h4>
-                    </div>
-                    ${getClientDetails[0].compititors_data.map(compititor => `
-                        <div class="body-content" style="padding:10px 15px 0px 15px;">
-                            <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;">` + compititor.Competitor_name + `</h4>
-                            ${compititor.news.map(news => `
-                                <h5><a  style="color: ` + getClientDetails[0].content_headline_color + `;font-size: ` + getClientDetails[0].content_headline_font_size + `;font-family: ` + getClientDetails[0].content_headline_font + `;">` + news.head_line + `</a></h5>
-                                <h6>Summary:</h6>
-                                <p style="color: ` + getClientDetails[0].content_news_summary_color + `;font-size: ` + getClientDetails[0].content_news_summary_font_size + `;">` + news.summary + `</p>
-                                <p>Date: ` + new Date(news.create_at).toLocaleDateString('en-GB') + `, 
-                                Publication: <span style="color:blue;">` + news.MediaOutlet + `</span>, Journalist / Agency: <span style="color:blue;">` + news.Journalist + `</span>, 
-                                Edition: <span style="color:blue;">` + news.Edition + `</span>, Supplement: <span style="color:blue;">` + news.Supplement + `</span>, No of pages: <span style="color:blue;">` + news.page_count + `</span>, Circulation Figure: <span></span>, qAVE(Rs.): <span></span></p>
-                                <hr>
-                            `).join('')}
-                        </div>
-                    `).join('')}
-                    <div class="body-content" style="padding:10px 15px 0px 15px;">
-                        <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;">Industry</h4>
-                    </div>
-                    ${getClientDetails[0].industry_data.map(Industry => `
-                        <div class="body-content" style="padding:10px 15px 0px 15px;">
-                            <h4 style="background-color: #cfbbbb; color: #ffffff; padding:4px;">` + Industry.Industry_name + `</h4>
-                            ${Industry.news.map(news => `
-                                <h5><a  style="color: ` + getClientDetails[0].content_headline_color + `;font-size: ` + getClientDetails[0].content_headline_font_size + `;font-family: ` + getClientDetails[0].content_headline_font + `;">` + news.head_line + `</a></h5>
-                                <h6>Summary:</h6>
-                                <p style="color: ` + getClientDetails[0].content_news_summary_color + `;font-size: ` + getClientDetails[0].content_news_summary_font_size + `;">` + news.summary + `</p>
-                                <p>Date: ` + new Date(news.create_at).toLocaleDateString('en-GB') + `, 
-                                Publication: <span style="color:blue;">` + news.MediaOutlet + `</span>, Journalist / Agency: <span style="color:blue;">` + news.Journalist + `</span>, 
-                                Edition: <span style="color:blue;">` + news.Edition + `</span>, Supplement: <span style="color:blue;">` + news.Supplement + `</span>, No of pages: <span style="color:blue;">` + news.page_count + `</span>, Circulation Figure: <span></span>, qAVE(Rs.): <span></span></p>
-                                <hr>
-                            `).join('')}
-                        </div>
-                    `).join('')}
-                    <div class="col-md-12 news-footer" style="background-color: ` + getClientDetails[0].footer_background_color + `;">
-                        <div class="d-flex justify-content-between">
-                            <div class="logo" style="text-align:left;">
-                                ${getClientDetails[0].footer_logo_position === 'Left' ? `<img src="` + getClientDetails[0].footer_logo_url + `" alt="logo" style="width:100px; padding:5px;">` : ''}
-                            </div>
-                            <div class="footer" style="text-align:center;">
-                                ${getClientDetails[0].footer_logo_position === 'Center' ? `<img src="` + getClientDetails[0].footer_logo_url + `" alt="logo" style="width:100px; padding:5px;">` : ''}
-                            </div>
-                            <div class="footer" style="text-align:end;">
-                                ${getClientDetails[0].footer_logo_position === 'Right' ? `<img src="` + getClientDetails[0].footer_logo_url + `" alt="logo" style="width:100px; padding:5px;">` : ''}
-                            </div>
-                        </div>
-                        <p style="font-size:` + getClientDetails[0].footer_title_font_size + `px; color:` + getClientDetails[0].footer_title_font_color + `;text-align: center">` + getClientDetails[0].footer_title_name + `</p>
-                        <p><span style="color:red; font-weight:bold;">This is an auto generated email – please do not reply to this email id</span></p>
-                    </div>
-                </div>
-            </div>`;
-
-           // Insert the updated content into the div
-           $('#printData').html(printContent);
-
-            // Create a new window for printing
-            var newWin = window.open('', 'Print-Window');
-            newWin.document.open();
-            newWin.document.write('<html><head><title>Print</title>');
-            newWin.document.write('<style>/* Include any necessary CSS here */</style>');
-            newWin.document.write('</head><body onload="window.print()">');
-            newWin.document.write($('#printData').html());
-            newWin.document.write('</body></html>');
-            newWin.document.close();
-            setTimeout(function() { newWin.close(); }, 10); // Close window after printing
+            // Check if the response indicates success and contains a valid PDF URL
+            if (response.success && response.pdf_url) {
+                // Use JavaScript to initiate the download
+                var link = document.createElement('a');
+                link.href = response.pdf_url;
+                link.download = 'downloaded_pdf.pdf'; // Optional: Specify the filename for download
+                link.click();
             } else {
-            console.error('Invalid JSON response:', response);
+                // Handle error or no valid PDF URL case
+                alert('Failed to generate PDF or PDF URL is invalid.');
             }
-            },
-            error: function(xhr, status, error) {
-            console.error('AJAX error:', status, error);
-            }
-            });
+        },
+        error: function(xhr, status, error) {
+            // Handle AJAX error
+            console.error('AJAX Error:', status, error);
+            alert('AJAX Error: Failed to fetch PDF data.');
+        }
+    });
 }
 </script>
 

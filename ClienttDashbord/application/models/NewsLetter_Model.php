@@ -388,20 +388,40 @@ class NewsLetter_Model extends CI_Model
 
 
     function getClientNewsCount($timeframe, $client_id, $from = null, $to = null) {
-        // WHERE FIND_IN_SET(?, client_id) > 0
         $this->db->select('*');
         $this->db->from('news_details');
-
+    
         if ($from !== null && $to !== null) {
             $this->db->where('create_at >=', $from);
             $this->db->where('create_at <=', $to);
         }
-
+    
         $this->db->group_start();
         $this->db->where("FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
         $this->db->group_end();
-        
-        return $this->db->count_all_results();
+    
+        $result = $this->db->get()->result_array();
+    
+        $total_ave = 0;
+        $news_count = 0;
+        foreach ($result as $value) {
+            $rates_data = $this->getRates($value['media_type_id'], $value['publication_id']);
+            $ave = 0;
+            if (!empty($rates_data)) {
+                $article_size = $value['sizeofArticle'] != null ? $value['sizeofArticle'] : 0;
+                $rate = $rates_data['Rate'];
+                $Circulation_Fig = $rates_data['Circulation_Fig'];
+                $ave = 3 * $article_size * $rate * $Circulation_Fig;
+            }
+            
+            $total_ave += $ave;
+            $news_count++;
+        }
+    
+        return array(
+            'news_count' => $news_count,
+            'total_ave' => $total_ave
+        );
     }
 
     public function getCompData($timeframe, $client_id, $from = null, $to = null, $gidMediaType = null)
@@ -999,56 +1019,74 @@ class NewsLetter_Model extends CI_Model
             'news_count' => $news_count,
             'total_ave' => $total_ave
         );
-
         return $outArr;
     }
 
-    public function getSizeDataComp($timeframe, $client_id, $from = null, $to = null){
+    public function getSizeDataComp($timeframe, $client_id, $from = null, $to = null) {
         $outArr = array();
+    
+        // Get competitor data
         $comp_data = $this->getCompititersWithSize($client_id, $from, $to);
+    
+        // Get client data
         $client_data = $this->getClientSize($client_id, $from, $to);
-        foreach ($client_data as $key => $value) {
+    
+        // Loop through client data and prepare output array
+        foreach ($client_data as $value) {
             $outArr[] = [
                 'label' => $this->session->userdata('client_name'),
                 'count' => $value['count'],
-                'category' => $value['category']
+                'category' => $value['category'],
+                'ave' => isset($value['ave']) ? $value['ave'] : 0 // Ensure ave is set
             ];
         }
-
+    
+        // Merge client data with competitor data
         $final_array = array_merge($outArr, $comp_data);
-
+    
         return $final_array;
     }
 
     public function getClientSize($client_id, $from = null, $to = null) {
-        // WHERE FIND_IN_SET(?, client_id) > 0
-        $this->db->select('COUNT(*)
- as count, category');
+        // Select required fields for AVE calculation
+        $this->db->select('COUNT(*) as count, category, media_type_id, publication_id, sizeofArticle');
         $this->db->from('news_details');
+    
+        // Apply date range filters if provided
         if ($from !== null && $to !== null) {
             $this->db->where('create_at >=', $from);
             $this->db->where('create_at <=', $to);
         }
-
+    
+        // Filter by client_id using FIND_IN_SET
         $this->db->group_start();
         $this->db->where("FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
         $this->db->group_end();
-        
-        // $this->db->group_start();
-        // foreach (explode(',', $Keywords) as $keyword) {
-        //     $keyword = trim($keyword); // Trim any whitespace around keywords
-        //     $this->db->or_where("FIND_IN_SET('$keyword', keywords) >", 0);
-        // }
-        // $this->db->group_end();
-
+    
+        // Group results by category
         $this->db->group_by('category');
+    
+        // Execute the query and fetch results as an array
         $result = $this->db->get()->result_array();
-        // $outArr = array();
-        // $outArr[] = array(
-        //     'news_count' => $news_count,
-        //     'total_ave' => $total_ave
-        // );
-
+    
+        // Loop through each result row to calculate average
+        foreach ($result as &$value) {
+            $rates_data = $this->getRates($value['media_type_id'], $value['publication_id']);
+            $ave = 0;
+    
+            // Calculate average only if $rates_data is not empty
+            if (!empty($rates_data)) {
+                $article_size = $value['sizeofArticle'] ?? 0; // Using null coalescing operator to handle null values
+                $rate = $rates_data['Rate'];
+                $Circulation_Fig = $rates_data['Circulation_Fig'];
+                $ave = 3 * $article_size * $rate * $Circulation_Fig;
+            }
+    
+            // Assign ave to the current row in $result array
+            $value['ave'] = $ave;
+        }
+    
+        // Return the result array with count, category, and ave
         return $result;
     }
 

@@ -114,12 +114,24 @@
                 <div id="verticalBarChart" class="chart-container">
                     <canvas id="myVerticalBarChart"></canvas>
                 </div>
+               
+                <div class="client-news-count chart-container" id="showDataInTable" >
+                    <div class="row">
+                        <!-- <div class="col-md-12 text-left">
+                            <h6 class="text-primary">Client News Count</h6>
+                        </div> -->
+                    </div>
+                    <div id="clientNewsCountContainer">
+                        <!-- Client news count will be dynamically inserted here -->
+                    </div>
+                </div>
                 <div class="my-4">
                     <!-- <button class="btn btn-primary" onclick="showChart('areaChart')">Area Chart</button> -->
                     <button class="btn btn-primary" onclick="showChart('pieChart')">Pie Chart</button>
                     <button class="btn btn-primary" onclick="showChart('barChart')">Bar Chart</button>
                     <button class="btn btn-primary" onclick="showChart('lineChart')">Line Chart</button>
                     <button class="btn btn-primary" onclick="showChart('verticalBarChart')">Column Chart</button>
+                    <button class="btn btn-primary" onclick="showChart('showDataInTable')">Show Table</button>
                 </div>
             </div>
 
@@ -147,7 +159,7 @@
                 </div>
                 <div class="my-4">
                     <!-- <button class="btn btn-primary" onclick="showChart2('sizeareaChart')">Area Chart</button> -->
-                    <button class="btn btn-primary" onclick="showChart2('sizepieChart')">Pie Chart</button>
+                    <!-- <button class="btn btn-primary" onclick="showChart2('sizepieChart')">Pie Chart</button> -->
                     <button class="btn btn-primary" onclick="showChart2('sizebarChart')">Bar Chart</button>
                     <button class="btn btn-primary" onclick="showChart2('sizelineChart')">Line Chart</button>
                     <button class="btn btn-primary" onclick="showChart2('sizeverticalBarChart')">Column Chart</button>
@@ -317,7 +329,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Quantity Charts
     const areaChartCtx = document.getElementById('myAreaChart').getContext('2d');
     const pieChartCtx = document.getElementById('myPieChart').getContext('2d');
     const barChartCtx = document.getElementById('myBarChart').getContext('2d');
@@ -463,31 +474,62 @@
         console.log(`Showing chart: ${chartId}`);
     }
 
+    function updateClientNewsCount(data) {
+        const container = document.getElementById('clientNewsCountContainer');
+        container.innerHTML = '';
+
+        const table = document.createElement('table');
+        table.style.width = '100%';
+        table.innerHTML = `
+            <tr style="border: 1px solid #dddddd;">
+                <th style="border: 1px solid #dddddd;">Company Name</th>
+                <th style="border: 1px solid #dddddd;">Count</th>
+                <th style="border: 1px solid #dddddd;">AVE</th>
+            </tr>
+        `;
+
+        data.forEach(client => {
+            const row = document.createElement('tr');
+            row.style.border = '1px solid #dddddd; padding: 3px;';
+            row.innerHTML = `
+                <td style="border: 1px solid #dddddd; padding: 3px;">${client.label}</td>
+                <td style="border: 1px solid #dddddd; padding: 3px;">${client.count}</td>
+                 <td style="border: 1px solid #dddddd; padding: 3px;">${client.ave !== undefined && client.ave !== null && client.ave !== '' ? client.ave : 0}</td>
+            `;
+            table.appendChild(row);
+        });
+
+        container.appendChild(table);
+    }
+
     function updateChart(timeFrame) {
         let data = [];
         let labels = [];
         var quantityGraphDaily = <?php echo json_encode($get_quantity_compare_data); ?>;
         var quantityGraphWeekly = <?php echo json_encode($get_quantity_compare_data); ?>;
         var quantityGraphMonthly = <?php echo json_encode($get_quantity_compare_data); ?>;
-        
+
         switch (timeFrame) {    
             case 'daily':
                 for (var i = 0; i < quantityGraphDaily.length; i++) {
                     labels.push(quantityGraphDaily[i].label);
                     data.push(quantityGraphDaily[i].count);
                 }
+                updateClientNewsCount(quantityGraphDaily); // Update client news count for daily
                 break;
             case 'weekly':
                 for (var i = 0; i < quantityGraphWeekly.length; i++) {
                     labels.push(quantityGraphWeekly[i].label);
                     data.push(quantityGraphWeekly[i].count);
                 }
+                updateClientNewsCount(quantityGraphWeekly); // Update client news count for weekly
                 break;
             case 'monthly':
                 for (var i = 0; i < quantityGraphMonthly.length; i++) {
                     labels.push(quantityGraphMonthly[i].label);
                     data.push(quantityGraphMonthly[i].count);
                 }
+                updateClientNewsCount(quantityGraphMonthly); // Update client news count for monthly
                 break;
         }        
         updateChartData(areaChart, labels, data);
@@ -506,8 +548,19 @@
         chart.update();
     }
 
-//size chart section
-const sizeAreaChartCtx = document.getElementById('sizeAreaChart').getContext('2d');
+    document.addEventListener('DOMContentLoaded', function() {
+        var quantityGraphDaily = <?php echo json_encode($get_quantity_compare_data); ?>;
+
+        console.log('dataGraph', quantityGraphDaily);
+        // Update the client news count section with initial data
+        updateClientNewsCount(quantityGraphDaily);
+
+        // Update charts with initial data
+        updateChart('daily');
+    });
+    
+    //size chart section
+    const sizeAreaChartCtx = document.getElementById('sizeAreaChart').getContext('2d');
     const sizePieChartCtx = document.getElementById('sizePieChart').getContext('2d');
     const sizeBarChartCtx = document.getElementById('sizeBarChart').getContext('2d');
     const sizeLineChartCtx = document.getElementById('sizeLineChart').getContext('2d');

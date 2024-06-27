@@ -15,14 +15,14 @@ class ManageEditionsmodel extends CI_Model {
     }
 
     // Method to insert data into the database
-    public function add_edition($data) {
+    public function add_editions($data) {
         return $this->db->insert('edition', $data); 
     }
 
      // Method to insert data into the edition table
-     public function insert_edition($data) {
-        return $this->db->insert('edition', $data);
-    }
+    //  public function insert_editions($data) {
+    //     return $this->db->insert('edition', $data);
+    // }
 
     public function update($table, $colIdName, $id, $data)
     {
@@ -30,13 +30,26 @@ class ManageEditionsmodel extends CI_Model {
         $result = $this->db->update($table, $data);
         return $result;
     }
+   
 
     public function getAlledition()
     {
         $this->db->select('*');
-        $this->db->from('edition');
+        $this->db->from('edition as ed');
+        $this->db->join('mediaoutlet as mo', 'ed.MediaOutletId = mo.gidMediaOutlet', 'left');
         $this->db->order_by('Edition', 'DESC');
         return $this->db->get()->result_array();
     }
+
+    public function getMediaOutLet()
+    {
+        $this->db->select('*');
+        $this->db->from('mediaoutlet');
+        // $this->db->join('mediaoutlet as mo', 'adr.gidMediaOutlet = mo.gidMediaOutlet', 'left');
+        return $this->db->get()->result_array();
+  
+    }
+
+   
 }
 

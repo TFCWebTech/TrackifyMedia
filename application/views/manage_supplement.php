@@ -110,14 +110,23 @@ margin-bottom: 5px !important;
                 </div>
                 <div class="form-group">
                 <label class="px-1 font-weight-bold" for="tier_type">Publication  </label>
-                  <select class="form-control" name="" id="">
-                    <option value="">Select</option>
-                  </select>
+                <select class="form-control" name="MediaOutletId" >
+        <option value="">Select</option>
+        <?php foreach($get_MediaOutLet as $values){ ?>
+            <option value="<?php echo $values['gidMediaOutlet']; ?>">
+                <?php echo $values['MediaOutlet']; ?>
+            </option>
+        <?php } ?>
+    </select>
                 </div>
                 <div class="form-group">
                 <label class="px-1 font-weight-bold" for="tier_type">  </label>
                   <select class="form-control" name="" id="">
                     <option value="">Select</option>
+                    <?php foreach($get_Edition as $values){?>
+                                    <option value="<?php echo $values['gidEdition'];?>"> <?php echo $values['Edition'];?>
+                                    </option>
+                                    <?php }?>
                   </select>
                 </div>
                 <div class="text-right pt-2">
@@ -206,6 +215,7 @@ margin-bottom: 5px !important;
 
       $('#editModal').modal('show');
     }
+    
 </script>
 </div>
 

@@ -13,7 +13,9 @@ class ManageSupplement extends CI_Controller {
         $this->load->model('ManageSupplementModal', 'supplement', TRUE);
     }
     public function index()
-    {
+    {  
+        $data['get_MediaOutLet'] = $this->supplement->getMediaOutLet();
+        $data['get_Edition'] = $this->supplement->getEdition();
         $data['all'] = $this->supplement->getAllSuplement();
         $this->load->view('common/header');
         $this->load->view('manage_supplement', $data);

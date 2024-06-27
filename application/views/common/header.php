@@ -27,6 +27,14 @@
     <!-- Custom styles for this template-->
     <link href="<?php echo base_url('assets/css/sb-admin-2.min.css') ?>" rel="stylesheet">
 
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<!-- jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
         // This function sets the default date to today
             function setDefaultDate() {
@@ -202,11 +210,16 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Manage Publication</span></a>
             </li>
-            <!-- <li class="nav-item <?php print ($this->uri->segment(2)=='ManageUser')?'active':''; ?>">
-                <a class="nav-link" href="<?php echo site_url('ManageUser');?>">
+            <li class="nav-item <?php print ($this->uri->segment(2)=='ManageJournl')?'active':''; ?>">
+                <a class="nav-link" href="<?php echo site_url('ManageJournl');?>">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Manage Publication</span></a>
-            </li> -->
+                    <span>Manage Journalist</span></a>
+            </li>
+            <li class="nav-item <?php print ($this->uri->segment(2)=='ManageAddRate')?'active':''; ?>">
+                <a class="nav-link" href="<?php echo site_url('ManageAddRate');?>">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Manage Add Rate</span></a>
+            </li>
             
             <?php
             } ?>

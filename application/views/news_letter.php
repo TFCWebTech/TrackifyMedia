@@ -13,7 +13,7 @@
                 <th>News Send Detail</th>
                 <th>Today Pending News</th>
                 <th>Today Send News</th>
-                <th><input type="checkbox" id="checkAll" value="checkAll"></th>
+                <!-- <th><input type="checkbox" id="checkAll" value="checkAll"></th> -->
             </tr>
         </thead>
         <tbody>
@@ -23,7 +23,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><input type="checkbox" class="checkBox" name="client_id[]" value="<?php echo $clients['client_id'];?>"></td>
+                    <!-- <td><input type="checkbox" class="checkBox" name="client_id[]" value="<?php echo $clients['client_id'];?>"></td> -->
                 </tr>
             <?php endforeach; ?>
         </tbody>
