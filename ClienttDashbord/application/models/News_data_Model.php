@@ -176,6 +176,8 @@ class News_data_Model extends CI_Model
         return $outArr;
     }
 
+    
+
     public function getCompNewsByKey($Keywords, $client_id)
     {
         $date = date('Y-m-d');
@@ -201,6 +203,7 @@ class News_data_Model extends CI_Model
     }
 
 
+    
 
         public function getClientTemplateDetails2($select_client, $from_date = null, $to_date = null, $publication_type, $Cities) {
             // Fetch mail templates for the given client ID
@@ -230,10 +233,10 @@ class News_data_Model extends CI_Model
                 $client['client_news'] = $this->getNewsDetails2($client['client_id'], $from_date, $to_date, $publication_type, $Cities);
                 
                 // Fetch competitors data
-                $client['compititors_data'] = $this->getCompData($client['client_id']);
+                $client['compititors_data'] = $this->getCompData2($client['client_id']);
                 
                 // Fetch industry data
-                $client['industry_data'] = $this->getIndustryData($client['client_id']);
+                $client['industry_data'] = $this->getIndustryData2($client['client_id']);
             }
         
             return $clients;
@@ -269,5 +272,56 @@ class News_data_Model extends CI_Model
         
             return $result;
         }
+        public function getCompData2($client_id)
+        {
+        $this->db->select('*');
+        $this->db->from('competitor');
+        $this->db->where('client_id', $client_id);
+        $result = $this->db->get()->result_array();
+        $outArr = array();
+        foreach ($result as $row){
+            $row['news'] = $this->getCompNewsByKey2($row['Keywords'], $client_id);
+            $outArr[] = $row;
+        }
+        return $outArr;
+    }
+
+    public function getCompNewsByKey2($Keywords, $client_id)
+    {
+        $date = date('Y-m-d');
+        
+        $this->db->select('nd.*, mout.*, ed.gidEdition , ed.Edition, s.gidSupplement, s.Supplement, j.gidJournalist, j.Journalist, (SELECT COUNT(na.news_artical_id) FROM news_artical as na WHERE na.news_details_id = nd.news_details_id) as page_count');
+        $this->db->from('news_details as nd');
+        $this->db->join('mediaoutlet as mout', 'nd.publication_id = mout.gidMediaOutlet', 'left');
+        $this->db->join('edition as ed', 'nd.edition_id = ed.gidEdition', 'left');
+        $this->db->join('supplements as s', 'nd.supplement_id = s.gidSupplement', 'left');
+        $this->db->join('journalist as j', 'nd.journalist_id = j.gidJournalist', 'left');
+        $this->db->group_start();
+        $this->db->where("NOT FIND_IN_SET('$client_id', nd.company)", NULL, FALSE);
+        $this->db->group_end();
+        
+        $this->db->group_start();
+        foreach (explode(',', $Keywords) as $keyword) {
+            $keyword = trim($keyword); // Trim any whitespace around keywords
+            $this->db->or_where("FIND_IN_SET('$keyword', keywords) >", 0);
+        }
+        $this->db->group_end();
+        $query = $this->db->get();
+        $result = $query->result_array(); 
+        return $result; 
+    }
+
+    public function getIndustryData2($client_id){
+        $this->db->select('*');
+        $this->db->from('industry');
+        $this->db->where("FIND_IN_SET('$client_id', client_id) >", 0);
+        $result = $this->db->get()->result_array();
+        $outArr = array();
+        foreach ($result as $row){
+            $row['news'] = $this->getCompNewsByKey2($row['Keywords'], $client_id);
+            $outArr[] = $row;
+        }
+        return $outArr;
+    }
 }
 ?>

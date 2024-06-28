@@ -399,9 +399,7 @@ class NewsLetter_Model extends CI_Model
         $this->db->group_start();
         $this->db->where("FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
         $this->db->group_end();
-    
         $result = $this->db->get()->result_array();
-    
         $total_ave = 0;
         $news_count = 0;
         foreach ($result as $value) {
@@ -472,33 +470,40 @@ class NewsLetter_Model extends CI_Model
         // return $result; 
     }
 
-    public function getMediaData($timeframe, $client_id, $from = null, $to = null){
+    public function getMediaData($timeframe, $client_id, $from = null, $to = null) {
         $this->db->select('*');
         $this->db->from('mediatype');
         $result = $this->db->get()->result_array();
         $outArr = array();
-        foreach ($result as $row){
-            $news_data = $this->getNewsDetails($row['gidMediaType'], $client_id, $from , $to );
+    
+        foreach ($result as $row) {
+            $news_data = $this->getNewsDetails($row['gidMediaType'], $client_id, $from, $to);
+            
+            // Sum up the 'ave' values from news_data
+            $totalAve = array_reduce($news_data, function($carry, $item) {
+                return $carry + ($item['ave'] ?? 0);
+            }, 0);
+    
             $outArr[] = array(
                 'Media_name' => $row['MediaType'],
-                'Count' => $news_data,
-                'Client_name' =>$this->session->userdata('client_name')
+                'Count' => count($news_data), // News count
+                'ave' => $totalAve, // Total ave value
+                'Client_name' => $this->session->userdata('client_name')
             );
-
+    
             $comp_data = $this->getCompData('daily', $client_id, $from, $to, $row['gidMediaType']);
             foreach ($comp_data as $key => $value) {
-               
                 $outArr[] = array(
                     'Media_name' => $row['MediaType'],
                     'Count' => $value['count'],
+                    'ave' => $value['ave'] ?? 0, // Ensure 'ave' index exists
                     'Client_name' => $value['label']
                 );
             }
-            
         }
-
+    
         $groupedData = array();
-
+    
         foreach ($outArr as $record) {
             $mediaName = $record['Media_name'];
             if (!isset($groupedData[$mediaName])) {
@@ -506,11 +511,11 @@ class NewsLetter_Model extends CI_Model
             }
             $groupedData[$mediaName][] = $record;
         }
-
+    
         return $groupedData;
     }
-
-    public function getNewsDetails($gidMediaType, $client_id, $from = null, $to = null){
+    
+    public function getNewsDetails($gidMediaType, $client_id, $from = null, $to = null) {
         $this->db->select('*');
         $this->db->from('news_details');
         $this->db->where('media_type_id', $gidMediaType); 
@@ -518,12 +523,26 @@ class NewsLetter_Model extends CI_Model
             $this->db->where('create_at >=', $from);
             $this->db->where('create_at <=', $to);
         }
-
+    
         $this->db->group_start();
         $this->db->where("FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
         $this->db->group_end();
-
-       return $this->db->count_all_results();       
+    
+        $result = $this->db->get()->result_array();
+        
+        foreach ($result as &$value) {
+            $rates_data = $this->getRates($value['media_type_id'], $value['publication_id']);
+            $ave = 0;
+    
+            if (!empty($rates_data)) {
+                $article_size = $value['sizeofArticle'] ?? 0;
+                $rate = $rates_data['Rate'];
+                $Circulation_Fig = $rates_data['Circulation_Fig'];
+                $ave = 3 * $article_size * $rate * $Circulation_Fig;
+            }
+            $value['ave'] = $ave;
+        }
+        return $result;
     }
 
     public function getPublicationData($timeframe, $client_id, $from = null, $to = null) {
@@ -1037,7 +1056,7 @@ class NewsLetter_Model extends CI_Model
                 'label' => $this->session->userdata('client_name'),
                 'count' => $value['count'],
                 'category' => $value['category'],
-                'ave' => isset($value['ave']) ? $value['ave'] : 0 // Ensure ave is set
+                'ave' => $value['ave'],
             ];
         }
     
@@ -1046,7 +1065,7 @@ class NewsLetter_Model extends CI_Model
     
         return $final_array;
     }
-
+    
     public function getClientSize($client_id, $from = null, $to = null) {
         // Select required fields for AVE calculation
         $this->db->select('COUNT(*) as count, category, media_type_id, publication_id, sizeofArticle');
@@ -1085,7 +1104,6 @@ class NewsLetter_Model extends CI_Model
             // Assign ave to the current row in $result array
             $value['ave'] = $ave;
         }
-    
         // Return the result array with count, category, and ave
         return $result;
     }

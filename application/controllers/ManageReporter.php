@@ -53,7 +53,6 @@ class ManageReporter extends CI_Controller {
 	        	'user_status' => $is_active,
 				'user_type' => 'Reporter'
 	        );
-				
 				$this->reporter->insert('user', $data);
 
 				$this->session->set_flashdata('success', 'Reporter Added Successfully.');

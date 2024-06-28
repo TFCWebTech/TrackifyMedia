@@ -62,7 +62,7 @@ margin-bottom: 5px !important;
                                 <div class="col-md-4">
                                     <label class="px-1 font-weight-bold" for="publication_type">Publication Type</label>
                                     <select class="form-control" name="publication_type" id="publication_type">
-                                    <option disbled>Select</option>
+                                    <option value="" disbled>Select</option>
                                             <?php foreach($publication_type as $values){?>
                                             <option value="<?php echo $values['gidPublicationType'];?>"> <?php echo $values['PublicationType'];?></option>
                                             <?php }?>
@@ -71,7 +71,7 @@ margin-bottom: 5px !important;
                                 <div class="col-md-4">
                                     <label class="px-1 font-weight-bold" for="Cities">Cities</label>
                                     <select class="form-control" name="Cities" id="Cities">
-                                    <option disbled>Select</option>
+                                    <option value="" disbled>Select</option>
                                             <?php foreach($news_city as $values){?>
                                             <option value="<?php echo $values['gidNewscity'];?>"> <?php echo $values['CityName'];?></option>
                                             <?php }?>
@@ -441,6 +441,7 @@ function downloadWord() {
                 link.href = response.pdf_url;
                 link.download = 'downloaded_pdf.pdf'; // Optional: Specify the filename for download
                 link.click();
+                window.open(response.pdf_url, '_blank'); 
             } else {
                 // Handle error or no valid PDF URL case
                 alert('Failed to generate PDF or PDF URL is invalid.');

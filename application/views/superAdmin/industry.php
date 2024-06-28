@@ -178,8 +178,16 @@ function addKeywordInput() {
                             <option value="<?php echo $values['client_id']; ?>"> <?php echo $values['client_name']; ?></option>
                         <?php } ?>
                     </select>
+                </div> 
+                <div class="form-group">
+                    <label class="px-1 font-weight-bold" for="is_active">Add Competitors</label>
+                    <select class="js-example-basic-multiple form-control" name="compitertors_name[]" id="compitertors_name" multiple="multiple">
+                        <option disabled>Select</option>
+                        <?php foreach($get_compitertors as $values) { ?>
+                            <option value="<?php echo $values['competitor_id']; ?>"> <?php echo $values['Competitor_name']; ?></option>
+                        <?php } ?>
+                    </select>
                 </div>
-                
                 <div class="form-group" id="additionalKeywords">
                     <label class="px-1 font-weight-bold" for="user_type">Add Keywords</label>
                     <input type="text" class="form-control" placeholder="Enter Keywords" name="Keywords[]" required>

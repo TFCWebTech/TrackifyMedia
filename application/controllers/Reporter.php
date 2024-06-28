@@ -31,7 +31,8 @@ class Reporter extends CI_Controller {
 				$ext = pathinfo($file_name, PATHINFO_EXTENSION);
 				$mtime = uniqid(microtime(), true);
 				$uniqueid = substr(md5($mtime), 0, 8);
-				$image_upload = 'image_upload_' . $uniqueid . '.' . $ext;
+				$currentDate = date('Y-m-d');
+				$image_upload = 'image_upload_' .$currentDate. $uniqueid . '.' . $ext;
 				$target_file = $target_dir . 'Uploads/' . $image_upload;
 	
 				if (move_uploaded_file($_FILES['image_upload']['tmp_name'][$key], $target_file)) {

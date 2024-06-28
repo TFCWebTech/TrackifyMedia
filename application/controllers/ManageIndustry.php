@@ -16,7 +16,8 @@ class ManageIndustry extends CI_Controller {
         $data['get_industry'] = $this->news->industry();
        
         $data['get_clients'] = $this->news->getClients();
-        //  print_r($data);
+        $data['get_compitertors'] = $this->news->getCompitetors();
+        //  print_r($data['get_compitertors']);
         $this->load->view('common/header');
         $this->load->view('superAdmin/industry', $data);
         $this->load->view('common/footer');
@@ -29,12 +30,16 @@ class ManageIndustry extends CI_Controller {
             $client_id_string = implode(',', $client_id);
             $Keywords = $this->input->post('Keywords');
             $Keywords_string = implode(',', $Keywords); // Convert array to string
+            $compitertors_names = $this->input->post('compitertors_name');
+            $compitertors_names_string = implode(',', $compitertors_names); 
+            
             $data = [
                 // 'client_id' => $client_id,
                 'Industry_name' => $client_name,
                 'is_active' => $is_active,
                 'client_id' => $client_id_string,
                 'Keywords' => $Keywords_string, // Use the string version here
+                'competitor_id' => $compitertors_names_string
             ];
             // print_r($data);
             $result = $this->db->insert('industry', $data);

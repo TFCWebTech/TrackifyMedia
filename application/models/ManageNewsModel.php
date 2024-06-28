@@ -173,14 +173,12 @@ class ManageNewsModel extends CI_Model
         return $query->result_array();
     }
     
-
     // public function industry(){
     //     $sql="SELECT * FROM `industry`  ; ";
     //     $query = $this->db->query($sql);
     //     return $query->result_array();
 
     // }
-
 
     public function industry() {
         $this->db->select('*');
@@ -206,5 +204,11 @@ class ManageNewsModel extends CI_Model
         return $query->result_array();
     }
     
+    public function getCompitetors(){
+        $this->db->select('*');
+        $this->db->from('competitor');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 ?>

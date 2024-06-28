@@ -99,10 +99,10 @@ class Report extends CI_Controller {
     //     $pdf->Output($pdfName, 'I');
     // }
 
-    
     public function downloadPDF() {
         // Collect necessary POST data
         $select_client = $this->input->post('select_client'); // Assuming this is passed correctly via AJAX
+        // $select_client = 1;
         $from_date = $this->input->post('from_date');
         $to_date = $this->input->post('to_date');
         $publication_type = $this->input->post('publication_type');
@@ -112,8 +112,11 @@ class Report extends CI_Controller {
         $data['details'] = $this->NewsData->getClientById($select_client);
         $data['get_client_details'] = $this->NewsData->getClientTemplateDetails2($select_client, $from_date, $to_date, $publication_type, $Cities);
         
-        // var_dump($data['details']);
-        // var_dump($data['get_client_details']);
+        // Debugging: Print the data to verify
+        // echo '<pre>';
+        // print_r($data['get_client_details']);
+        // echo '</pre>';
+        
         // Load TCPDF library
         require_once(APPPATH . 'libraries/tcpdf/tcpdf.php');
         

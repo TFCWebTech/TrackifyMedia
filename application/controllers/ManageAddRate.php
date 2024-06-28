@@ -88,9 +88,9 @@ class ManageAddRate extends CI_Controller {
             'CreatedOn' => $formatted_date
             );
             // print_r($data);
-        // $this->addRate->insert('AddRate', $data);
-        // $this->session->set_flashdata('success', 'Rate Added Successfully.');
-        // redirect('ManageAddRate');
+            $this->client->update('AddRate', 'gidAddRate_id', $gidAddRate_id, $data);
+        $this->session->set_flashdata('success', 'Rate Updated Successfully.');
+        redirect('ManageAddRate');
     }
 
     public function getPublicaton(){

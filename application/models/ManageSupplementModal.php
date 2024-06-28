@@ -24,8 +24,9 @@ class ManageSupplementModal extends CI_Model
     
     public function getAllSuplement()
     {
-        $this->db->select('*');
-        $this->db->from('supplements');
+        $this->db->select('sp.* , ed.Edition');
+        $this->db->from('supplements as sp');
+        $this->db->join('edition as ed','sp.gidEdition = ed.gidEdition', 'left');
         $this->db->order_by('supplement_id', 'DESC');
         return $this->db->get()->result_array();
     }

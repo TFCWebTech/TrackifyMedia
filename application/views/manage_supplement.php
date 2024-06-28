@@ -46,7 +46,7 @@ margin-bottom: 5px !important;
                 <tr>
                   <th>Sr.no</th>
                     <th>Supplement Name</th>
-                    <th>Publication </th>
+                    <th>Edition </th>
                     <th>Status</th>
                     <th>Created At</th>
                     <th>Action</th>
@@ -60,7 +60,7 @@ margin-bottom: 5px !important;
                   ?>
                   <tr>
                     <td><?php echo $i; ?></td>
-                    <td><?php echo $value['Supplement']; ?></td>
+                    <td><?php echo $value['Edition']; ?></td>
                     <td></td>
                     <td>
                       <?php  
@@ -120,8 +120,8 @@ margin-bottom: 5px !important;
     </select>
                 </div>
                 <div class="form-group">
-                <label class="px-1 font-weight-bold" for="tier_type">  </label>
-                  <select class="form-control" name="" id="">
+                <label class="px-1 font-weight-bold" for="tier_type">Edition </label>
+                  <select class="form-control" name="edition" id="">
                     <option value="">Select</option>
                     <?php foreach($get_Edition as $values){?>
                                     <option value="<?php echo $values['gidEdition'];?>"> <?php echo $values['Edition'];?>

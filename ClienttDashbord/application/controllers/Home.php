@@ -149,8 +149,9 @@ class Home extends CI_Controller {
             $data['Journalist_data'] = $journalist_data;
             $data['ave_data'] = $ave_data;
             $data['size_data'] = $size_data;
-            
-            // print_r($data['size_data']);
+            // echo '<pre>';
+            // print_r($media_data);
+            // echo '</pre>';
             // Uncomment these lines to load views if necessary
             $this->load->view('common/header');
             $this->load->view('compare_charts', $data);
@@ -172,8 +173,5 @@ class Home extends CI_Controller {
             $this->load->view('common/footer');
 
         }
-
-
-
 }
 ?>

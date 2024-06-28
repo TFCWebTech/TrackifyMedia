@@ -475,32 +475,52 @@
     }
 
     function updateClientNewsCount(data) {
-        const container = document.getElementById('clientNewsCountContainer');
-        container.innerHTML = '';
+    const container = document.getElementById('clientNewsCountContainer');
+    container.innerHTML = '';
 
-        const table = document.createElement('table');
-        table.style.width = '100%';
-        table.innerHTML = `
-            <tr style="border: 1px solid #dddddd;">
-                <th style="border: 1px solid #dddddd;">Company Name</th>
-                <th style="border: 1px solid #dddddd;">Count</th>
-                <th style="border: 1px solid #dddddd;">AVE</th>
-            </tr>
+    const table = document.createElement('table');
+    table.style.width = '100%';
+    table.innerHTML = `
+        <tr style="border: 1px solid #dddddd;">
+            <th style="border: 1px solid #dddddd;">Company Name</th>
+            <th style="border: 1px solid #dddddd;">Count</th>
+            <th style="border: 1px solid #dddddd;">AVE</th>
+        </tr>
+    `;
+
+    let totalCount = 0;
+    let totalAve = 0;
+    let aveCount = 0;
+
+    data.forEach(client => {
+        const row = document.createElement('tr');
+        row.style.border = '1px solid #dddddd; padding: 3px;';
+        const aveValue = client.ave !== undefined && client.ave !== null && client.ave !== '' ? client.ave : 0;
+        row.innerHTML = `
+            <td style="border: 1px solid #dddddd; padding: 3px;">${client.label}</td>
+            <td style="border: 1px solid #dddddd; padding: 3px;">${client.count}</td>
+            <td style="border: 1px solid #dddddd; padding: 3px;">${aveValue}</td>
         `;
+        table.appendChild(row);
 
-        data.forEach(client => {
-            const row = document.createElement('tr');
-            row.style.border = '1px solid #dddddd; padding: 3px;';
-            row.innerHTML = `
-                <td style="border: 1px solid #dddddd; padding: 3px;">${client.label}</td>
-                <td style="border: 1px solid #dddddd; padding: 3px;">${client.count}</td>
-                 <td style="border: 1px solid #dddddd; padding: 3px;">${client.ave !== undefined && client.ave !== null && client.ave !== '' ? client.ave : 0}</td>
-            `;
-            table.appendChild(row);
-        });
+        totalCount += parseInt(client.count, 10);
+        totalAve += parseFloat(aveValue);
+        aveCount += aveValue ? 1 : 0;
+    });
 
-        container.appendChild(table);
-    }
+    const avgAve = aveCount > 0 ? (totalAve / aveCount).toFixed(2) : 0;
+
+    const totalRow = document.createElement('tr');
+    totalRow.style.border = '1px solid #dddddd; padding: 3px; font-weight: bold;';
+    totalRow.innerHTML = `
+        <td style="border: 1px solid #dddddd; padding: 3px;">Total</td>
+        <td style="border: 1px solid #dddddd; padding: 3px;">${totalCount}</td>
+        <td style="border: 1px solid #dddddd; padding: 3px;">${avgAve}</td>
+    `;
+    table.appendChild(totalRow);
+
+    container.appendChild(table);
+}
 
     function updateChart(timeFrame) {
         let data = [];

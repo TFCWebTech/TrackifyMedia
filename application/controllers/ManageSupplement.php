@@ -24,12 +24,15 @@ class ManageSupplement extends CI_Controller {
 
     public function addSupliment(){
         
-        $Supplement = $this->input->post('Supplement');
+        $Supplement = $this->input->post('Supplement'); 
+        $edition = $this->input->post('edition');
+        //$MediaOutletId = $this->input->post('MediaOutletId');
         $gidSupplement = bin2hex(random_bytes(40 / 2));
 
         $data = array(
             'gidSupplement' => $gidSupplement,
             'Supplement' => $Supplement,
+            'gidEdition' => $edition,
             'Status' => 1,
             'CreatedOn' => date('Y-m-d h:i:s')
         );
