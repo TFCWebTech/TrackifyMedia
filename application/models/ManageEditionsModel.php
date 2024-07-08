@@ -30,11 +30,10 @@ class ManageEditionsmodel extends CI_Model {
         $result = $this->db->update($table, $data);
         return $result;
     }
-   
 
     public function getAlledition()
     {
-        $this->db->select('*');
+        $this->db->select('ed.*, mo.MediaOutlet');
         $this->db->from('edition as ed');
         $this->db->join('mediaoutlet as mo', 'ed.MediaOutletId = mo.gidMediaOutlet', 'left');
         $this->db->order_by('Edition', 'DESC');

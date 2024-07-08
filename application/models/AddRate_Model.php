@@ -38,7 +38,18 @@ class AddRate_Model extends CI_Model
 		$this->db->where('MediaOutletId', $publication);
 		return $this->db->get()->result_array();
     }
-   
+    public function getSupplement($edition){
+        $this->db->select('*');
+		$this->db->from('supplements');
+		$this->db->where('gidEdition', $gidEdition);
+		return $this->db->get()->result_array();
+    }
+    public function getJournalist($publication){
+        $this->db->select('*');
+		$this->db->from('journalist');
+		$this->db->where('gigMediaOutlet', $publication);
+		return $this->db->get()->result_array();
+    }
     public function getAddRateDataBySearch($media_type) {
         $this->db->select('adr.*, sp.Supplement, ed.Edition, mo.MediaOutlet');
         $this->db->from('AddRate as adr');

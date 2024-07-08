@@ -31,13 +31,15 @@ class ManageEditions extends CI_Controller {
         $Edition = $this->input->post('Edition');
         $EditionOrder = $this->input->post('EditionOrder');
         $MediaOutletId = $this->input->post('MediaOutletId'); // This matches the name attribute in the form
-    
+        $Status = $this->input->post('Status');
         // Handle other fields as needed
-    
+        $gidEdition = bin2hex(random_bytes(40 / 2));
         $data = array(
             'Edition' => $Edition,
+            'gidEdition' => $gidEdition,
             'EditionOrder' => $EditionOrder,
             'MediaOutletId' => $MediaOutletId,
+            'Status' => $Status,
             'CreatedOn' => date('Y-m-d h:i:s')
             // Add other fields here
         );
@@ -51,16 +53,18 @@ class ManageEditions extends CI_Controller {
         $edition_id = $this->input->post('edition_id');
         $Edition = $this->input->post('Edition');
         $EditionOrder = $this->input->post('EditionOrder');
+        $MediaOutletId = $this->input->post('MediaOutletId');
         $Status = $this->input->post('Status');
 
         $data = array(
             'edition_id' => $edition_id,
             'Edition' => $Edition,
             'EditionOrder' => $EditionOrder,
+            'MediaOutletId' => $MediaOutletId,
             'Status' => $Status,
             // Add other fields here
         );
-
+        print_r($data);
         $this->editions->update('edition', 'edition_id', $edition_id, $data);
         redirect('ManageEditions');
         

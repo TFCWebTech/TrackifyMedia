@@ -60,8 +60,8 @@ margin-bottom: 5px !important;
                   ?>
                   <tr>
                     <td><?php echo $i; ?></td>
+                    <td><?php echo $value['Supplement']; ?></td>
                     <td><?php echo $value['Edition']; ?></td>
-                    <td></td>
                     <td>
                       <?php  
                       if($value['Status'] == 0) {
@@ -110,23 +110,20 @@ margin-bottom: 5px !important;
                 </div>
                 <div class="form-group">
                 <label class="px-1 font-weight-bold" for="tier_type">Publication  </label>
-                <select class="form-control" name="MediaOutletId" >
-        <option value="">Select</option>
-        <?php foreach($get_MediaOutLet as $values){ ?>
-            <option value="<?php echo $values['gidMediaOutlet']; ?>">
-                <?php echo $values['MediaOutlet']; ?>
-            </option>
-        <?php } ?>
-    </select>
+                <select class="form-control" name="MediaOutletId" onchange="change_publication(this.value)">
+                      <option value="">Select</option>
+                      <?php foreach($get_MediaOutLet as $values){ ?>
+                          <option value="<?php echo $values['gidMediaOutlet']; ?>">
+                              <?php echo $values['MediaOutlet']; ?>
+                          </option>
+                      <?php } ?>
+                  </select>
                 </div>
                 <div class="form-group">
                 <label class="px-1 font-weight-bold" for="tier_type">Edition </label>
-                  <select class="form-control" name="edition" id="">
+                  <select class="form-control" name="edition" id="getEdition">
                     <option value="">Select</option>
-                    <?php foreach($get_Edition as $values){?>
-                                    <option value="<?php echo $values['gidEdition'];?>"> <?php echo $values['Edition'];?>
-                                    </option>
-                                    <?php }?>
+                    
                   </select>
                 </div>
                 <div class="text-right pt-2">
@@ -134,9 +131,6 @@ margin-bottom: 5px !important;
                 </div>
         </form>
       </div>
-
-      
-
     </div>
   </div>
 </div>
@@ -162,6 +156,24 @@ margin-bottom: 5px !important;
                 <div class="form-group">
                     <label class="px-1 font-weight-bold" for="user_type">Supplement Name </label>
                     <input type="text" class="form-control" placeholder="Enter Edition Name" name="Supplement" id="Supplement" required>
+                </div>
+                <div class="form-group">
+                <label class="px-1 font-weight-bold" for="tier_type">Publication  </label>
+                <select class="form-control" name="MediaOutletId" id="publication" onchange="change_publication(this.value)">
+                    <option value="">Select</option>
+                    <?php foreach($get_MediaOutLet as $values){ ?>
+                        <option value="<?php echo $values['gidMediaOutlet']; ?>">
+                            <?php echo $values['MediaOutlet']; ?>
+                        </option>
+                    <?php } ?>
+                </select>
+                </div>
+                <div class="form-group">
+                <label class="px-1 font-weight-bold" for="tier_type">Edition </label>
+                  <select class="form-control" name="edition" id="edition">
+                    <option value="">Select</option>
+                   
+                  </select>
                 </div>
                 <div class="form-group">
                 <label class="px-1 font-weight-bold" for="tier_type">Status  </label>
@@ -208,15 +220,33 @@ margin-bottom: 5px !important;
 					break;
 				}
 			}
-
       $('#Supplement').val(desiredTask.Supplement);
       $('#supplement_id').val(desiredTask.supplement_id);
+      $('#publication').val(desiredTask.publication);
+      $('#edition').val(desiredTask.gidEdition);  
       $('#Status').val(desiredTask.Status);
 
       $('#editModal').modal('show');
     }
     
+
+    function change_publication(publication){
+        $.ajax(
+        {
+            type: "POST",
+            url: "<?php echo site_url('ManageAddRate/getEdition'); ?>",
+            dataType: 'html',
+            data:{publication:publication},
+            success: function (data) 
+            {
+            $("#getEdition").html(data);
+            $("#edition").html(data);
+            }
+        });
+    }
 </script>
+
+
 </div>
 
             <!-- End of Main Content -->

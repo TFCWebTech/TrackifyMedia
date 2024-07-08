@@ -125,7 +125,7 @@ class NewsLetter extends CI_Controller {
     $author = $this->input->post('author');
     $news_position = $this->input->post('news_position');
     $news_city_id = $this->input->post('news_city_id');
-    $category_id = $this->input->post('category_id');
+    // $category_id = $this->input->post('category_id');
     $is_send = $this->input->post('is_send');
     $keywords = $this->input->post('keywords'); 
 
@@ -143,7 +143,7 @@ class NewsLetter extends CI_Controller {
         'author' => $author,
         'news_position' => $news_position,
         'news_city_id' => $news_city_id,
-        'category_id' => $category_id,
+        // 'category_id' => $category_id,
         'is_send' => $is_send,
         'keywords' => $keywords,
     );

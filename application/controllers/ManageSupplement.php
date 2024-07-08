@@ -36,21 +36,20 @@ class ManageSupplement extends CI_Controller {
             'Status' => 1,
             'CreatedOn' => date('Y-m-d h:i:s')
         );
-
         $this->supplement->insert('supplements', $data);
-
         redirect('ManageSupplement');
     }
     
     public function editSupliment(){
-        
         $Supplement = $this->input->post('Supplement');
         $supplement_id = $this->input->post('supplement_id');
+        $edition = $this->input->post('edition');
         $Status = $this->input->post('Status');
 
         $data = array(
             'Supplement' => $Supplement,
-            'Status' => $Status
+            'Status' => $Status,
+            'gidEdition' => $edition,
         );
 
         $this->supplement->update('supplements', 'supplement_id', $supplement_id, $data);

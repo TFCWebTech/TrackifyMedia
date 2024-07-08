@@ -85,26 +85,26 @@ th {
                         <th>Quick Links</th>
                         <th>Access Other Services</th>
                     </tr>
-                    <?php if (!empty($get_client_details)): ?>
-                        <?php foreach ($get_client_details as $detail): ?>
+                    <?php if (!empty($get_client_details[0]['get_quick_links'])): ?>
+                        <?php foreach ($get_client_details[0]['get_quick_links'] as $detail): ?>
                             <?php if ($detail['quick_links_position'] == '1'): ?>
                                 <tr style="background-color: #DCD5D5; color: #ffffff;">
                                     <td>
-                                        <p><?php echo $detail['quick_links_name']; ?></p>
+                                        <p><?php echo $detail['quick_links_name']; ?>(<?php echo sizeof($get_client_details[0]['client_news']); ?>)</p>
                                     </td>
-                                    <td><a href="<?php echo site_url('ClienttDashbord/');?>">Login</a></td>
+                                    <td><a href="">Login</a></td>
                                 </tr>
                             <?php elseif ($detail['quick_links_position'] == '2'): ?>
                                 <tr style="background-color: #DCD5D5; color: #ffffff;">
                                     <td>
-                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($detail['compititors_data']); ?>)
+                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($get_client_details[0]['compititors_data']); ?>)
                                     </td>
                                     <td></td>
                                 </tr>
                             <?php elseif ($detail['quick_links_position'] == '3'): ?>
                                 <tr style="background-color: #DCD5D5; color: #ffffff;">
                                     <td>
-                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($detail['industry_data']); ?>)
+                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($get_client_details[0]['industry_data']); ?>)
                                     </td>
                                     <td>
                                     </td>
@@ -112,7 +112,7 @@ th {
                             <?php elseif ($detail['quick_links_position'] == '4'): ?>
                                 <tr style="background-color: #DCD5D5; color: #ffffff;">
                                     <td>
-                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($detail['compititors_data']); ?>)
+                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($get_client_details[0]['compititors_data']); ?>)
                                     </td>
                                     <td>
                                     </td>
@@ -120,7 +120,7 @@ th {
                             <?php elseif ($detail['quick_links_position'] == '5'): ?>
                                 <tr style="background-color: #DCD5D5; color: #ffffff;">
                                     <td>
-                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($detail['industry_data']); ?>)
+                                        <?php echo $detail['quick_links_name']; ?> (<?php echo sizeof($get_client_details[0]['industry_data']); ?>)
                                     </td>
                                     <td>
                                     </td>
@@ -152,7 +152,7 @@ th {
                             <?php echo $news['summary']; ?>
                             </p>
                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"><?php if($news['Journalist'] != ''){ echo $news['Journalist']; }else{ echo $news['Agency']; } ?></span>  , 
                                 Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
                             </p>                 
                          <hr>
@@ -174,7 +174,7 @@ th {
                                 <?php echo $news['summary']; ?>
                                 </p>
                                 <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php if($news['Journalist'] != ''){ echo $news['Journalist']; }else{ echo $news['Agency']; } ?></span>  , 
                                 Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
                             </p>                 
                          <hr>
@@ -193,14 +193,14 @@ th {
                         <h4 style="background-color: #6D6B6B; color: #ffffff; padding:4px;"> <?php echo $Industry['Industry_name']; ?></h4>
 
                         <?php
-                        foreach ($compititor['news'] as $key => $news) { ?>
+                        foreach ($Industry['news'] as $key => $news) { ?>
                             <h5 ><a href="<?php echo site_url('ClienttDashbord/Home/DisplayNews/'.$news['news_details_id']);?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
                              <h6 >Summary:</h6>
                                 <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                                 <?php echo $news['summary']; ?>
                                 </p>
                                 <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php if($news['Journalist'] != ''){ echo $news['Journalist']; }else{ echo $news['Agency']; } ?></span>  , 
                                 Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
                             </p>                 
                          <hr>

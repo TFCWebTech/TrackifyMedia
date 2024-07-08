@@ -104,6 +104,22 @@ class ManageAddRate extends CI_Controller {
 		<?php }
     }
 
+    public function getPublicaton2() {
+        $media = $this->input->post('media');
+        log_message('debug', 'Received media: ' . $media); // Log received media for debugging
+        $get_publication = $this->addRate->getPublication($media);
+    
+        // Log publication data for debugging
+        log_message('debug', 'Publication data: ' . print_r($get_publication, true));
+    
+        ?>
+        <option value="">Select Publication</option>
+        <?php 
+        foreach ($get_publication as $value) { ?>
+            <option value="<?php echo $value['gidMediaOutlet']; ?>"><?php echo $value['MediaOutlet']; ?></option>
+        <?php }
+    }
+
     public function getEdition(){
         $publication = $this->input->post('publication');
 		$get_edition = $this->addRate->getEdition($publication);
@@ -112,6 +128,40 @@ class ManageAddRate extends CI_Controller {
 		<?php 
 		foreach ($get_edition as $value) { ?>
 			<option value="<?php echo $value['gidEdition'] ?>"><?php echo $value['Edition'] ?></option>
+		<?php }
+    }
+    public function getEdition2(){
+        $publication = $this->input->post('publication');
+        $get_edition = $this->addRate->getEdition($publication);
+        $get_journalist = $this->addRate->getJournalist($publication);
+    
+        $response = array();
+    
+        // Prepare edition options
+        $edition_options = '<option value="">Select Edition</option>';
+        foreach ($get_edition as $value) {
+            $edition_options .= '<option value="' . $value['gidEdition'] . '">' . $value['Edition'] . '</option>';
+        }
+    
+        // Prepare journalist options
+        $journalist_options = '<option value="">Select</option>';
+        foreach ($get_journalist as $value) {
+            $journalist_options .= '<option value="' . $value['gidJournalist'] . '">' . $value['Journalist'] . '</option>';
+        }
+    
+        $response['edition_options'] = $edition_options;
+        $response['journalist_options'] = $journalist_options;
+    
+        echo json_encode($response);
+    }
+    public function getSupplements(){
+        $edition = $this->input->post('edition');
+		$get_supplements = $this->addRate->getSupplement($edition);
+        ?>
+		<option value="">Select Supplement</option>
+		<?php 
+		foreach ($get_supplements as $value) { ?>
+			<option value="<?php echo $value['gidSupplement'] ?>"><?php echo $value['Supplement'] ?></option>
 		<?php }
     }
 

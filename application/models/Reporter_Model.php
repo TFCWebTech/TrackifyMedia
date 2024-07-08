@@ -329,7 +329,7 @@ class Reporter_Model extends CI_Model
         $query = $this->db->query($sql, array($client_id));
         return $query->result_array();
     }
-    
+        
     public function industryData($client_ids) {
         // Ensure $client_ids is an array
         if (!is_array($client_ids)) {

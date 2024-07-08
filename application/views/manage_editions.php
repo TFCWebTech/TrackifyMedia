@@ -127,7 +127,15 @@ margin-bottom: 5px !important;
         <?php } ?>
     </select>
 </div>
-          
+<div class="form-group">
+            <label class="px-1 font-weight-bold" for="MediaOutletId">Status </label>
+            <select class="form-control" name="Status" >
+                <option value="">Select</option>
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+                <!-- Add options dynamically if needed -->
+            </select>
+        </div>  
     <div class="text-right pt-2">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
@@ -166,6 +174,18 @@ margin-bottom: 5px !important;
             <label class="px-1 font-weight-bold" for="publiction_order">Edition Order </label>
             <input type="text" class="form-control" placeholder="Enter Edition Order" id="EditionOrder" name="EditionOrder" required>
         </div>
+
+        <div class="form-group">
+          <label class="px-1 font-weight-bold" for="media_outlet">Publication </label>
+          <select class="form-control" name="MediaOutletId" id="publication">
+              <option value="">Select</option>
+              <?php foreach($get_MediaOutLet as $values){ ?>
+                  <option value="<?php echo $values['gidMediaOutlet']; ?>">
+                      <?php echo $values['MediaOutlet']; ?>
+                  </option>
+              <?php } ?>
+          </select>
+      </div>
 
         <div class="form-group">
             <label class="px-1 font-weight-bold" for="MediaOutletId">Status </label>
@@ -221,6 +241,7 @@ margin-bottom: 5px !important;
       $('#edition_id').val(desiredTask.edition_id);
       $('#Edition').val(desiredTask.Edition);
       $('#EditionOrder').val(desiredTask.EditionOrder);
+      $('#publication').val(desiredTask.MediaOutletId);
       $('#Status').val(desiredTask.Status);
 
       $('#editModal').modal('show');

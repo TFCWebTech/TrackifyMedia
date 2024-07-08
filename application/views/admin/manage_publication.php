@@ -134,9 +134,27 @@ margin-bottom: 5px !important;
                 </div>
                 <div class="form-group">
                 <label class="px-1 font-weight-bold" for="tier_type">Publication Language </label>
-                  <select class="form-control" name="publication_language" id="">
+                  <select class="form-control" name="publication_language" >
                     <option value="">Select</option>
-              
+                                    <option value="English">English</option>
+                                    <option value="Hindi">Hindi</option>
+                                    <option value="Marathi">Marathi</option>
+                                    <option value="Gujarati">Gujarati</option>
+                                    <option value="Punjabi">Punjabi</option>
+                                    <option value="Urdu">Urdu</option>
+                                    <option value="Konkani">Konkani</option>
+                                    <option value="Bengali">Bengali</option>
+                                    <option value="Tamil">Tamil</option>
+                                    <option value="Telugu">Telugu</option>
+                                    <option value="Malayalam">Malayalam</option>
+                                    <option value="Kannada">Kannada</option>
+                                    <option value="Assamese">Assamese</option>
+                                    <option value="Kashmiri">Kashmiri</option>
+                                    <option value="Manipuri">Manipuri</option>
+                                    <option value="Sanskrit">Sanskrit</option>
+                                    <option value="Sindhi">Sindhi</option>
+                                    <option value="Bhojpuri">Bhojpuri</option>
+                                    <option value="Orissa">Orissa</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -209,7 +227,27 @@ margin-bottom: 5px !important;
                 <div class="form-group">
                 <label class="px-1 font-weight-bold" for="tier_type">Publication Language </label>
                   <select class="form-control" name="publication_language" id="publication_language">
-                    <option value="">Select</option>
+                  <option value="">Select</option>
+                                    <option value="English">English</option>
+                                    <option value="Hindi">Hindi</option>
+                                    <option value="Marathi">Marathi</option>
+                                    <option value="Gujarati">Gujarati</option>
+                                    <option value="Punjabi">Punjabi</option>
+                                    <option value="Urdu">Urdu</option>
+                                    <option value="Konkani">Konkani</option>
+                                    <option value="Bengali">Bengali</option>
+                                    <option value="Tamil">Tamil</option>
+                                    <option value="Telugu">Telugu</option>
+                                    <option value="Malayalam">Malayalam</option>
+                                    <option value="Kannada">Kannada</option>
+                                    <option value="Assamese">Assamese</option>
+                                    <option value="Kashmiri">Kashmiri</option>
+                                    <option value="Manipuri">Manipuri</option>
+                                    <option value="Sanskrit">Sanskrit</option>
+                                    <option value="Sindhi">Sindhi</option>
+                                    <option value="Bhojpuri">Bhojpuri</option>
+                                    <option value="Orissa">Orissa</option>
+                  </select>
                   </select>
                 </div>
                 <div class="form-group">

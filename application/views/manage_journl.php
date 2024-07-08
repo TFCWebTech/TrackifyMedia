@@ -137,24 +137,18 @@ margin-bottom: 5px !important;
             <form action="<?php echo site_url('ManageJournl/addjournalist'); ?>" method="post">
 
             <div class="form-group">
-                    <label class="px-1 font-weight-bold" for="tier_type">Media Type  </label>
-                    <select class="form-control" name="media_type" id="">
+                <label class="px-1 font-weight-bold" for="tier_type">Media Type</label>
+                <select class="form-control" name="media_type" onchange="change_media(this.value)"> 
                     <option value="">Select</option>
-                    <option value="">Magazine</option>
-                    <option value="">NewsPaper</option>
-                    <option value="">Online</option>
-                    <option value="">RSS</option>
-                    <option value="">TV</option>
-                    </select>
-                </div>
+                    <?php foreach($get_media_type as $values) { ?>
+                        <option value="<?php echo $values['gidMediaType']; ?>"> <?php echo $values['MediaType']; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
                 <div class="form-group">
-                    <label class="px-1 font-weight-bold" for="tier_type">Media Outlet  </label>
-                    <select class="form-control" name="media_outlet" >
+                    <label class="px-1 font-weight-bold" for="tier_type">Publication </label>
+                    <select class="form-control" name="media_outlet" id="getPublication">
                         <option value="">Select</option>
-                                    <?php foreach($get_MediaOutLet as $values){?>
-                                    <option value="<?php echo $values['gidMediaOutlet'];?>"> <?php echo $values['MediaOutlet'];?></option>
-                                    <?php }?>
-                        </select>
                     </select>
                 </div>
                 <div class="form-group">
@@ -199,23 +193,18 @@ margin-bottom: 5px !important;
     <div class="form-group">
         <input type="text" name="gidJournalist" id="gidJournalist" hidden>
         <label class="px-1 font-weight-bold" for="media_type">Media Type</label>
-        <select class="form-control" name="media_type" id="media_type">
-            <option value="">Select</option>
-            <option value="Magazine">Magazine</option>
-            <option value="NewsPaper">NewsPaper</option>
-            <option value="Online">Online</option>
-            <option value="RSS">RSS</option>
-            <option value="TV">TV</option>
-        </select>
+        <select class="form-control" name="media_type" id="media_type" onchange="change_media(this.value)">
+        <option value="">Select</option>
+                    <?php foreach($get_media_type as $values) { ?>
+                        <option value="<?php echo $values['gidMediaType']; ?>"> <?php echo $values['MediaType']; ?></option>
+                    <?php } ?>
+                </select>
     </div>
     <div class="form-group">
         <label class="px-1 font-weight-bold" for="media_outlet">Media Outlet</label>
         <select class="form-control" name="media_outlet" id="media_outlet">
         <option value="">Select</option>
-                    <?php foreach($get_MediaOutLet as $values){?>
-                    <option value="<?php echo $values['gidMediaOutlet'];?>"> <?php echo $values['MediaOutlet'];?></option>
-                    <?php }?>
-        </select>
+                    </select>
     </div>
     <div class="form-group">
         <label class="px-1 font-weight-bold" for="Journalist">Journalist Name</label>
@@ -223,7 +212,7 @@ margin-bottom: 5px !important;
     </div>
     <div class="form-group">
         <label class="px-1 font-weight-bold" for="JEmailId">Journalist Email</label>
-        <input type="email" class="form-control" placeholder="Enter Journalist Email" name="JEmailId" id="JEmailId" required>
+        <input type="email" class="form-control" placeholder="Enter Journalist Email" name="email" id="JEmailId" required>
     </div>
     <div class="form-group">
         <label class="px-1 font-weight-bold" for="Status">Status</label>
@@ -284,7 +273,22 @@ margin-bottom: 5px !important;
         // $('#editModal').modal('show');
     }
 </script>
-
+<script>
+     function change_media(media){
+        $.ajax(
+        {
+            type: "POST",
+            url: "<?php echo site_url('ManageAddRate/getPublicaton'); ?>",
+            dataType: 'html',
+            data:{media:media},
+            success: function (data) 
+            {
+            $("#getPublication").html(data);
+            $("#media_outlet").html(data);
+            }
+        });
+    }
+</script>
 
 </div>
 

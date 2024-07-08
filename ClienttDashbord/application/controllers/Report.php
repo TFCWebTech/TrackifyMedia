@@ -1,10 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-// Load PhpSpreadsheet manually
-require_once APPPATH . 'third_party/Phpspreadsheet.php';
-    
-
 
 class Report extends CI_Controller {
 

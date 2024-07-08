@@ -1,6 +1,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 
 <style>
    
@@ -47,7 +48,7 @@ th {
             margin-top: 0px !important;
             margin-bottom: 0px !important;
         }
-        #printButton , .send-button, #edit, #getEmails{
+        #generatePDF , .send-button, #edit, #getEmails{
             background-color: #0080FF ;
             color: #ffffff;
             border-color: #0080FF ;
@@ -60,12 +61,11 @@ th {
         .showEdit {
             display: none;
         }
-
 </style>
 <div class="container">
-        <div class="row">
+        <div class="row" id="hideThis">
             <div class="col-md-12 text-right mb-2">
-            <button id="printButton" > <i class="fa fa-download"></i></button> &nbsp;
+            <button id="generatePDF"> <i class="fa fa-download"></i></button> &nbsp;
             <button id="edit"> <i class="fa fa-edit"></i></button> &nbsp;
             <button data-toggle="modal" data-target="#getEmail" id="getEmails" onclick="getEmail('<?php echo $details['client_id'];?>')" > <i class="fa fa-send"></i></button>
               <!-- <a class="send-button btn" href="<?php echo site_url('NewsLetter/sendMail/'.$details['client_id']);?>"> <i class="fa fa-send-o" ></i></a> -->
@@ -119,7 +119,7 @@ th {
                             <?php if ($detail['quick_links_position'] == '1'): ?>
                                 <tr style="background-color: #DCD5D5; color: #ffffff;">
                                     <td>
-                                        <p><?php echo $detail['quick_links_name']; ?></p>
+                                        <p><?php echo $detail['quick_links_name']; ?>(<?php echo sizeof($get_client_details[0]['client_news']); ?>)</p>
                                     </td>
                                     <td><a href="">Login</a></td>
                                 </tr>
@@ -192,7 +192,7 @@ th {
                                 <?php echo $news['summary']; ?>
                             </p>
                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php if($news['Journalist'] != ''){ echo $news['Journalist']; }else{ echo $news['Agency']; } ?></span>  , 
                                 Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
                             </p>
                             <hr>
@@ -215,7 +215,7 @@ th {
                             <h6>Summary:</h6>
                             <textarea name="" id="update_summary_<?php echo $news['news_details_id']; ?>" class="form-control"><?php echo $news['summary']; ?></textarea>
                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php if($news['Journalist'] != ''){ echo $news['Journalist']; }else{ echo $news['Agency']; } ?></span> , 
                                 Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
                             </p>
                             <hr>
@@ -252,7 +252,7 @@ th {
                                 <?php echo $news['summary']; ?>
                             </p>
                             <p>Date: <?php echo date('d-m-Y', strtotime($news['create_at'])); ?> ,
-                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php echo $news['Journalist']; ?></span>  , 
+                                Publication :<span style="color:blue;"> <?php echo $news['MediaOutlet']; ?></span>, Journalist / Agency :<span style="color:blue;"> <?php if($news['Journalist'] != ''){ echo $news['Journalist']; }else{ echo $news['Agency']; } ?></span> , 
                                 Edition : <span style="color:blue;"> <?php echo $news['Edition']; ?> </span>,  Supplement : <span style="color:blue;"> <?php echo $news['Supplement']; ?> </span>, No of pages:<span style="color:blue;"> <?php echo $news['page_count']; ?></span> , Circulation Figure:<span> </span>, qAVE(Rs.) :<span> </span> 
                             </p>                 
                             <hr>
@@ -498,16 +498,31 @@ function getEmail(client_id) {
         });
     }
 
-
 </script>
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add event listener to the print button
-            document.getElementById('printButton').addEventListener('click', function() {
-                window.print();
-            });
+  document.getElementById('generatePDF').addEventListener('click', function() {
+    var element = document.getElementById('content');
+    var hideSection = document.getElementById('hideThis');
+    
+    // Hide the section before generating the PDF
+    hideSection.style.display = 'none';
+    
+    var opt = {
+        margin: [-0.27, 0, 0, 0], // No margins
+        filename: 'document.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+    
+    html2pdf().from(element).set(opt).save().then(function() {
+        // Restore the section after generating the PDF
+        hideSection.style.display = 'block';
+    });
+});
 
-            if (typeof jQuery !== 'undefined') {
+if (typeof jQuery !== 'undefined') {
                 $(document).ready(function() {
                     $('#edit').on('click', function() {
                         $('.showEdit').toggle();
@@ -516,9 +531,7 @@ function getEmail(client_id) {
             } else {
                 console.error('jQuery is not loaded.');
             }
-        });
-    </script>
-
+</script>
 <script>
 function toggleNewsContent(newsDetailsId) {
     var content = document.getElementById('clientnewsContent-' + newsDetailsId);
@@ -593,7 +606,7 @@ function updateNewsContent(news_details_id, client_id) {
                 var author = clientNews[j].author;
                 var news_position = clientNews[j].news_position;
                 var news_city_id = clientNews[j].news_city_id;
-                var category_id = clientNews[j].category_id;
+                // var category_id = clientNews[j].category_id;
                 var is_send = clientNews[j].is_send;
                 var keywords = clientNews[j].keywords;
                 var page_count = clientNews[j].page_count;
@@ -620,7 +633,7 @@ function updateNewsContent(news_details_id, client_id) {
                         author: author,
                         news_position: news_position,
                         news_city_id: news_city_id,
-                        category_id: category_id,
+                        // category_id: category_id,
                         is_send: is_send,
                         keywords: keywords,
                         page_count: page_count

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Managejournlmodel extends CI_Model {
+class ManageJournlModel extends CI_Model {
 
     public function __construct() {
         parent::__construct();
@@ -40,6 +40,11 @@ class Managejournlmodel extends CI_Model {
         $this->db->select('*');
         $this->db->from('Journalist');
         $this->db->order_by('gidJournalist', 'DESC');
+        return $this->db->get()->result_array();
+    }
+    public function mediatype(){
+        $this->db->select('gidMediaType, MediaType');
+        $this->db->from('mediatype');
         return $this->db->get()->result_array();
     }
 }

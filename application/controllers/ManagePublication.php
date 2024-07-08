@@ -39,8 +39,9 @@ class ManagePublication extends CI_Controller {
         $short_name = $this->input->post('short_name');
         $current_date = new DateTime();
         $formatted_date = $current_date->format('Y-m-d');
-
+        $gidMediaOutlet = bin2hex(random_bytes(40 / 2));
         $data = array(
+            'gidMediaOutlet' => $gidMediaOutlet,
             'MediaOutlet' => $publiction_name,
             'gidMediaType' => $get_media_type,
             'gidPublicationType' => $publication_type,

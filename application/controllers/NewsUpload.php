@@ -53,6 +53,27 @@ class NewsUpload extends CI_Controller {
 		$Summary = $this->input->post('Summary');
 		$website_url = $this->input->post('website_url');
 		
+		if($publication == ''){
+			$publication_id = null;
+		}else{
+			$publication_id = $publication;
+		}
+		if($edition == ''){
+			$edition_id = null;
+		}else{
+			$edition_id = $edition;
+		}
+		if($SupplementId == ''){
+			$Supplement_id = null;
+		}else{
+			$Supplement_id = $SupplementId;
+		}
+		if($journalist_name == ''){
+			$journalist_id = null;
+		}else{
+			$journalist_id = $journalist_name;
+		}
+
 		$allKeys = array();
 		$allClients = array();
 	
@@ -97,10 +118,10 @@ class NewsUpload extends CI_Controller {
 		// exit();
 		$data = array(
 			'media_type_id' => $media_type,
-			'publication_id' => $publication,
-			'edition_id' => $edition,
-			'supplement_id' => $SupplementId,
-			'journalist_id' => $journalist_name,
+			'publication_id' => $publication_id,
+			'edition_id' => $edition_id,
+			'supplement_id' => $Supplement_id,
+			'journalist_id' => $journalist_id,
 			'agencies_id' => $agency,
 			'news_position' => $NewsPosition,
 			'news_city_id' => $NewsCity,

@@ -71,16 +71,13 @@
             <div class="row mb-2">
             <div class="col-md-12 d-flex justify-content-between ">
                 <div class="div d-flex">
-                        <form action="<?php echo site_url('Home/CompareCharts2');?>" method="post" class="d-flex" style="height:35px;">
-                            <label class="px-1 font-weight-bold mt-1" for="publication_type">Select Client</label>
-                                <select class="form-control" name="select_client" id="select_client" style="width:200px;">
-                                    <option disbled>Select</option>
-                                        <?php foreach($clients as $values){?>
-                                        <option value="<?php echo $values['client_id'];?>"> <?php echo $values['client_name'];?></option>
-                                        <?php }?>
-                            </select>
-                            &nbsp; <button type="submit" class="bg-primary border-primary text-light"> <i class="fa fa-search "></i></button>
-                        </form>
+                    <label class="px-1 font-weight-bold mt-1" for="publication_type">Select Client</label>
+                        <select class="form-control" name="select_client" id="select_client" onchange="showChartData()" style="width:200px;">
+                            <option disbled>Select</option>
+                                <?php foreach($clients as $values){?>
+                                <option value="<?php echo $values['client_id'];?>"> <?php echo $values['client_name'];?></option>
+                                <?php }?>
+                        </select>
                         </div>
                         <div class="d-flex">
                     <form method="post" action="<?php echo site_url('Home/compareFilterGraphs2'); ?>">
@@ -2537,11 +2534,11 @@ function populateAVETable() {
     </script>
 
 
-<!-- <script>
-   function showChartData() {
-    var select_client = document.getElementById('select_client').value;
-    console.log("select client", select_client);
-    $.ajax({
+<script>
+    function showChartData(){
+        var select_client = document.getElementById('select_client').value;
+        console.log("select client", select_client);
+        $.ajax({
         type: "POST",
         url: "<?php echo site_url('Home/CompareChartsById'); ?>",
         dataType: 'json', // Expecting JSON response
@@ -2549,19 +2546,27 @@ function populateAVETable() {
             select_client: select_client,
         },
         success: function(response) {
+            // Assuming response contains all the data you need
             console.log("AJAX response:", response);
-
-            // Example: Render Quantity Comparison Chart
-            renderQuantityComparisonChart(response.get_quantity_compare_data);
-
-            // Example: Render Media Data Chart
-            renderMediaDataChart(response.media_data);
-
-            // Optionally redirect to another view if needed
+            
+            // Example: Update a div with the JSON data
+            $('#chartDataContainer').html('<pre>' + JSON.stringify(response, null, 2) + '</pre>');
+            
+            // Example: Update specific elements with parsed data
+            $('#clientName').text(response.get_quantity_compare_data[0].label);
+            $('#clientCount').text(response.get_quantity_compare_data[0].count);
+            $('#clientAve').text(response.get_quantity_compare_data[0].ave);
+            
+            // Iterate through other data arrays if needed
+            // Example for media_data array:
+            response.media_data.forEach(function(item) {
+                $('#mediaDataContainer').append('<p>' + item.label + ': ' + item.count + ', ' + item.ave + '</p>');
+            });
         },
         error: function(xhr, status, error) {
             console.error('AJAX Error:', error);
         }
     });
 }
-</script> -->
+    
+</script>

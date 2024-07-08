@@ -42,6 +42,10 @@
     font-weight: 600;
     text-transform: capitalize;
 }
+
+.cke_notifications_area{
+    display:none !important;
+}
 </style>
 </head>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -56,14 +60,13 @@
                         </div>  
                         <hr>
                     </div>
-                    
-                    <div class="col-md-12 py-2 mt-3" >
+                    <div class="col-md-12 py-2 mt-3">
                         <div class="border-with-text" data-heading="Media Information">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Media Type </label>
-                                            <select class="form-control" name="media_type" id="media_type" onchange="checkSelection()">
-                                            <option disbled>Select</option>
+                                            <select class="form-control" name="media_type" id="media_type" onchange="checkSelection(this.value)">
+                                            <option value="">Select</option>
                                             <?php foreach($get_media_type as $values){?>
                                             <option value="<?php echo $values['gidMediaType'];?>"> <?php echo $values['MediaType'];?></option>
                                             <?php }?>
@@ -71,29 +74,21 @@
                                         </div>  
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="publication">Publication</label>
-                                            <select class="form-control" name="publication" id="publication">
-                                            <option disbled>Select</option>
-                                            <?php foreach($get_publication as $values){?>
-                                            <option value="<?php echo $values['gidMediaOutlet'];?>"> <?php echo $values['MediaOutlet'];?></option>
-                                            <?php }?>
+                                            <select class="form-control" name="publication" id="publication" onchange="change_publication(this.value)">
+                                            <option value="">Select</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="edition">Edition</label>
-                                            <select class="form-control" name="edition" id="edition">
-                                            <option disbled>Select</option>
-                                            <?php foreach($get_edition as $values){?>
-                                            <option value="<?php echo $values['gidEdition'];?>"> <?php echo $values['Edition'];?></option>
-                                            <?php }?>
+                                            <select class="form-control" name="edition" id="edition" onchange="change_edition(this.value)">
+                                            <option value="">Select</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="SupplementId">Supplement</label>
                                             <select  class="form-control" name="SupplementId" id="SupplementId" accesskey="s">
-                                            <option disbled>Select</option>
-                                            <?php foreach($get_supplements as $values){?>
-                                            <option value="<?php echo $values['gidSupplement'];?>"> <?php echo $values['Supplement'];?></option>
-                                            <?php }?>
+                                           
+                                            <option value="">Select</option>
                                             </select>
                                         </div>  
                                         <!-- <div class="col-md-2">
@@ -106,22 +101,20 @@
                     <div class="col-md-12 mt-3" >
                         <div class="border-with-text" data-heading="Journalist Information">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="px-1 font-weight-bold" name="journalist_name" for="journalist_name">Journalist / News Agencies</label>
-                                            <select class="form-control" name="journalist_name" id="journalist_name">
-                                            <option value="">Select</option>
+                                    <div class="col-md-3">
+                                        <label class="px-1 font-weight-bold" name="journalist_name" for="journalist_name">Journalist / News Agencies</label>
+                                        <select class="form-control" name="journalist_name" id="journalist_name">
+                                            <option >Select</option>
                                             <optgroup label="News Agencies">
-                                            <?php foreach($get_agency as $values){?>
-                                            <option value="<?php echo $values['gidAgency'];?>"> <?php echo $values['Agency'];?></option>
-                                            <?php }?>
+                                                <?php foreach($get_agency as $values) { ?>
+                                                <option value="<?php echo $values['gidAgency']; ?>"><?php echo $values['Agency']; ?></option>
+                                                <?php } ?>
                                             </optgroup>
-                                            <optgroup label="Journalist Names"> 
-                                            <?php foreach($get_journalist as $values){?>
-                                            <option value="<?php echo $values['gidJournalist'];?>"> <?php echo $values['Journalist'];?></option>
-                                            <?php }?>
+                                            <optgroup label="Journalist Names">
+                                                <!-- Journalist options will be appended here -->
                                             </optgroup>
-                                            </select>
-                                        </div>
+                                        </select>
+                                                </div>
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="Author">Author </label>
                                             <input type="text" class="form-control" placeholder="Enter Author" name="author" id="author" >
@@ -250,33 +243,78 @@
 <!-- this div is for footer --->
 </div>
 <script>
+
 // function checkSelection() {
-//     console.log('hello');
 //     var selectElement = document.getElementById('media_type');
+//     var show_url = document.getElementById('show_url');
 //     var selectedValue = selectElement.value;
 
-//     if (selectedValue == 'Online') {
-//         console.log('helloas');
+//     console.log('Selected value:', selectedValue); 
+   
+//     if (selectedValue === '015304b714940c28695d592c9ac10355d0d9a45f') {
 //         addMoreFields();
+//     } else {
+//         show_url.style.display = 'none'; // Hide the element if the value is not matched
+//         console.log('The selected value is not Online'); 
 //     }
+
 // }
-function checkSelection() {
-    var selectElement = document.getElementById('media_type');
-    var show_url = document.getElementById('show_url');
-    var selectedValue = selectElement.value;
-
-    console.log('Selected value:', selectedValue); 
-
-    if (selectedValue === '015304b714940c28695d592c9ac10355d0d9a45f') {
+function checkSelection(media) {
+    console.log('Selected media:', media); // Log the selected media value
+    if (media === '015304b714940c28695d592c9ac10355d0d9a45f') {
         addMoreFields();
     } else {
         show_url.style.display = 'none'; // Hide the element if the value is not matched
         console.log('The selected value is not Online'); 
     }
+    $.ajax({
+        type: "POST",
+        url: "<?php echo site_url('ManageAddRate/getPublicaton2'); ?>",
+        dataType: 'html',
+        data: { media: media },
+        success: function(data) {
+            console.log('AJAX success:', data); // Log the successful response
+            $("#publication").html(data);
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error: ', status, error); // Log errors if any
+        }
+    });
 }
+function change_publication(publication) {
+    $.ajax({
+        type: "POST",
+        url: "<?php echo site_url('ManageAddRate/getEdition2'); ?>",
+        dataType: 'json', // Expecting JSON response
+        data: { publication: publication },
+        success: function(response) {
+            $("#edition").html(response.edition_options);
+            // Update the journalist select box within the "Journalist Names" optgroup
+            $("#journalist_name optgroup[label='Journalist Names']").html(response.journalist_options);
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error: ', status, error); // Log errors if any
+        }
+    });
+}
+function change_edition(edition){
+    $.ajax(
+        {
+            type: "POST",
+            url: "<?php echo site_url('ManageAddRate/getSupplements'); ?>",
+            dataType: 'html',
+            data:{edition:edition},
+            success: function (data) 
+            {
+            $("#SupplementId").html(data);
+            }
+        });
+}    
+
 </script>
 <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+<!-- <script src="https://cdn.ckeditor.com/4.24.0/standard/ckeditor.js"></script> -->
+
 
  <script type="text/javascript">
    CKEDITOR.replace( 'editor1' );

@@ -10,13 +10,18 @@ class ManageJournl extends CI_Controller {
         $this->load->database();
         $this->load->helper('security');
         // $this->load->library('form_validation');
-        $this->load->model('Managejournlmodel', 'Journalist', TRUE); 
+        $this->load->model('ManageJournlModel', 'Journalist', TRUE); 
     }
 
     public function index() {
         $data['journalist'] = $this->Journalist->getalljournalists();
-        $data['get_MediaOutLet'] = $this->Journalist->getMediaOutLet();
-        // print_r($data);
+        $data['get_media_type'] = $this->Journalist->mediatype(); // Corrected array key
+    
+        // Uncomment these lines for debugging if needed
+        // echo '<pre>';
+        // print_r($data['get_media_type']);
+        // echo '</pre>';
+    
         $this->load->view('common/header');
         $this->load->view('manage_journl', $data);
         $this->load->view('common/footer');
@@ -25,13 +30,14 @@ class ManageJournl extends CI_Controller {
     // Example method to handle addition (not directly used in your provided HTML)
     public function addjournalist() {
         // $media_type = $this->input->post('media_type');
-        // $media_outlet = $this->input->post('gigMediaOutlet');
+        $media_outlet = $this->input->post('media_outlet');
         $Journalist = $this->input->post('name');
-        $JEmailId = $this->input->post('JEmailId');
+        $JEmailId = $this->input->post('email');
         $Status = $this->input->post('Status');
        
         // Handle other fields as needed
         $data = array(
+            'gigMediaOutlet' => $media_outlet,
             'Journalist' => $Journalist,
             'JEmailId' => $JEmailId,
             'Status' => 1,
@@ -39,7 +45,7 @@ class ManageJournl extends CI_Controller {
             
             // Add other fields here
         );
-
+        // print_r($data);
         $this->Journalist->addjournalist($data); 
         redirect('ManageJournl'); // Corrected redirect URL
         
@@ -47,22 +53,23 @@ class ManageJournl extends CI_Controller {
 
     public function editJournalist() {
         // Retrieve posted data
-        $Journalist = $this->input->post('gidJournalist');
+        $media_outlet = $this->input->post('media_outlet');
         // media_outlet
         // Journalist
         // JEmailId
         // Status
         $Journalist = $this->input->post('Journalist');
-        $JEmailId = $this->input->post('JEmailId');
+        $JEmailId = $this->input->post('email');
         $Status = $this->input->post('Status');
     
         // Prepare data for update
         $data = array(
+            'gigMediaOutlet' => $media_outlet,
             'Journalist' => $Journalist,
             'JEmailId' => $JEmailId,
             'Status' => $Status,
         );
-    
+    // print_r($data);
         // Perform the update
         $this->Journalist->update('Journalist', 'gidJournalist', $gidJournalist, $data);
         // Redirect to the management page
