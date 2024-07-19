@@ -9,6 +9,7 @@ class ManageIndustry extends CI_Controller {
         $this->load->library('session');
         $this->load->database();
         $this->load->helper('security');
+        $this->load->library('form_validation');
         $this->load->model('ManageNewsModel', 'news', TRUE);
     }
     public function index()
@@ -22,8 +23,22 @@ class ManageIndustry extends CI_Controller {
         $this->load->view('superAdmin/industry', $data);
         $this->load->view('common/footer');
     }
-    
+
     public function addIndustry(){
+        $this->form_validation->set_rules('industry_name', 'industry_name', 'trim|required');
+        $this->form_validation->set_rules('Keywords', 'Keywords', 'trim|required');
+        $this->form_validation->set_rules('is_active', 'is_active', 'trim|required');
+        if ($this->form_validation->run() == FALSE) {
+            // If validation fails for any field, set flash message for the first error encountered
+            if (form_error('industry_name')) {
+                $this->session->set_flashdata('error', 'Invalid industry name');
+            } elseif (form_error('Keywords')) {
+                $this->session->set_flashdata('error', 'Invalid Keywords');
+            } elseif (form_error('is_active')) {
+                $this->session->set_flashdata('error', 'Invalid active');
+            }
+            redirect('ManageIndustry');
+        } else {
             $client_name = $this->input->post('industry_name');
             $is_active = $this->input->post('is_active');
             $client_id = $this->input->post('client_name');
@@ -48,6 +63,8 @@ class ManageIndustry extends CI_Controller {
                 $this->session->set_flashdata('success', 'Industry added successfully');
                 redirect('ManageIndustry');
             }
+        }    
+
 	}
 
 

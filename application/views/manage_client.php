@@ -29,10 +29,10 @@ margin-bottom: 5px !important;
 }
 .hidden {
     display: none;
-  }
-  .table-container-responsive{
-            overflow-x: auto;
-        }
+}
+.table-container-responsive{
+    overflow-x: auto;
+}
 </style>
 <script>
 function validateForm() {
@@ -46,14 +46,27 @@ function validateForm() {
 }
 </script>
 <script>
-function addKeywordInput() {
+ function addKeywordInput() {
     var formGroup = document.createElement('div');
-    formGroup.classList.add('form-group');
+    formGroup.classList.add('form-group', 'keyword-group');
+
+    var labelRow = document.createElement('div');
+    labelRow.classList.add('d-flex', 'justify-content-between', 'mt-2');
 
     var label = document.createElement('label');
-    label.classList.add('px-1', 'font-weight-bold');
+    label.classList.add('px-1', 'font-weight-bold', 'mr-2');
     label.setAttribute('for', 'user_type');
     label.textContent = 'Add Keywords';
+
+    var removeIcon = document.createElement('i');
+    removeIcon.classList.add('fa', 'fa-trash', 'text-danger', 'cursor-pointer');
+    removeIcon.style.cursor = 'pointer';
+    removeIcon.onclick = function() {
+        formGroup.remove();
+    };
+
+    labelRow.appendChild(label);
+    labelRow.appendChild(removeIcon);
 
     var input = document.createElement('input');
     input.setAttribute('type', 'text');
@@ -62,7 +75,7 @@ function addKeywordInput() {
     input.setAttribute('name', 'Keywords[]');
     input.setAttribute('required', 'required');
 
-    formGroup.appendChild(label);
+    formGroup.appendChild(labelRow);
     formGroup.appendChild(input);
 
     var parentDiv = document.getElementById('additionalKeywords');
@@ -70,17 +83,28 @@ function addKeywordInput() {
 }
 </script>
 
-
-
 <script>
 function addKeywordInput2() {
     var formGroup = document.createElement('div');
-    formGroup.classList.add('form-group');
+    formGroup.classList.add('form-group', 'keyword-group');
+
+    var labelRow = document.createElement('div');
+    labelRow.classList.add('d-flex', 'justify-content-between', 'mt-2');
 
     var label = document.createElement('label');
-    label.classList.add('px-1', 'font-weight-bold');
+    label.classList.add('px-1', 'font-weight-bold', 'mr-2');
     label.setAttribute('for', 'user_type');
     label.textContent = 'Add Keywords';
+
+    var removeIcon = document.createElement('i');
+    removeIcon.classList.add('fa', 'fa-trash', 'text-danger', 'cursor-pointer');
+    removeIcon.style.cursor = 'pointer';
+    removeIcon.onclick = function() {
+        formGroup.remove();
+    };
+
+    labelRow.appendChild(label);
+    labelRow.appendChild(removeIcon);
 
     var input = document.createElement('input');
     input.setAttribute('type', 'text');
@@ -89,12 +113,36 @@ function addKeywordInput2() {
     input.setAttribute('name', 'CompetetorKeywords[]');
     input.setAttribute('required', 'required');
 
-    formGroup.appendChild(label);
+    formGroup.appendChild(labelRow);
     formGroup.appendChild(input);
 
     var parentDiv = document.getElementById('additionalKeywords2');
     parentDiv.appendChild(formGroup);
 }
+    
+
+// function addKeywordInput2() {
+//     var formGroup = document.createElement('div');
+//     formGroup.classList.add('form-group');
+
+//     var label = document.createElement('label');
+//     label.classList.add('px-1', 'font-weight-bold');
+//     label.setAttribute('for', 'user_type');
+//     label.textContent = 'Add Keywords';
+
+//     var input = document.createElement('input');
+//     input.setAttribute('type', 'text');
+//     input.classList.add('form-control');
+//     input.setAttribute('placeholder', 'Enter Keywords');
+//     input.setAttribute('name', 'CompetetorKeywords[]');
+//     input.setAttribute('required', 'required');
+
+//     formGroup.appendChild(label);
+//     formGroup.appendChild(input);
+
+//     var parentDiv = document.getElementById('additionalKeywords2');
+//     parentDiv.appendChild(formGroup);
+// }
 </script>
 <div class="container">
         <div class="row">
@@ -240,9 +288,10 @@ function addKeywordInput2() {
                     <input type="text" class="form-control" placeholder="Enter Keywords" name="Keywords[]" required>
                 <!-- </div> -->
                 </div>
+                <div id="additionalKeywords"></div>
                 <div class="col-md-12 text-right pt-2">
                     <p onclick="addKeywordInput()"><i class="text-primary cursor"><u> Add More Keywords</u> </i></p>
-                 <button type="submit" class="btn btn-primary">ADD</button>
+                    <button type="submit" class="btn btn-primary">ADD</button>
                 </div>
         </form>
       </div>

@@ -111,7 +111,7 @@
 <body id="page-top" onload="setDefaultDate()">
 
     <!-- Page Wrapper -->
-    <div id="wrapper">
+    <div id="wrapper" class="no-pdf">
 
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -157,7 +157,7 @@
         <div id="content-wrapper" class="d-flex flex-column">
 
             <!-- Main Content -->
-            <div id="content">
+            <div id="content" >
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">

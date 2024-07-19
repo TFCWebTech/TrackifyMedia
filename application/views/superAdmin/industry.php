@@ -59,13 +59,48 @@ function validateForm() {
 </script>
 <script>
 function addKeywordInput() {
+    // var formGroup = document.createElement('div');
+    // formGroup.classList.add('form-group');
+
+    // var label = document.createElement('label');
+    // label.classList.add('px-1', 'font-weight-bold');
+    // label.setAttribute('for', 'user_type');
+    // label.textContent = 'Add Keywords';
+
+    // var input = document.createElement('input');
+    // input.setAttribute('type', 'text');
+    // input.classList.add('form-control');
+    // input.setAttribute('placeholder', 'Enter Keywords');
+    // input.setAttribute('name', 'Keywords[]');
+    // input.setAttribute('required', 'required');
+
+    // formGroup.appendChild(label);
+    // formGroup.appendChild(input);
+
+    // var parentDiv = document.getElementById('additionalKeywords');
+    // parentDiv.appendChild(formGroup);
+
+    ////
     var formGroup = document.createElement('div');
-    formGroup.classList.add('form-group');
+    formGroup.classList.add('form-group', 'keyword-group');
+
+    var labelRow = document.createElement('div');
+    labelRow.classList.add('d-flex', 'justify-content-between', 'mt-2');
 
     var label = document.createElement('label');
-    label.classList.add('px-1', 'font-weight-bold');
+    label.classList.add('px-1', 'font-weight-bold', 'mr-2');
     label.setAttribute('for', 'user_type');
     label.textContent = 'Add Keywords';
+
+    var removeIcon = document.createElement('i');
+    removeIcon.classList.add('fa', 'fa-trash', 'text-danger', 'cursor-pointer');
+    removeIcon.style.cursor = 'pointer';
+    removeIcon.onclick = function() {
+        formGroup.remove();
+    };
+
+    labelRow.appendChild(label);
+    labelRow.appendChild(removeIcon);
 
     var input = document.createElement('input');
     input.setAttribute('type', 'text');
@@ -74,7 +109,7 @@ function addKeywordInput() {
     input.setAttribute('name', 'Keywords[]');
     input.setAttribute('required', 'required');
 
-    formGroup.appendChild(label);
+    formGroup.appendChild(labelRow);
     formGroup.appendChild(input);
 
     var parentDiv = document.getElementById('additionalKeywords');
@@ -160,7 +195,7 @@ function addKeywordInput() {
             <form onsubmit="return validateForm()" action="<?php echo site_url('ManageIndustry/addIndustry')?>" method="post">
                 <div class="form-group">
                     <label class="px-1 font-weight-bold" for="user_type">Industry Name </label>
-                    <input type="text" class="form-control" placeholder="Enter Industry Name" name="industry_name" required>
+                    <input type="text" class="form-control" placeholder="Enter Industry Name" name="industry_name" >
                 </div>
                 <div class="form-group">
                     <label class="px-1 font-weight-bold" for="is_active">Status</label>
@@ -191,10 +226,12 @@ function addKeywordInput() {
                 <div class="form-group" id="additionalKeywords">
                     <label class="px-1 font-weight-bold" for="user_type">Add Keywords</label>
                     <input type="text" class="form-control" placeholder="Enter Keywords" name="Keywords[]" required>
+                <!-- </div> -->
                 </div>
-                <div class="text-right pt-2">
+                <div id="additionalKeywords"></div>
+                <div class="form-group text-right pt-2">
                     <p onclick="addKeywordInput()"><i class="text-primary cursor"><u> Add More Keywords</u> </i></p>
-                 <button type="submit" class="btn btn-primary">ADD</button>
+                    <button type="submit" class="btn btn-primary">ADD</button>
                 </div>
         </form>
       </div>

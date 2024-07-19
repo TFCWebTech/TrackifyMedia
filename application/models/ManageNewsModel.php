@@ -210,5 +210,19 @@ class ManageNewsModel extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function getAllPublication(){
+        $this->db->select('*');
+        $this->db->from('mediaoutlet');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function getAllEdition(){
+        $this->db->select('*');
+        $this->db->from('edition');
+        $query = $this->db->get();
+        return $query->result_array();
+    } 
 }
 ?>

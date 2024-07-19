@@ -41,7 +41,7 @@ class AddRate_Model extends CI_Model
     public function getSupplement($edition){
         $this->db->select('*');
 		$this->db->from('supplements');
-		$this->db->where('gidEdition', $gidEdition);
+		$this->db->where('gidEdition', $edition);
 		return $this->db->get()->result_array();
     }
     public function getJournalist($publication){

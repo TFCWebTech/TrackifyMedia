@@ -343,7 +343,7 @@ class NewsLetter_Model extends CI_Model
 
     public function getCompNewsByKey($Keywords, $client_id) {
         $date = date('Y-m-d');
-        
+        $this->db->distinct();
         $this->db->select('
             nd.*, 
             mout.*, 
@@ -390,14 +390,14 @@ class NewsLetter_Model extends CI_Model
     }
 
     public function getNewsDataById($news_details_id) {
-        $this->db->select('nd.*, mout.*, ed.gidEdition , ed.Edition, s.gidSupplement, s.Supplement, j.gidJournalist, j.Journalist');
+        $this->db->select('nd.*, mout.*, ed.gidEdition , ed.Edition, s.gidSupplement, s.Supplement, j.gidJournalist, j.Journalist, ac.Agency');
         // $this->db->from('news_details');
         $this->db->from('news_details as nd');
         $this->db->join('mediaoutlet as mout', 'nd.publication_id = mout.gidMediaOutlet', 'left');
         $this->db->join('edition as ed', 'nd.edition_id = ed.gidEdition', 'left');
         $this->db->join('supplements as s', 'nd.supplement_id = s.gidSupplement', 'left');
         $this->db->join('journalist as j', 'nd.journalist_id = j.gidJournalist', 'left');
-
+        $this->db->join('Agency as ac', 'nd.journalist_id = ac.gidAgency', 'left');
         $this->db->where('news_details_id', $news_details_id);
         $result = $this->db->get()->row_array();
         if ($result) {

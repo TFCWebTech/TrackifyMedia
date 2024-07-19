@@ -306,6 +306,7 @@ function change_edition(edition){
             data:{edition:edition},
             success: function (data) 
             {
+                console.log('AJAX success:', data); 
             $("#SupplementId").html(data);
             }
         });

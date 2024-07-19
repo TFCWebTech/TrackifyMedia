@@ -83,15 +83,15 @@
                         </form>
                         </div>
                         <div class="d-flex">
-                    <form method="post" action="<?php echo site_url('Home/compareFilterGraphs2'); ?>">
-                    <div class="d-flex ">
-                            <label for="from-date"> From: </label> &nbsp;
-                            <input id="from-date" name="from" class="form-control" type="date" value="<?php echo $this->uri->segment(3); ?>" required> &nbsp;
-                            <label for="to-date"> To: </label> &nbsp;
-                            <input id="to-date" name="to" class="form-control" type="date" value="<?php echo $this->uri->segment(4); ?>" required>
-                            &nbsp;<button type="submit" class="bg-primary border-primary text-light"> <i class="fa fa-search "></i></button> 
-                    </div>
-                    </form> &nbsp;&nbsp;
+                        <form method="post" action="<?php echo site_url('Home/compareFilterGraphs2'); ?>">
+                        <div class="d-flex ">
+                                <label for="from-date"> From: </label> &nbsp;
+                                <input id="from-date" name="from" class="form-control" type="date" value="<?php echo $this->uri->segment(3); ?>" required> &nbsp;
+                                <label for="to-date"> To: </label> &nbsp;
+                                <input id="to-date" name="to" class="form-control" type="date" value="<?php echo $this->uri->segment(4); ?>" required>
+                                &nbsp;<button type="submit" class="bg-primary border-primary text-light"> <i class="fa fa-search "></i></button> 
+                        </div>
+                        </form> &nbsp;&nbsp;
                     <!-- <input type="text" name="daterange" value="01/01/2015 - 01/31/2015" /> -->
                     <div class="mb-4">
                             <select name="" id="chartTypeSelector" class="form-control" onchange="handleChartTypeChange()">

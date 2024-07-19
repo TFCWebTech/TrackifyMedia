@@ -98,21 +98,22 @@ class Report extends CI_Controller {
     public function downloadPDF() {
         // Collect necessary POST data
         $select_client = $this->input->post('select_client'); // Assuming this is passed correctly via AJAX
-        // $select_client = 1;
         $from_date = $this->input->post('from_date');
         $to_date = $this->input->post('to_date');
         $publication_type = $this->input->post('publication_type');
         $Cities = $this->input->post('Cities');
-        
+        // $select_client = 1; // Assuming this is passed correctly via AJAX
+        // $from_date =  '2024-07-01';
+        // $to_date = '2024-07-13';
+        // $publication_type = '162a7297aab7607fd24522b628dc740d453e0dea';
+        // $Cities = 'A2E0E77E-BEFF-4425-B34C-00DAEC9AAD06';
         // Fetch data from NewsData model or wherever it's sourced from
         $data['details'] = $this->NewsData->getClientById($select_client);
-        $data['get_client_details'] = $this->NewsData->getClientTemplateDetails2($select_client, $from_date, $to_date, $publication_type, $Cities);
+        $data['get_client_details'] = $this->NewsData->getNewsDetails3($select_client, $from_date, $to_date, $publication_type, $Cities);
         
-        // Debugging: Print the data to verify
         // echo '<pre>';
         // print_r($data['get_client_details']);
         // echo '</pre>';
-        
         // Load TCPDF library
         require_once(APPPATH . 'libraries/tcpdf/tcpdf.php');
         
@@ -151,28 +152,31 @@ class Report extends CI_Controller {
             'success' => true,
             'pdf_url' => base_url('download_pdf/' . $pdfName) // URL to download the PDF
         );
-        
         // Send JSON response back to AJAX request
         header('Content-Type: application/json');
         echo json_encode($response);
     }
     
-
     public function exportWord() {
         try {
-            $client_id = $this->session->userdata('client_id');
             $from_date = $this->input->post('from_date');
             $to_date = $this->input->post('to_date');
-            $publication_type = $this->input->post('publication_type');
+             $publication_type = $this->input->post('publication_type');
             $Cities = $this->input->post('Cities');
-            $client_name = $this->session->userdata('client_name');
-    
+            $select_client = $this->input->post('select_client');
+            $publication_id = $this->NewsData->getPublicationID($publication_type);
+            
+            $gidMediaOutlet = $publication_id['gidMediaOutlet'] ?? null; 
             // Get report data
-            $WordFileData = $this->NewsData->getReportData($client_id, $from_date, $to_date, $publication_type, $Cities);
-    
+            $data['details'] = $this->NewsData->getClientById($select_client);
+            $WordFileData = $this->NewsData->getReportData($select_client, $from_date, $to_date, $gidMediaOutlet, $Cities);
+            
+            // Retrieve the client name from $data['details']
+            $client_name = isset($data['details']['client_name']) ? $data['details']['client_name'] : 'Unknown Client';
+            
             // Initialize an array to hold all the data, including news articles
             $completeData = array();
-    
+            
             // Loop through the report data and get news articles for each news_details_id
             foreach ($WordFileData as $report) {
                 $news_details_id = $report['news_details_id'];
@@ -180,6 +184,7 @@ class Report extends CI_Controller {
                 $report['news_articles'] = $newsArticles; // Add news articles to the report data
                 $completeData[] = $report;
             }
+            
             // Add client name and date range to the response
             $response = array(
                 'client_name' => $client_name,
@@ -187,6 +192,7 @@ class Report extends CI_Controller {
                 'to_date' => $to_date,
                 'data' => $completeData
             );
+            
             // Send response as JSON
             header('Content-Type: application/json');
             echo json_encode($response); // Properly output the JSON-encoded response

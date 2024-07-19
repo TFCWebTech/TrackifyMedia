@@ -96,7 +96,7 @@ function validateForm() {
             <form onsubmit="return validateForm()" action="<?php echo site_url('ManageReporter/addReporter')?>" method="post">
                 <div class="form-group">
                     <label class="px-1 font-weight-bold" for="user_type">Reporter Name </label>
-                    <input type="text" class="form-control" placeholder="Enter Reporter Name" name="reporter_name" required>
+                    <input type="text" class="form-control" placeholder="Enter Reporter Name" name="reporter_name" >
                 </div>
                 <div class="form-group">
                     <label class="px-1 font-weight-bold" for="user_type">Email</label>

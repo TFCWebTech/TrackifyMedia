@@ -57,7 +57,7 @@
                             <div class="col-lg-6" style="margin-top:50px;">
                                 <div class="p-5">
                                     <div class="text-center">
-                                    <img src="<?php echo base_url('assets/img/images/logo.png')?>" style="width:100%;" alt="">
+                                    <img src="https://pressbro.com/News/assets/img/mediaLogo.png" style="width:100%;" alt="">
                                         <h4>Reset Password</h4>
                                     </div>
                                     <form class="user" method="post" action="<?php echo site_url('ManageClient/newPassword'); ?>" onSubmit="return checkPassword()">

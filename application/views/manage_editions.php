@@ -118,7 +118,7 @@ margin-bottom: 5px !important;
 
     <div class="form-group">
     <label class="px-1 font-weight-bold" for="media_outlet">Publication </label>
-    <select class="form-control" name="MediaOutletId" >
+    <select class="form-control" name="MediaOutletId" required>
         <option value="">Select</option>
         <?php foreach($get_MediaOutLet as $values){ ?>
             <option value="<?php echo $values['gidMediaOutlet']; ?>">
@@ -129,7 +129,7 @@ margin-bottom: 5px !important;
 </div>
 <div class="form-group">
             <label class="px-1 font-weight-bold" for="MediaOutletId">Status </label>
-            <select class="form-control" name="Status" >
+            <select class="form-control" name="Status" required>
                 <option value="">Select</option>
                 <option value="1">Active</option>
                 <option value="0">Inactive</option>

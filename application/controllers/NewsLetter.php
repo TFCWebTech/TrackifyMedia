@@ -24,18 +24,39 @@ class NewsLetter extends CI_Controller {
     public function newsMail($client_id){
         $data['details'] = $this->newsLetter->getClientById($client_id);
         $data['get_client_details'] = $this->newsLetter->getClientTemplateDetails($client_id);
+
+        $get_news_data = [
+            'get_client_data' => $this->newsLetter->getClientById($client_id),
+            'get_news_details' => $this->newsLetter->getNewsDetails($client_id),
+            'get_comp_data' => $this->newsLetter->getCompData($client_id),
+            'get_industry_data' => $this->newsLetter->getIndustryData($client_id)
+        ];
+      
         // echo '<pre>';
         // print_r($data['get_client_details']);
         // echo '</pre>';
-        $this->load->view('common/header');
-        $this->load->view('mail_letter', $data);
-        $this->load->view('common/footer');
+        // $this->load->view('common/header');
+        // $this->load->view('mail_letter', $data);
+        // $this->load->view('common/footer');
+        if (empty($data['get_client_details'][0]['client_id'])) {
+            $this->load->view('common/header');
+            $this->load->view('newsLetter_defult_template', $get_news_data);
+            $this->load->view('common/footer');
+        }else{
+            $this->load->view('common/header');
+            $this->load->view('mail_letter', $data);
+            $this->load->view('common/footer');
+        }
+        
+
     }
 
    public function DisplayNews($news_details_id){
     // echo $news_details_id;
     $data['news_details'] = $this->newsLetter->getNewsDataById($news_details_id);
+    // echo '<pre>';
     // print_r($data);
+    // echo '</pre>';
     $this->load->view('common/header');
     $this->load->view('news_details', $data);
     $this->load->view('common/footer');

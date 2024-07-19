@@ -22,6 +22,11 @@ class EmailTemplate extends CI_Controller {
     }
     public function CreateTemplate($client_id)
     {
+        $data['get_publication'] = $this->manageNews->getAllPublication();
+        $data['get_edition'] = $this->manageNews->getAllEdition();
+        // echo '<pre>';
+        // print_r($data['get_edition']);
+        // echo '</pre>';
         $data['client_id'] = $client_id;
         $this->load->view('common/header');
         $this->load->view('manage_template', $data);
@@ -72,7 +77,9 @@ class EmailTemplate extends CI_Controller {
             $font_size = $this->input->post('font_size');
             $content_category = $this->input->post('content_category');
             $content_publication = $this->input->post('content_publication');
+            $content_publication_string = implode(',', $content_publication);
             $content_edition = $this->input->post('content_edition');
+            $content_edition_string = implode(',', $content_edition);
             $content_news_summary_color = $this->input->post('content_news_summary_color');
             $content_news_summary_color_size = $this->input->post('content_news_summary_color_size');
             $content_headline_color = $this->input->post('content_headline_color');
@@ -112,8 +119,8 @@ class EmailTemplate extends CI_Controller {
                 'header_title_font_color' => $font_color,
                 'header_title_font_size' => $font_size,
                 'content_category' => $content_category,
-                'content_publication' => $content_publication,
-                'content_edition' => $content_edition,
+                'content_publication' => $content_publication_string,
+                'content_edition' => $content_edition_string,
                 'content_news_summary_color' => $content_news_summary_color,
                 'content_news_summary_font_size' => $content_news_summary_color_size,
                 'content_headline_color' => $content_headline_color,
@@ -170,5 +177,7 @@ class EmailTemplate extends CI_Controller {
             }
             
         }
+
+
 }
 ?>

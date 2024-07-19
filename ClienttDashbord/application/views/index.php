@@ -153,7 +153,7 @@
                     <button class="btn btn-primary" onclick="showChart('barChart')">Bar Chart</button>
                     <button class="btn btn-primary" onclick="showChart('lineChart')">Line Chart</button>
                     <button class="btn btn-primary" onclick="showChart('verticalBarChart')">Column Chart</button>
-                    <button class="btn btn-secondary" onclick="showChart('quantityShowTable')">Show Table</button>
+                    <button class="btn btn-primary" onclick="showChart('quantityShowTable')">Show Table</button>
 
                 </div>
             </div>

@@ -146,7 +146,7 @@ th {
                     <h4 style="background-color: #6D6B6B; color: #ffffff; padding:4px;"> <?php echo $details['client_name']; ?></h4>
                     <?php
                     foreach ($get_client_details[0]['client_news'] as $key => $news) { ?>
-                        <h5 ><a href="<?php echo site_url('ClienttDashbord/Home/DisplayNews/'.$news['news_details_id']);?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
+                        <h5 ><a href="<?php echo $news['website_url']; ?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
                          <h6 >Summary:</h6>
                             <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                             <?php echo $news['summary']; ?>
@@ -168,7 +168,7 @@ th {
                         <h4 style="background-color: #6D6B6B; color: #ffffff; padding:4px;"> <?php echo $compititor['Competitor_name']; ?></h4>
                         <?php
                         foreach ($compititor['news'] as $key => $news) { ?>
-                            <h5 ><a href="<?php echo site_url('ClienttDashbord/Home/DisplayNews/'.$news['news_details_id']);?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
+                            <h5 ><a href="<?php echo $news['website_url']; ?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
                              <h6 >Summary:</h6>
                                 <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                                 <?php echo $news['summary']; ?>
@@ -194,7 +194,7 @@ th {
 
                         <?php
                         foreach ($Industry['news'] as $key => $news) { ?>
-                            <h5 ><a href="<?php echo site_url('ClienttDashbord/Home/DisplayNews/'.$news['news_details_id']);?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
+                            <h5 ><a href="<?php echo $news['website_url']; ?>" style="color: <?php echo $get_client_details[0]['content_headline_color']; ?>;font-size: <?php echo $get_client_details[0]['content_headline_font_size']; ?>;font-family: <?php echo $get_client_details[0]['content_headline_font']; ?>">  <?php echo $news['head_line']; ?> </a></h5>
                              <h6 >Summary:</h6>
                                 <p style="color: <?php echo $get_client_details[0]['content_news_summary_color']; ?>;font-size: <?php echo $get_client_details[0]['content_news_summary_font_size']; ?>;">
                                 <?php echo $news['summary']; ?>

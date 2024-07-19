@@ -28,68 +28,122 @@ class ManagePublication extends CI_Controller {
     }
 
     public function addPublication(){
-        $user_id = $this->session->userdata('user_id');
-        $publiction_name = $this->input->post('publiction_name');
-        $get_media_type = $this->input->post('get_media_type');
-        $publication_type = $this->input->post('publication_type');
-        $tier_type = $this->input->post('tier_type');
-        $publication_language = $this->input->post('publication_language');
-        $master_head = $this->input->post('master_head');
-        $priority = $this->input->post('priority');
-        $short_name = $this->input->post('short_name');
-        $current_date = new DateTime();
-        $formatted_date = $current_date->format('Y-m-d');
-        $gidMediaOutlet = bin2hex(random_bytes(40 / 2));
-        $data = array(
-            'gidMediaOutlet' => $gidMediaOutlet,
-            'MediaOutlet' => $publiction_name,
-            'gidMediaType' => $get_media_type,
-            'gidPublicationType' => $publication_type,
-            'gidTier' => $tier_type,
-            'Language' => $publication_language,
-            'Masthead' => $master_head,
-            'Priority' => $priority,
-            'ShortName' => $short_name,
-            'CreatedBy' => $user_id,
-            'CreatedOn' => $formatted_date
-            );
-            // print_r($data);
-        $this->manangeAdmin->insert('mediaoutlet', $data);
-        $this->session->set_flashdata('success', 'Publication Added Successfully.');
-        redirect('ManagePublication');
+        $this->form_validation->set_rules('publiction_name', 'publiction_name', 'trim|required');
+        $this->form_validation->set_rules('get_media_type', 'get_media_type', 'trim|required');
+        $this->form_validation->set_rules('publication_type', 'publication_type', 'trim|required');
+        $this->form_validation->set_rules('publication_language', 'publication_language', 'trim|required');
+        $this->form_validation->set_rules('master_head', 'master_head', 'trim|required');
+        $this->form_validation->set_rules('priority', 'priority', 'trim|required');
+        $this->form_validation->set_rules('short_name', 'short_name', 'trim|required');
+        if ($this->form_validation->run() == FALSE) {
+            // If validation fails for any field, set flash message for the first error encountered
+            if (form_error('publiction_name')) {
+                $this->session->set_flashdata('error', 'Invalid publiction name');
+            } elseif (form_error('get_media_type')) {
+                $this->session->set_flashdata('error', 'Invalid Media Type');
+            } elseif (form_error('publication_type')) {
+                   $this->session->set_flashdata('error', 'Invalid Publication');
+            } elseif (form_error('publication_language')) {
+                $this->session->set_flashdata('error', 'Invalid publication language Status');
+            } elseif (form_error('priority')) {
+                $this->session->set_flashdata('error', 'Invalid priority');
+            }elseif (form_error('master_head')) {
+                $this->session->set_flashdata('error', 'Invalid master head');
+            }elseif (form_error('short_name')) {
+                $this->session->set_flashdata('error', 'Invalid short name');
+            }
+            redirect('ManagePublication');
+        } else {
+            $user_id = $this->session->userdata('user_id');
+            $publiction_name = $this->input->post('publiction_name');
+            $get_media_type = $this->input->post('get_media_type');
+            $publication_type = $this->input->post('publication_type');
+            $tier_type = $this->input->post('tier_type');
+            $publication_language = $this->input->post('publication_language');
+            $master_head = $this->input->post('master_head');
+            $priority = $this->input->post('priority');
+            $short_name = $this->input->post('short_name');
+            $current_date = new DateTime();
+            $formatted_date = $current_date->format('Y-m-d');
+            $gidMediaOutlet = bin2hex(random_bytes(40 / 2));
+            $data = array(
+                'gidMediaOutlet' => $gidMediaOutlet,
+                'MediaOutlet' => $publiction_name,
+                'gidMediaType' => $get_media_type,
+                'gidPublicationType' => $publication_type,
+                'gidTier' => $tier_type,
+                'Language' => $publication_language,
+                'Masthead' => $master_head,
+                'Priority' => $priority,
+                'ShortName' => $short_name,
+                'CreatedBy' => $user_id,
+                'CreatedOn' => $formatted_date
+                );
+                // print_r($data);
+            $this->manangeAdmin->insert('mediaoutlet', $data);
+            $this->session->set_flashdata('success', 'Publication Added Successfully.');
+            redirect('ManagePublication');
+        }
 
     }
 
     public function updatedPublication(){
-        $user_id = $this->session->userdata('user_id');
-        $publiction_name = $this->input->post('publiction_name');
-        $get_media_type = $this->input->post('get_media_type');
-        $publication_type = $this->input->post('publication_type');
-        $tier_type = $this->input->post('tier_type');
-        $publication_language = $this->input->post('publication_language');
-        $master_head = $this->input->post('master_head');
-        $priority = $this->input->post('priority');
-        $short_name = $this->input->post('short_name');
-        $current_date = new DateTime();
-        $formatted_date = $current_date->format('Y-m-d');
-        $gidMediaOutlet_id = $this->input->post('gidMediaOutlet_id');
-        
-        $data = array(
-            'MediaOutlet' => $publiction_name,
-            'gidMediaType' => $get_media_type,
-            'gidPublicationType' => $publication_type,
-            'gidTier' => $tier_type,
-            'Language' => $publication_language,
-            'Masthead' => $master_head,
-            'Priority' => $priority,
-            'ShortName' => $short_name,
-            'UpdatedBy' => $user_id,
-            'UpdatedOn' => $formatted_date
-            );
-            // print_r($data);
-            $this->manangeAdmin->update('mediaoutlet', 'gidMediaOutlet', $gidMediaOutlet_id, $data);
-            $this->session->set_flashdata('success', 'Publication Updated Successfully.');
+        $this->form_validation->set_rules('publiction_name', 'publiction_name', 'trim|required');
+        $this->form_validation->set_rules('get_media_type', 'get_media_type', 'trim|required');
+        $this->form_validation->set_rules('publication_type', 'publication_type', 'trim|required');
+        $this->form_validation->set_rules('publication_language', 'publication_language', 'trim|required');
+        $this->form_validation->set_rules('master_head', 'master_head', 'trim|required');
+        $this->form_validation->set_rules('priority', 'priority', 'trim|required');
+        $this->form_validation->set_rules('short_name', 'short_name', 'trim|required');
+        if ($this->form_validation->run() == FALSE) {
+            // If validation fails for any field, set flash message for the first error encountered
+            if (form_error('publiction_name')) {
+                $this->session->set_flashdata('error', 'Invalid publiction name');
+            } elseif (form_error('get_media_type')) {
+                $this->session->set_flashdata('error', 'Invalid Media Type');
+            } elseif (form_error('publication_type')) {
+                   $this->session->set_flashdata('error', 'Invalid Publication type');
+            } elseif (form_error('publication_language')) {
+                $this->session->set_flashdata('error', 'Invalid publication language Status');
+            } elseif (form_error('priority')) {
+                $this->session->set_flashdata('error', 'Invalid priority');
+            }elseif (form_error('master_head')) {
+                $this->session->set_flashdata('error', 'Invalid master head');
+            }elseif (form_error('short_name')) {
+                $this->session->set_flashdata('error', 'Invalid short name');
+            }
             redirect('ManagePublication');
+        } else {
+            $user_id = $this->session->userdata('user_id');
+            $publiction_name = $this->input->post('publiction_name');
+            $get_media_type = $this->input->post('get_media_type');
+            $publication_type = $this->input->post('publication_type');
+            $tier_type = $this->input->post('tier_type');
+            $publication_language = $this->input->post('publication_language');
+            $master_head = $this->input->post('master_head');
+            $priority = $this->input->post('priority');
+            $short_name = $this->input->post('short_name');
+            $current_date = new DateTime();
+            $formatted_date = $current_date->format('Y-m-d');
+            $gidMediaOutlet_id = $this->input->post('gidMediaOutlet_id');
+            
+            $data = array(
+                'MediaOutlet' => $publiction_name,
+                'gidMediaType' => $get_media_type,
+                'gidPublicationType' => $publication_type,
+                'gidTier' => $tier_type,
+                'Language' => $publication_language,
+                'Masthead' => $master_head,
+                'Priority' => $priority,
+                'ShortName' => $short_name,
+                'UpdatedBy' => $user_id,
+                'UpdatedOn' => $formatted_date
+                );
+                // print_r($data);
+                $this->manangeAdmin->update('mediaoutlet', 'gidMediaOutlet', $gidMediaOutlet_id, $data);
+                $this->session->set_flashdata('success', 'Publication Updated Successfully.');
+                redirect('ManagePublication');
+            }
     }
 
     // public function addReporter(){

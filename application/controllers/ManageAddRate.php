@@ -15,6 +15,7 @@ class ManageAddRate extends CI_Controller {
     }
     public function index()
     {
+        set_time_limit(60);
         // $data['get_publication'] = $this->staff->getPublication();
         $data['get_media_type'] = $this->manageAdmin->mediatype();
         $data['get_publication'] = $this->manageAdmin->getPublication();
@@ -30,38 +31,97 @@ class ManageAddRate extends CI_Controller {
     }
 
     public function addNewRate(){
-        $user_id = $this->session->userdata('user_id');
-        $get_media_type = $this->input->post('get_media_type');
-        $Publication = $this->input->post('Publication');
-        $Edtion = $this->input->post('Edtion');
-        $Supplements = $this->input->post('Supplements');
-        $rate = $this->input->post('rate');
-        $new_rate = $this->input->post('new_rate');
-        $Number_of_circulation = $this->input->post('Number_of_circulation');
-        $Status = $this->input->post('Status');
-        $current_date = new DateTime();
-        $formatted_date = $current_date->format('Y-m-d');
-        $gidAddRate = bin2hex(random_bytes(40 / 2));
-        $data = array(
-            'gidAddRate' => $gidAddRate,
-            'gidMediaType' => $get_media_type,
-            'gidMediaOutlet' => $Publication,
-            'gidEdition' => $Edtion,
-            'gidSupplement' => $Supplements,
-            'Rate' => $rate,
-            'NewRate' => $new_rate,
-            'Circulation_Fig' => $Number_of_circulation,
-            'Status' => $Status,
-            'CreatedBy' => $user_id,
-            'CreatedOn' => $formatted_date
-            );
-            // print_r($data);
-        $this->addRate->insert('AddRate', $data);
-        $this->session->set_flashdata('success', 'Rate Added Successfully.');
-        redirect('ManageAddRate');
+        $this->form_validation->set_rules('Publication', 'Publication', 'trim|required');
+        $this->form_validation->set_rules('get_media_type', 'get_media_type', 'trim|required');
+        $this->form_validation->set_rules('Edtion', 'Edtion', 'trim|required');
+        $this->form_validation->set_rules('Supplements', 'Supplements', 'trim|required');
+        $this->form_validation->set_rules('rate', 'rate', 'trim|required');
+        $this->form_validation->set_rules('new_rate', 'new_rate', 'trim|required');
+        $this->form_validation->set_rules('Number_of_circulation', 'Number_of_circulation', 'trim|required');
+        $this->form_validation->set_rules('Status', 'Status', 'trim|required');
+        if ($this->form_validation->run() == FALSE) {
+            // If validation fails for any field, set flash message for the first error encountered
+            if (form_error('Publication')) {
+                $this->session->set_flashdata('error', 'Invalid publiction name');
+            } elseif (form_error('get_media_type')) {
+                $this->session->set_flashdata('error', 'Invalid Media Type');
+            } elseif (form_error('Edtion')) {
+                   $this->session->set_flashdata('error', 'Invalid Edtion');
+            } elseif (form_error('Supplements')) {
+                $this->session->set_flashdata('error', 'Invalid Supplements');
+            } elseif (form_error('rate')) {
+                $this->session->set_flashdata('error', 'Invalid rate');
+            }elseif (form_error('new_rate')) {
+                $this->session->set_flashdata('error', 'Invalid new rate');
+            }elseif (form_error('Number_of_circulation')) {
+                $this->session->set_flashdata('error', 'Invalid Number of circulation');
+            }elseif (form_error('Status')) {
+                $this->session->set_flashdata('error', 'Invalid Status');
+            }
+            redirect('ManageAddRate');
+        } else {
+            $user_id = $this->session->userdata('user_id');
+            $get_media_type = $this->input->post('get_media_type');
+            $Publication = $this->input->post('Publication');
+            $Edtion = $this->input->post('Edtion');
+            $Supplements = $this->input->post('Supplements');
+            $rate = $this->input->post('rate');
+            $new_rate = $this->input->post('new_rate');
+            $Number_of_circulation = $this->input->post('Number_of_circulation');
+            $Status = $this->input->post('Status');
+            $current_date = new DateTime();
+            $formatted_date = $current_date->format('Y-m-d');
+            $gidAddRate = bin2hex(random_bytes(40 / 2));
+            $data = array(
+                'gidAddRate' => $gidAddRate,
+                'gidMediaType' => $get_media_type,
+                'gidMediaOutlet' => $Publication,
+                'gidEdition' => $Edtion,
+                'gidSupplement' => $Supplements,
+                'Rate' => $rate,
+                'NewRate' => $new_rate,
+                'Circulation_Fig' => $Number_of_circulation,
+                'Status' => $Status,
+                'CreatedBy' => $user_id,
+                'CreatedOn' => $formatted_date
+                );
+                // print_r($data);
+            $this->addRate->insert('AddRate', $data);
+            $this->session->set_flashdata('success', 'Rate Added Successfully.');
+            redirect('ManageAddRate');
+        }
     }
     
     public function updatedAddRate(){
+        $this->form_validation->set_rules('Publication', 'Publication', 'trim|required');
+        $this->form_validation->set_rules('get_media_type', 'get_media_type', 'trim|required');
+        $this->form_validation->set_rules('Edtion', 'Edtion', 'trim|required');
+        $this->form_validation->set_rules('Supplements', 'Supplements', 'trim|required');
+        $this->form_validation->set_rules('rate', 'rate', 'trim|required');
+        $this->form_validation->set_rules('new_rate', 'new_rate', 'trim|required');
+        $this->form_validation->set_rules('Number_of_circulation', 'Number_of_circulation', 'trim|required');
+        $this->form_validation->set_rules('Status', 'Status', 'trim|required');
+        if ($this->form_validation->run() == FALSE) {
+            // If validation fails for any field, set flash message for the first error encountered
+            if (form_error('Publication')) {
+                $this->session->set_flashdata('error', 'Invalid publiction name');
+            } elseif (form_error('get_media_type')) {
+                $this->session->set_flashdata('error', 'Invalid Media Type');
+            } elseif (form_error('Edtion')) {
+                   $this->session->set_flashdata('error', 'Invalid Edtion');
+            } elseif (form_error('Supplements')) {
+                $this->session->set_flashdata('error', 'Invalid Supplements');
+            } elseif (form_error('rate')) {
+                $this->session->set_flashdata('error', 'Invalid rate');
+            }elseif (form_error('new_rate')) {
+                $this->session->set_flashdata('error', 'Invalid new rate');
+            }elseif (form_error('Number_of_circulation')) {
+                $this->session->set_flashdata('error', 'Invalid Number of circulation');
+            }elseif (form_error('Status')) {
+                $this->session->set_flashdata('error', 'Invalid Status');
+            }
+            redirect('ManageAddRate');
+        } else {
         $user_id = $this->session->userdata('user_id');
         $gidAddRate_id = $this->input->post('gidAddRate_id');
         $get_media_type = $this->input->post('get_media_type');
@@ -89,8 +149,9 @@ class ManageAddRate extends CI_Controller {
             );
             // print_r($data);
             $this->client->update('AddRate', 'gidAddRate_id', $gidAddRate_id, $data);
-        $this->session->set_flashdata('success', 'Rate Updated Successfully.');
-        redirect('ManageAddRate');
+            $this->session->set_flashdata('success', 'Rate Updated Successfully.');
+            redirect('ManageAddRate');
+        }
     }
 
     public function getPublicaton(){

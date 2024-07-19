@@ -32,16 +32,18 @@ class News_data_Model extends CI_Model
             $this->db->join('newscity as nc', 'nd.news_city_id = nc.gidNewscity', 'left');
             // Build client_id conditions
             $client_id_conditions = array_map(function($id) {
-                return "FIND_IN_SET('$id', nd.client_id) > 0";
+                return "FIND_IN_SET('$id', nd.company) > 0";
             }, $client_id);
         
             // Join the conditions with OR to match any client_id
             $this->db->where('('.implode(' OR ', $client_id_conditions).')');
         
-            // if (!empty($Cities) && $Cities !== 'Select') {
-            //         $this->db->where('nd.news_city_id', $Cities);
-            //     }
-
+            if (!empty($Cities) && $Cities !== 'Select') {
+                    $this->db->where('nd.news_city_id', $Cities);
+                }
+                // if (!empty($publication_type) && $publication_type !== 'Select') {
+                //     $this->db->where('nd.publication_id', $publication_type);
+                // }
             // Optionally add date filtering if $from_date and $to_date are provided
             if ($from_date !== null && $to_date !== null) {
                 $this->db->where('nd.create_at >=', $from_date);
@@ -49,9 +51,40 @@ class News_data_Model extends CI_Model
             }
             // Execute the query and return the result
             $query = $this->db->get();
-            return $query->result_array();
+            // return $query->result_array();
+            $result = $query->result_array();
+    
+            // Calculate total AVE for all news
+            $totalAve = 0;
+            foreach ($result as &$value) {
+                $rates_data = $this->getRates($value['media_type_id'], $value['publication_id']);
+                $ave = 0;
+    
+                if (!empty($rates_data)) {
+                    $article_size = $value['sizeofArticle'] ?? 0;
+                    $rate = $rates_data['Rate'];
+                    $Circulation_Fig = $rates_data['Circulation_Fig'];
+                    $ave = 3 * $article_size * $rate * $Circulation_Fig;
+                    $totalAve += $ave; // Accumulate total AVE
+                }
+    
+                // Remove detailed AVE from individual items
+                unset($value['media_type_id']);
+                unset($value['publication_id']);
+                unset($value['sizeofArticle']);
+                $value['total_ave'] = $totalAve; // Assign total AVE to each item
+            }
+    
+            return $result;
         }
-
+        public function getRates($gidMediaType, $gidMediaOutlet)
+        {
+            $this->db->select('Rate, Circulation_Fig');
+            $this->db->from('AddRate');
+            $this->db->where('gidMediaType', $gidMediaType);
+            // $this->db->where('gidMediaOutlet', $gidMediaOutlet);
+            return $this->db->get()->row_array();
+        }
         public function getClientById($client_id)
         {
             $this->db->select('*');
@@ -200,10 +233,6 @@ class News_data_Model extends CI_Model
         $result = $query->result_array(); 
         return $result; 
     }
-
-
-    
-
         public function getClientTemplateDetails2($select_client, $from_date = null, $to_date = null, $publication_type, $Cities) {
             // Fetch mail templates for the given client ID
             $this->db->select('mt.*');
@@ -249,10 +278,10 @@ class News_data_Model extends CI_Model
             $this->db->join('edition as ed', 'nd.edition_id = ed.gidEdition', 'left');
             $this->db->join('supplements as s', 'nd.supplement_id = s.gidSupplement', 'left');
             $this->db->join('journalist as j', 'nd.journalist_id = j.gidJournalist', 'left');
-            if ($from_date !== null && $to_date !== null) {
-                $this->db->where('create_at >=', $from_date);
-                $this->db->where('create_at <=', $to_date);
-            }
+            // if ($from_date !== null && $to_date !== null) {
+            //     $this->db->where('create_at >=', $from_date);
+            //     $this->db->where('create_at <=', $to_date);
+            // }
             if ($Cities !== null) {
                 $this->db->where('news_city_id', $Cities);
             }
@@ -268,7 +297,6 @@ class News_data_Model extends CI_Model
         
             $query = $this->db->get();
             $result = $query->result_array();
-        
             return $result;
         }
         public function getCompData2($client_id)
@@ -321,6 +349,57 @@ class News_data_Model extends CI_Model
             $outArr[] = $row;
         }
         return $outArr;
+    }
+
+
+    public function getNewsDetails3($client_id, $from_date = null, $to_date = null, $publication_type, $Cities) {
+        $this->db->distinct();
+        $this->db->select('nd.*, mout.*, ed.gidEdition, ed.Edition, s.gidSupplement, s.Supplement, j.gidJournalist, j.Journalist, 
+                          (SELECT COUNT(na.news_artical_id) FROM news_artical as na WHERE na.news_details_id = nd.news_details_id) as page_count');
+        $this->db->from('news_details as nd');
+        $this->db->join('mediaoutlet as mout', 'nd.publication_id = mout.gidMediaOutlet', 'left');
+        $this->db->join('edition as ed', 'nd.edition_id = ed.gidEdition', 'left');
+        $this->db->join('supplements as s', 'nd.supplement_id = s.gidSupplement', 'left');
+        $this->db->join('journalist as j', 'nd.journalist_id = j.gidJournalist', 'left');
+    
+        if ($from_date !== null && $to_date !== null) {
+            $this->db->where('nd.create_at >=', $from_date);
+            $this->db->where('nd.create_at <=', $to_date);
+        }
+        if ($Cities !== null) {
+            $this->db->where('nd.news_city_id', $Cities);
+        }
+
+        $this->db->where('nd.is_send =', '1');
+        $this->db->group_start();
+        $this->db->like('nd.company', ',' . $client_id . ',');
+        $this->db->or_like('nd.company', $client_id . ',');
+        $this->db->or_like('nd.company', ',' . $client_id);
+        $this->db->or_where('nd.company', $client_id);
+        $this->db->group_end();
+    
+        $this->db->where('NOT EXISTS (SELECT 1 FROM delete_news dn WHERE dn.news_details_id = nd.news_details_id AND dn.client_id = ' . $this->db->escape($client_id) . ')', null, false);
+    
+        $query = $this->db->get();
+        $result = $query->result_array();
+    
+        // Fetch quick links for each mail template
+        foreach ($result as &$News) {
+            $this->db->select('*');
+            $this->db->from('news_artical');
+            $this->db->where('news_details_id', $News['news_details_id']);
+            $News_artical_data = $this->db->get();
+            $News['News_artical'] = $News_artical_data->result_array();
+        }
+    
+        return $result;
+    }
+    
+    public function getPublicationID($publication_type){
+        $this->db->select('gidMediaOutlet');
+        $this->db->from('mediaoutlet');
+        $this->db->where_in('gidPublicationType', $publication_type);
+        return $this->db->get()->row_array();
     }
 }
 ?>

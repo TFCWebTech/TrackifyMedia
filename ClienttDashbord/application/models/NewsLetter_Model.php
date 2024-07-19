@@ -1885,7 +1885,7 @@ public function getCompNewsByKeyM($Keywords, $client_id, $from = null, $to = nul
         foreach ($client_data as $value) {
             $outArr[] = [
                 'label' => $this->session->userdata('client_name'),
-                'count' => $value['count'],
+                'count' => isset($value['count']) ? $value['count'] : 0, // Ensure count is set
                 'category' => $value['category'],
                 'ave' => $value['ave'],
             ];
@@ -1898,8 +1898,8 @@ public function getCompNewsByKeyM($Keywords, $client_id, $from = null, $to = nul
     }
     
     public function getClientSize($client_id, $from = null, $to = null) {
-        // Select required fields for AVE calculation
-        $this->db->select('*');
+        // Select required fields including COUNT for count
+        $this->db->select('category, media_type_id, publication_id, sizeofArticle, COUNT(*) as count');
         $this->db->from('news_details');
     
         // Apply date range filters if provided
@@ -1910,15 +1910,16 @@ public function getCompNewsByKeyM($Keywords, $client_id, $from = null, $to = nul
     
         // Filter by client_id using FIND_IN_SET
         $this->db->group_start();
-        $this->db->where("FIND_IN_SET('$client_id', client_id)", NULL, FALSE);
+        $this->db->where("FIND_IN_SET('$client_id', company)", NULL, FALSE);
         $this->db->group_end();
     
         // Group results by category
         $this->db->group_by('category');
     
         // Execute the query and fetch results as an array
-        // $result = $this->db->get()->result_array();
         $result = $this->db->get()->result_array();
+    
+        // Calculate AVE for each result
         foreach ($result as &$value) {
             $rates_data = $this->getRates($value['media_type_id'], $value['publication_id']);
             $ave = 0;

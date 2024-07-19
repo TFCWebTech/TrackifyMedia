@@ -18,7 +18,6 @@ class ManageClient extends CI_Controller {
         $this->load->view('superAdmin/manage_client');
         $this->load->view('common/footer');
     }
-    
     public function addClient() {
         $client_name = $this->input->post('client_name');
         // $client_password = $this->input->post('client_password');
@@ -85,8 +84,8 @@ class ManageClient extends CI_Controller {
                 ];
                 // print_r($data);
                 $this->client->update('client', 'client_id', $existing_client_id, $data);      
-                $this->session->set_flashdata('success', 'User Information added successfully');
-                redirect('ManageClient/ClientInfo'); 
+                // $this->session->set_flashdata('success', 'User Information added successfully');
+                // redirect('ManageClient/ClientInfo'); 
         }else{
         
         $min = 100000000000000000; // Minimum value
@@ -133,7 +132,7 @@ class ManageClient extends CI_Controller {
                     </head>
                     <body style='border-top: 10px solid #3fa3df;text-align: center; color:#000 !important;'>
                     <div style='text-align: center;padding: 10px; background-color:white;'>
-                            <img src='assets/img/logo.png' style='width: 25%;vertical-align:middle'>
+                            <img src='https://pressbro.com/News/assets/img/mediaLogo.png' style='width: 25%;vertical-align:middle'>
                         </div>
                         <div style='background-color: #fff; color:#000 !important; padding: 0% 10%; text-align: center;'>
                             <h1 align='center'>Set  Password</h1>
@@ -147,9 +146,9 @@ class ManageClient extends CI_Controller {
                     </html>";
             $this->email->message($msg);
             
-            $result = $this->email->send();
+            $results = $this->email->send();
             
-            if($result) {
+            if($results) {
                 $this->session->set_flashdata('success','Email is Sent');
             } else {
                 $this->session->set_flashdata('error','Email is not sent');

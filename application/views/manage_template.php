@@ -240,10 +240,10 @@
                                     </div>
                         </div>
                     </div>
-                    <div class="col-md-12 mt-3" >
+                    <div class="col-md-12 mt-3">
                         <div class="border-with-text" data-heading="Content News">
                             <div class="row">
-                                    <div class="col-md-4">
+                                        <!-- <div class="col-md-4">
                                             <label class="px-1 font-weight-bold" for="media_type">Category </label>
                                             <select name="content_category"  class="form-control" accesskey="n" onkeyup="validateUserType('?text=' + this.value);">
                                             <option value="0">Select</option>
@@ -263,25 +263,23 @@
                                             <option value="Airline BIAL Transport" >Airline BIAL Transport</option>
                                             <option value="Airline Boeing" >Airline Boeing</option>
                                             </select>
-                                    </div>
+                                        </div> -->
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Publication</label>
-                                            <select class="form-control" name="content_publication" >
+                                            <select class="js-example-basic-multiple form-control" name="content_publication[]" multiple="multiple">
                                                 <option value="">Select</option>
-                                                <option value="4Ps">4Ps</option>
-                                                <option value="50 Fashion Brand Icons">50 Fashion Brand Icons</option>
-                                                <option value="Aag">Aag</option>
-                                                <option value="Abraxas Lifestyle Magazine">Abraxas Lifestyle Magazine</option>
-                                                <option value="Acaai News">Acaai News</option>
-                                                <option value="Accommodation Times">Accommodation Times</option>
-                                                <option value="ACE">ACE</option>
+                                                <?php foreach($get_publication as $publication){?>
+                                                <option value="<?php echo $publication['gidMediaOutlet'];?>"><?php echo $publication['MediaOutlet'];?></option>
+                                                <?php } ?>
                                             </select>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Edition</label>
-                                            <select class="form-control" name="content_edition" >
+                                            <select class="js-example-basic-multiple form-control" name="content_edition[]" multiple="multiple">
                                                 <option value="">Select</option>
-                                                <option value="National">National</option>
+                                                <?php foreach($get_edition as $edition){ ?>
+                                                <option value="<?php echo $edition['gidEdition'];?>"><?php echo $edition['Edition']?></option>
+                                                <?php } ?>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
@@ -292,7 +290,6 @@
                                             <label class="px-1 font-weight-bold" for="media_type">News Summary Font Size</label>
                                             <input type="text" class="form-control" placeholder="Enter Font Size" name="content_news_summary_color_size">
                                         </div>
-
                                        
                                         <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Headline Color </label>
@@ -334,8 +331,8 @@
                                             <label class="px-1 font-weight-bold" for="media_type">Media Details </label>
                                             <select name="media_details"  class="form-control" accesskey="n" onkeyup="validateUserType('?text=' + this.value);">
                                             <option value="0">Select</option>
-                                            <option value="Yes" >Yes</option>
-                                            <option value="No" >No</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
@@ -343,7 +340,7 @@
                                             <input type="color" class="form-control" placeholder="Enter Media Color" name="media_color">
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="px-1 font-weight-bold" for="Time">Media Font  </label>
+                                            <label class="px-1 font-weight-bold" for="Time">Media Font </label>
                                             <select name="media_font" class="form-control" id="MediaFont1">
                                                             <option value="1">Select</option>
                                                             <option value="Arial">Arial</option>
@@ -376,7 +373,7 @@
                                         </div>
                                     
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label class="px-1 font-weight-bold" for="media_type">Context  </label>
                                             <select name="context"  class="form-control" accesskey="n" onkeyup="validateUserType('?text=' + this.value);">
                                             <option value="0">Select</option>
